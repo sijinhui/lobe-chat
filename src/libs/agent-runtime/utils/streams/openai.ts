@@ -54,7 +54,7 @@ export const transformOpenAIStream = (
           console.log('888888888', value.function)
           return {
             function: {
-              arguments: value.function?.arguments ?? '{}',
+              arguments: value.function?.arguments ?? '', // {}
               name: value.function?.name ?? null,
             },
             id:
