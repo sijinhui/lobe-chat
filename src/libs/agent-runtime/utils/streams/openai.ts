@@ -51,7 +51,7 @@ export const transformOpenAIStream = (
           if (streamContext && !streamContext.tool) {
             streamContext.tool = { id: value.id!, index: value.index, name: value.function!.name! };
           }
-
+          console.log('888888888', value.function)
           return {
             function: {
               arguments: value.function?.arguments ?? '{}',

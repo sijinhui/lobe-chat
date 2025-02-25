@@ -120,6 +120,7 @@ export const createSSEProtocolTransformer = (
         controller.enqueue(`event: ${type}\n`);
         controller.enqueue(`data: ${JSON.stringify(data)}\n\n`);
       });
+      console.log('99999999', buffers)
     },
   });
 

@@ -110,6 +110,7 @@ export const chatPlugin: StateCreator<
       internal_updateMessageContent,
       internal_updatePluginError,
     } = get();
+    console.log('123--------', payload)
     const params = JSON.parse(payload.arguments);
     internal_togglePluginApiCalling(true, id, n('invokeBuiltinTool/start') as string);
     let data;
@@ -205,7 +206,7 @@ export const chatPlugin: StateCreator<
     }
 
     const payload: ChatToolPayload = { ...message.plugin, id: message.tool_call_id! };
-
+    console.log('3333333', payload)
     await get().internal_invokeDifferentTypePlugin(id, payload);
   },
 
@@ -262,9 +263,9 @@ export const chatPlugin: StateCreator<
         threadId,
         topicId: get().activeTopicId, // if there is activeTopicId，then add it to topicId
       };
-
+      console.log('55555555555', chatSelectors)
       const id = await get().internal_createMessage(toolMessage);
-
+      console.log('444444444', payload)
       // trigger the plugin call
       const data = await get().internal_invokeDifferentTypePlugin(id, payload);
 
@@ -453,7 +454,7 @@ export const chatPlugin: StateCreator<
         const [identifier, apiName, type] = toolCall.function.name.split(PLUGIN_SCHEMA_SEPARATOR);
 
         if (!apiName) return null;
-
+        console.log('77777777', toolCall.function)
         payload = {
           apiName,
           arguments: toolCall.function.arguments,

@@ -39,7 +39,7 @@ const activeBaseChats = (s: ChatStoreState): ChatMessage[] => {
   if (!s.activeId) return [];
 
   const messages = s.messagesMap[currentChatKey(s)] || [];
-
+  // console.log('6666666666', messages)
   return messages.map((i) => ({ ...i, meta: getMeta(i) }));
 };
 
