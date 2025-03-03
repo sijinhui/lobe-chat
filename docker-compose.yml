@@ -49,7 +49,7 @@ services:
       - "--providers.docker.watch=true"
     ports:
       - "23210:23210"
-      - "8080:8080"
+#      - "8080:8080"
     networks:
       - lobe-chat
     volumes:
