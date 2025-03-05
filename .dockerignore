@@ -9,3 +9,5 @@ npm-debug.log
 *.md
 .env.example
 .env.local
+
+update.sh

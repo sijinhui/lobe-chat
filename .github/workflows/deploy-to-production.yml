@@ -33,9 +33,8 @@ jobs:
             git pull
 
             echo "🔧 更新 Docker 容器..."
-            docker-compose pull && docker-compose up -d --scale lobe-chat=2 --no-recreate
-            sleep 30
-            docker-compose up -d --scale lobe-chat=1 --no-recreate
+            docker-compose pull
+            chmod +x ./update.sh && ./update.sh
             echo "✅ 部署成功！"
             docker-compose ps
 
