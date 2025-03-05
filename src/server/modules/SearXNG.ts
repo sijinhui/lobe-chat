@@ -21,7 +21,12 @@ export class SearXNGClient {
       const response = await fetch(urlJoin(this.baseUrl, `/search?${searchParams}`));
 
       if (response.ok) {
-        return await response.json();
+        // 临时限制返回的查询结果数，避免浪费太多token
+        const result = await response.json();
+        if ((result?.results?.length ?? 0) > 10) {
+          result.results = result.results.slice(0, 10);
+        }
+        return result;
       }
 
       throw new Error(`Failed to search: ${response.statusText}`);
