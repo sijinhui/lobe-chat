@@ -1,0 +1,23 @@
+version: "3.3"
+services:
+  chromium:
+    ports:
+      - 18082:3000
+    environment:
+      - CORS=true
+#      - CORS_ALLOW_ORIGIN=http://localhost
+      - CONCURRENT=10
+      - QUEUED=10
+      - TOKEN=6R0W53R135510
+      - PROXY_HOST=browserless.xiaosi.cc
+      - PROXY_PORT=443
+      - PROXY_SSL=true
+#      - HOST=0.0.0.0
+    image: ghcr.io/browserless/chromium
+#networks: {}
+
+
+
+#  $ docker run -e "PROXY_HOST=browserless.my-domain.com" -e PROXY_PORT=443 -e PROXY_SSL=true -p 3000:3000 ghcr.io/browserless/chromium
+
+
