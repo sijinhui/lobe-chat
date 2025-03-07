@@ -144,7 +144,7 @@ export interface AiModelConfig {
 
 export type ModelSearchImplementType = 'tool' | 'params' | 'internal';
 
-export type ExtendParamsType = 'reasoningBudgetToken' | 'enableReasoning';
+export type ExtendParamsType = 'reasoningBudgetToken' | 'enableReasoning' | 'disableContextCaching';
 
 export interface AiModelSettings {
   extendParams?: ExtendParamsType[];
