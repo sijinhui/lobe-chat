@@ -169,6 +169,8 @@ export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>
   return class LobeOpenAICompatibleAI implements LobeRuntimeAI {
     client!: OpenAI;
 
+    private id: string;
+
     baseURL!: string;
     protected _options: ConstructorOptions<T>;
 
@@ -193,6 +195,8 @@ export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>
       }
 
       this.baseURL = baseURL || this.client.baseURL;
+
+      this.id = options.id || provider;
     }
 
     async chat({ responseMode, ...payload }: ChatStreamPayload, options?: ChatCompetitionOptions) {
@@ -211,7 +215,7 @@ export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>
         const streamOptions: OpenAIStreamOptions = {
           bizErrorTypeTransformer: chatCompletion?.handleStreamBizErrorType,
           callbacks: options?.callback,
-          provider,
+          provider: this.id,
         };
 
         if (customClient?.createChatCompletionStream) {
@@ -393,7 +397,7 @@ export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>
         if (errorResult)
           return AgentRuntimeError.chat({
             ...errorResult,
-            provider,
+            provider: this.id,
           } as ChatCompletionErrorPayload);
       }
 
@@ -404,7 +408,7 @@ export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>
               endpoint: desensitizedEndpoint,
               error: error as any,
               errorType: ErrorType.invalidAPIKey,
-              provider: provider as ModelProvider,
+              provider: this.id as ModelProvider,
             });
           }
 
@@ -422,7 +426,7 @@ export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>
             endpoint: desensitizedEndpoint,
             error: errorResult,
             errorType: AgentRuntimeErrorType.InsufficientQuota,
-            provider: provider as ModelProvider,
+            provider: this.id as ModelProvider,
           });
         }
 
@@ -431,7 +435,7 @@ export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>
             endpoint: desensitizedEndpoint,
             error: errorResult,
             errorType: AgentRuntimeErrorType.ModelNotFound,
-            provider: provider as ModelProvider,
+            provider: this.id as ModelProvider,
           });
         }
 
@@ -442,7 +446,7 @@ export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>
             endpoint: desensitizedEndpoint,
             error: errorResult,
             errorType: AgentRuntimeErrorType.ExceededContextWindow,
-            provider: provider as ModelProvider,
+            provider: this.id as ModelProvider,
           });
         }
       }
@@ -451,7 +455,7 @@ export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>
         endpoint: desensitizedEndpoint,
         error: errorResult,
         errorType: RuntimeError || ErrorType.bizError,
-        provider: provider as ModelProvider,
+        provider: this.id as ModelProvider,
       });
     }
   };
