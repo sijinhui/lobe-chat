@@ -33,6 +33,10 @@ export interface ModelAbilities {
    */
   hot?: boolean;
   /**
+   * whether model supports image output
+   */
+  imageOutput?: boolean;
+  /**
    * whether model supports reasoning
    */
   reasoning?: boolean;
@@ -40,7 +44,6 @@ export interface ModelAbilities {
    * whether model supports search web
    */
   search?: boolean;
-
   /**
    *  whether model supports vision
    */
