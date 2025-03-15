@@ -37,9 +37,8 @@ export const config = {
     '/login(.*)',
     '/signup(.*)',
     '/next-auth/(.*)',
-    '/waitlist(.*)',
-    '/next-auth/error',
     // ↓ cloud ↓
+    '/waitlist(.*)',
   ],
 };
 
