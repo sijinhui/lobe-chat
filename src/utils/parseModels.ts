@@ -59,8 +59,14 @@ export const parseModelString = (modelString: string = '', withDeploymentName = 
     }
 
     if (capabilities.length > 0) {
-      const [maxTokenStr, ...capabilityList] = capabilities[0].replace('>', '').split(':');
-      model.contextWindowTokens = parseInt(maxTokenStr, 10) || undefined;
+      const tempCapabilities = capabilities[0].replace('>', '').split(':');
+      let capabilityList: string[] = tempCapabilities; // 声明 capabilityList，并赋予默认值 (空数组或根据实际情况)
+      const [first] = tempCapabilities
+
+      if (!isNaN(parseInt(first, 10))) {
+        capabilityList = tempCapabilities.slice(1);
+        model.contextWindowTokens = parseInt(first, 10) || undefined;
+      }
 
       for (const capability of capabilityList) {
         switch (capability) {
