@@ -4,14 +4,13 @@ import { FewShots, LLMParams } from '@/types/llm';
 
 import { LobeAgentChatConfig } from './chatConfig';
 
-export type TTSServer = 'openai' | 'edge' | 'microsoft' | 'doubao';
+export type TTSServer = 'openai' | 'edge' | 'microsoft';
 
 export interface LobeAgentTTSConfig {
   showAllLocaleVoice?: boolean;
   sttLocale: 'auto' | string;
   ttsService: TTSServer;
   voice: {
-    doubao?: string
     edge?: string;
     microsoft?: string;
     openai: string;

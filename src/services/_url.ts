@@ -44,5 +44,4 @@ export const API_ENDPOINTS = mapWithBasePath({
   tts: '/webapi/tts/openai',
   edge: '/webapi/tts/edge',
   microsoft: '/webapi/tts/microsoft',
-  doubao: '/webapi/tts/doubao',
 });
