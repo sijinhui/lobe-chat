@@ -74,6 +74,19 @@ export const useTTS = (content: string, config?: TTSConfig) => {
       } as MicrosoftSpeechOptions;
       break;
     }
+    case "doubao": {
+      useSelectedTTS = useOpenAITTS;
+      options = {
+        api: {
+          serviceUrl: API_ENDPOINTS.doubao,
+        },
+        options: {
+          model: ttsSettings.doubao.ttsModel,
+          voice: config?.voice || voice,
+        },
+      } as OpenAITTSOptions;
+      break;
+    }
   }
 
   return useSelectedTTS(content, {
