@@ -39,6 +39,12 @@ const AgentTTS = memo(() => {
     () => voiceList(showAllLocaleVoice),
     [showAllLocaleVoice],
   );
+  const doubaoVoiceOptions = [
+    {
+      "label": "湾湾女声",
+      "value": "zh_female_wanwanxiaohe_moon_bigtts",
+    }
+  ]
 
   const tts: ItemGroup = {
     children: [
@@ -51,11 +57,18 @@ const AgentTTS = memo(() => {
       {
         children: <Switch />,
         desc: t('settingTTS.showAllLocaleVoice.desc'),
-        hidden: ttsService === 'openai',
+        hidden: ttsService === 'openai' || ttsService === 'doubao',
         label: t('settingTTS.showAllLocaleVoice.title'),
         minWidth: undefined,
         name: [TTS_SETTING_KEY, 'showAllLocaleVoice'],
         valuePropName: 'checked',
+      },
+      {
+        children: <SelectWithTTSPreview options={doubaoVoiceOptions} server={'doubao'} />,
+        desc: t('settingTTS.voice.desc'),
+        hidden: ttsService !== 'doubao',
+        label: t('settingTTS.voice.title'),
+        name: [TTS_SETTING_KEY, 'voice', 'doubao'],
       },
       {
         children: <SelectWithTTSPreview options={openaiVoiceOptions} server={'openai'} />,
@@ -104,6 +117,7 @@ const AgentTTS = memo(() => {
       initialValues={{
         [TTS_SETTING_KEY]: {
           voice: {
+            doubao: doubaoVoiceOptions?.[0].value,
             edge: edgeVoiceOptions?.[0].value,
             microsoft: microsoftVoiceOptions?.[0].value,
             openai: openaiVoiceOptions?.[0].value,

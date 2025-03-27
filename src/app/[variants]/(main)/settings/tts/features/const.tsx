@@ -21,6 +21,13 @@ export const opeanaiSTTOptions: SelectProps['options'] = [
   },
 ];
 
+export const doubaoTTSOptions: SelectProps['options'] = [
+  {
+    label: <LabelRenderer Icon={OpenAI.Avatar} label={'台湾妹子'} />,
+    value: 'zh_female_wanwanxiaohe_moon_bigtts',
+  },
+]
+
 export const sttOptions: SelectProps['options'] = [
   {
     label: 'OpenAI',

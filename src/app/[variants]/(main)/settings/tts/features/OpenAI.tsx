@@ -10,7 +10,7 @@ import { FORM_STYLE } from '@/const/layoutTokens';
 import { useUserStore } from '@/store/user';
 import { settingsSelectors } from '@/store/user/selectors';
 
-import { opeanaiSTTOptions, opeanaiTTSOptions } from './const';
+import { opeanaiSTTOptions, opeanaiTTSOptions, doubaoTTSOptions } from './const';
 
 type SettingItemGroup = ItemGroup;
 
@@ -28,6 +28,11 @@ const OpenAI = memo(() => {
         children: <Select options={opeanaiTTSOptions} />,
         label: t('settingTTS.openai.ttsModel'),
         name: [TTS_SETTING_KEY, 'openAI', 'ttsModel'],
+      },
+      {
+        children: <Select options={doubaoTTSOptions} />,
+        label: t('settingTTS.doubao.ttsModel'),
+        name: [TTS_SETTING_KEY, 'doubao', 'ttsModel'],
       },
       {
         children: <Select options={opeanaiSTTOptions} />,

@@ -272,6 +272,10 @@ export default {
     title: '系统设置',
   },
   settingTTS: {
+    doubao: {
+      title: '豆包',
+      ttsModel: "豆包 语音合成模型",
+    },
     openai: {
       sttModel: 'OpenAI 语音识别模型',
       title: 'OpenAI',

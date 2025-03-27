@@ -8,6 +8,7 @@ export const DEFAUTT_AGENT_TTS_CONFIG: LobeAgentTTSConfig = {
   sttLocale: 'auto',
   ttsService: 'openai',
   voice: {
+    doubao: 'zh_female_wanwanxiaohe_moon_bigtts',
     openai: 'alloy',
   },
 };

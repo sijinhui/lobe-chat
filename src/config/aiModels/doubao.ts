@@ -1,9 +1,21 @@
-import { AIChatModelCard } from '@/types/aiModel';
+import { AIChatModelCard, AITTSModelCard } from '@/types/aiModel';
+
+export const doubaoTTSModels: AITTSModelCard[] = [
+  {
+    description: '台湾妹子',
+    displayName: 'zh_female_wanwanxiaohe_moon_bigtts',
+    id: 'zh_female_wanwanxiaohe_moon_bigtts',
+    pricing: {
+      input: 15,
+    },
+    type: 'tts',
+  },
+]
 
 const doubaoChatModels: AIChatModelCard[] = [
     {
         contextWindowTokens: 4096,
-        description: 
+        description:
         '拥有极致的响应速度，更好的性价比，为客户不同场景提供更灵活的选择。支持 4k 上下文窗口的推理和精调。',
         displayName: 'Doubao Lite 4k',
         enabled: true,
@@ -12,7 +24,7 @@ const doubaoChatModels: AIChatModelCard[] = [
     },
     {
         contextWindowTokens: 32_768,
-        description: 
+        description:
             '拥有极致的响应速度，更好的性价比，为客户不同场景提供更灵活的选择。支持 32k 上下文窗口的推理和精调。',
         displayName: 'Doubao Lite 32k',
         enabled: true,
@@ -21,7 +33,7 @@ const doubaoChatModels: AIChatModelCard[] = [
     },
     {
         contextWindowTokens: 128_000,
-        description: 
+        description:
             '拥有极致的响应速度，更好的性价比，为客户不同场景提供更灵活的选择。支持 128k 上下文窗口的推理和精调。',
         displayName: 'Doubao Lite 128k',
         enabled: true,
@@ -30,7 +42,7 @@ const doubaoChatModels: AIChatModelCard[] = [
     },
     {
         contextWindowTokens: 4096,
-        description: 
+        description:
             '效果最好的主力模型，适合处理复杂任务，在参考问答、总结摘要、创作、文本分类、角色扮演等场景都有很好的效果。支持 4k 上下文窗口的推理和精调。',
         displayName: 'Doubao Pro 4k',
         enabled: true,
@@ -42,7 +54,7 @@ const doubaoChatModels: AIChatModelCard[] = [
           deploymentName: 'Doubao-pro-test',
         },
         contextWindowTokens: 32_768,
-        description: 
+        description:
             '效果最好的主力模型，适合处理复杂任务，在参考问答、总结摘要、创作、文本分类、角色扮演等场景都有很好的效果。支持 32k 上下文窗口的推理和精调。',
         displayName: 'Doubao Pro 32k',
         enabled: true,
@@ -51,7 +63,7 @@ const doubaoChatModels: AIChatModelCard[] = [
     },
     {
         contextWindowTokens: 128_000,
-        description: 
+        description:
             '效果最好的主力模型，适合处理复杂任务，在参考问答、总结摘要、创作、文本分类、角色扮演等场景都有很好的效果。支持 128k 上下文窗口的推理和精调。',
         displayName: 'Doubao Pro 128k',
         enabled: true,
@@ -60,6 +72,9 @@ const doubaoChatModels: AIChatModelCard[] = [
     },
 ];
 
-export const allModels = [...doubaoChatModels];
+export const allModels = [
+  ...doubaoChatModels,
+  ...doubaoTTSModels,
+];
 
 export default allModels;
