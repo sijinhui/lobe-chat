@@ -72,13 +72,11 @@ const SelectWithTTSPreview = forwardRef<RefSelectProps, SelectWithTTSPreviewProp
     }, [stop, start]);
 
     const handleSelect: SelectProps['onSelect'] = (value, option) => {
-      console.log('--------------', value, option)
       stop();
       setVoice(value as string);
       setText([PREVIEW_TEXT, option?.label].join(' - '));
       onSelect?.(value, option);
     };
-
     return (
       <Flexbox gap={8}>
         <Flexbox align={'center'} gap={8} horizontal style={{ width: '100%' }}>
