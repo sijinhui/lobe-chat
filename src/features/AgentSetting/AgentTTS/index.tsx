@@ -71,12 +71,6 @@ const AgentTTS = memo(() => {
     () => voiceList(showAllLocaleVoice),
     [showAllLocaleVoice],
   );
-  const doubaoVoiceOptions = [
-    {
-      "label": "湾湾女声",
-      "value": "zh_female_wanwanxiaohe_moon_bigtts",
-    }
-  ]
 
   const tts: ItemGroup = {
     children: [
