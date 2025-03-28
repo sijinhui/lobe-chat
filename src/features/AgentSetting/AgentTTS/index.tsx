@@ -20,6 +20,38 @@ import { ttsOptions } from './options';
 const TTS_SETTING_KEY = 'tts';
 const { openaiVoiceOptions, localeOptions } = VoiceList;
 
+const doubaoVoiceOptions = [
+  {
+    "label": "湾湾女声",
+    "value": "zh_female_wanwanxiaohe_moon_bigtts",
+  },
+  {
+    "label": "北京小爷（多情感）",
+    "value": "zh_male_beijingxiaoye_emo_v2_mars_bigtts",
+  },
+  {
+    "label": "柔美女友（多情感）",
+    "value": "zh_female_roumeinvyou_emo_v2_mars_bigtts",
+  },
+  {
+    "label": "阳光青年（多情感）",
+    "value": "zh_male_yangguangqingnian_emo_v2_mars_bigtts",
+  },
+  {
+    "label": "魅力女友（多情感）",
+    "value": "zh_female_meilinvyou_emo_v2_mars_bigtts",
+  },
+  {
+    "label": "爽快思思（多情感）",
+    "value": "zh_female_shuangkuaisisi_emo_v2_mars_bigtts",
+  },
+  {
+    "label": "京腔侃爷/Harmony",
+    "value": "zh_male_jingqiangkanye_moon_bigtts",
+  }
+]
+
+
 const AgentTTS = memo(() => {
   const { t } = useTranslation('setting');
   const [form] = Form.useForm();
@@ -39,12 +71,6 @@ const AgentTTS = memo(() => {
     () => voiceList(showAllLocaleVoice),
     [showAllLocaleVoice],
   );
-  const doubaoVoiceOptions = [
-    {
-      "label": "湾湾女声",
-      "value": "zh_female_wanwanxiaohe_moon_bigtts",
-    }
-  ]
 
   const tts: ItemGroup = {
     children: [

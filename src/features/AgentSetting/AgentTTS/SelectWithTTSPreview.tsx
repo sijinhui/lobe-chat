@@ -2,7 +2,7 @@ import { AudioPlayer } from '@lobehub/tts/react';
 import { Alert, Highlighter } from '@lobehub/ui';
 import { Button, RefSelectProps, Select, SelectProps } from 'antd';
 import { useTheme } from 'antd-style';
-import { forwardRef, useCallback, useState } from 'react';
+import {forwardRef, useCallback, useEffect, useState} from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flexbox } from 'react-layout-kit';
 
@@ -19,6 +19,12 @@ const SelectWithTTSPreview = forwardRef<RefSelectProps, SelectWithTTSPreviewProp
   ({ value, options, server, onSelect, ...rest }, ref) => {
     const [error, setError] = useState<ChatMessageError>();
     const [voice, setVoice] = useState<string>(value);
+
+    // TODO: 临时修复了选择的语音默认值问题，但应该不能这么修
+    useEffect(() => {
+      if (value !== voice) setVoice(value);
+    }, [value]);
+
     const { t } = useTranslation('welcome');
     const theme = useTheme();
     const PREVIEW_TEXT = ['Lobe Chat', t('slogan.title'), t('slogan.desc1')].join('. ');

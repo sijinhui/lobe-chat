@@ -1,16 +1,16 @@
-import { AIChatModelCard, AITTSModelCard } from '@/types/aiModel';
+import { AIChatModelCard } from '@/types/aiModel';
 
-export const doubaoTTSModels: AITTSModelCard[] = [
-  {
-    description: '台湾妹子',
-    displayName: 'zh_female_wanwanxiaohe_moon_bigtts',
-    id: 'zh_female_wanwanxiaohe_moon_bigtts',
-    pricing: {
-      input: 15,
-    },
-    type: 'tts',
-  },
-]
+// export const doubaoTTSModels: AITTSModelCard[] = [
+//   {
+//     description: '台湾妹子',
+//     displayName: 'zh_female_wanwanxiaohe_moon_bigtts',
+//     id: 'zh_female_wanwanxiaohe_moon_bigtts',
+//     pricing: {
+//       input: 15,
+//     },
+//     type: 'tts',
+//   },
+// ]
 
 const doubaoChatModels: AIChatModelCard[] = [
     {
@@ -74,7 +74,7 @@ const doubaoChatModels: AIChatModelCard[] = [
 
 export const allModels = [
   ...doubaoChatModels,
-  ...doubaoTTSModels,
+  // ...doubaoTTSModels,
 ];
 
 export default allModels;
