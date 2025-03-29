@@ -51,9 +51,7 @@ export const POST = async (req: Request) => {
       encoding: "wav",
       pitch_ratio: 1,
       speed_ratio: 1,
-      voice_type: payload.options.model,
-      // TODO: 应该用这个的，之后再看吧
-      // voice_type: payload.options.voice,
+      voice_type: payload.options.voice,
       volume_ratio: 1,
     },
     request: {
