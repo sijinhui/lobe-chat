@@ -1,16 +1,35 @@
 import { AIChatModelCard } from '@/types/aiModel';
 
-// export const doubaoTTSModels: AITTSModelCard[] = [
-//   {
-//     description: '台湾妹子',
-//     displayName: 'zh_female_wanwanxiaohe_moon_bigtts',
-//     id: 'zh_female_wanwanxiaohe_moon_bigtts',
-//     pricing: {
-//       input: 15,
-//     },
-//     type: 'tts',
-//   },
-// ]
+export const doubaoVoiceOptions = [
+  {
+    "label": "湾湾女声",
+    "value": "zh_female_wanwanxiaohe_moon_bigtts",
+  },
+  {
+    "label": "北京小爷（多情感）",
+    "value": "zh_male_beijingxiaoye_emo_v2_mars_bigtts",
+  },
+  {
+    "label": "柔美女友（多情感）",
+    "value": "zh_female_roumeinvyou_emo_v2_mars_bigtts",
+  },
+  {
+    "label": "阳光青年（多情感）",
+    "value": "zh_male_yangguangqingnian_emo_v2_mars_bigtts",
+  },
+  {
+    "label": "魅力女友（多情感）",
+    "value": "zh_female_meilinvyou_emo_v2_mars_bigtts",
+  },
+  {
+    "label": "爽快思思（多情感）",
+    "value": "zh_female_shuangkuaisisi_emo_v2_mars_bigtts",
+  },
+  {
+    "label": "京腔侃爷/Harmony",
+    "value": "zh_male_jingqiangkanye_moon_bigtts",
+  }
+]
 
 const doubaoChatModels: AIChatModelCard[] = [
     {
