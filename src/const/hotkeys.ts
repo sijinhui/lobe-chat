@@ -61,6 +61,12 @@ export const HOTKEYS_REGISTRATION: HotkeyRegistration = [
   },
   {
     group: HotkeyGroupEnum.Conversation,
+    id: HotkeyEnum.DeleteAndRegenerateMessage,
+    keys: combineKeys([KeyEnum.Alt, KeyEnum.Shift, 'r']),
+    scopes: [HotkeyScopeEnum.Chat],
+  },
+  {
+    group: HotkeyGroupEnum.Conversation,
     id: HotkeyEnum.SaveTopic,
     keys: combineKeys([KeyEnum.Alt, 'n']),
     scopes: [HotkeyScopeEnum.Chat],
