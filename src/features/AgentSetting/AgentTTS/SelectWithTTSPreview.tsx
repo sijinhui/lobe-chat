@@ -2,7 +2,7 @@ import { AudioPlayer } from '@lobehub/tts/react';
 import { Alert, Highlighter } from '@lobehub/ui';
 import { Button, RefSelectProps, Select, SelectProps } from 'antd';
 import { useTheme } from 'antd-style';
-import {forwardRef, useCallback, useEffect, useState} from 'react';
+import {forwardRef, useCallback, useState} from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flexbox } from 'react-layout-kit';
 
@@ -18,12 +18,7 @@ interface SelectWithTTSPreviewProps extends SelectProps {
 const SelectWithTTSPreview = forwardRef<RefSelectProps, SelectWithTTSPreviewProps>(
   ({ value, options, server, onSelect, ...rest }, ref) => {
     const [error, setError] = useState<ChatMessageError>();
-    const [voice, setVoice] = useState<string>(value);
-
-    // TODO: 临时修复了选择的语音默认值问题，但应该不能这么修
-    useEffect(() => {
-      if (value !== voice) setVoice(value);
-    }, [value]);
+    // const [voice, setVoice] = useState<string>(value);
 
     const { t } = useTranslation('welcome');
     const theme = useTheme();
@@ -57,7 +52,7 @@ const SelectWithTTSPreview = forwardRef<RefSelectProps, SelectWithTTSPreviewProp
         stop();
       },
       server,
-      voice,
+      voice: value as string,  // 直接使用 value 属性
     });
 
     const handleCloseError = useCallback(() => {
@@ -73,7 +68,7 @@ const SelectWithTTSPreview = forwardRef<RefSelectProps, SelectWithTTSPreviewProp
 
     const handleSelect: SelectProps['onSelect'] = (value, option) => {
       stop();
-      setVoice(value as string);
+      // setVoice(value as string);
       setText([PREVIEW_TEXT, option?.label].join(' - '));
       onSelect?.(value, option);
     };
