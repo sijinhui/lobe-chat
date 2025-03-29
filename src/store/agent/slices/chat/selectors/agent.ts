@@ -12,6 +12,8 @@ import { LobeAgentConfig, LobeAgentTTSConfig } from '@/types/agent';
 import { KnowledgeItem, KnowledgeType } from '@/types/knowledgeBase';
 import { merge } from '@/utils/merge';
 
+import { doubaoVoiceOptions } from "@/config/aiModels/doubao";
+
 const isInboxSession = (s: AgentStoreState) => s.activeId === INBOX_SESSION_ID;
 
 // ==========   Config   ============== //
@@ -85,6 +87,10 @@ const currentAgentTTSVoice =
       }
       case 'microsoft': {
         currentVoice = voice.microsoft || (voiceList.microsoftVoiceOptions?.[0].value as string);
+        break;
+      }
+      case 'doubao': {
+        currentVoice = voice.doubao || (doubaoVoiceOptions?.[0].value as string);
         break;
       }
     }
