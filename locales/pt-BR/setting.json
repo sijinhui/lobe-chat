@@ -281,6 +281,10 @@
     "title": "Configurações do sistema"
   },
   "settingTTS": {
+    "doubao": {
+      "title": "Pão de Feijão",
+      "ttsModel": "Modelo de Síntese de Voz Pão de Feijão"
+    },
     "openai": {
       "sttModel": "Modelo de reconhecimento de fala OpenAI",
       "title": "OpenAI",

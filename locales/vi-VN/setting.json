@@ -281,6 +281,10 @@
     "title": "Cài đặt hệ thống"
   },
   "settingTTS": {
+    "doubao": {
+      "title": "Bánh đậu",
+      "ttsModel": "Mô hình tổng hợp giọng nói Bánh đậu"
+    },
     "openai": {
       "sttModel": "Mô hình nhận dạng giọng nói OpenAI",
       "title": "OpenAI",

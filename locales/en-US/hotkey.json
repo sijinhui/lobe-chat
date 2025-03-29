@@ -3,6 +3,10 @@
     "desc": "Add the current input as a user message without triggering generation",
     "title": "Add a User Message"
   },
+  "deleteAndRegenerateMessage": {
+    "desc": "Delete and regenerate the last message",
+    "title": "Delete and regenerate message"
+  },
   "editMessage": {
     "desc": "Enter edit mode by holding Alt and double-clicking the message",
     "title": "Edit Message"

@@ -281,6 +281,10 @@
     "title": "Systemeinstellungen"
   },
   "settingTTS": {
+    "doubao": {
+      "title": "Bohnenbrot",
+      "ttsModel": "Bohnenbrot Sprachsynthesemodell"
+    },
     "openai": {
       "sttModel": "OpenAI Spracherkennungsmodell",
       "title": "OpenAI",

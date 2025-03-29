@@ -281,6 +281,10 @@
     "title": "시스템 설정"
   },
   "settingTTS": {
+    "doubao": {
+      "title": "두부빵",
+      "ttsModel": "두부빵 음성 합성 모델"
+    },
     "openai": {
       "sttModel": "OpenAI 음성 인식 모델",
       "title": "OpenAI",

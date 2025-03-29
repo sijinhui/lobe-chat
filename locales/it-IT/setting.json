@@ -281,6 +281,10 @@
     "title": "Impostazioni di sistema"
   },
   "settingTTS": {
+    "doubao": {
+      "title": "Fagiolo",
+      "ttsModel": "Modello di sintesi vocale Fagiolo"
+    },
     "openai": {
       "sttModel": "Modello di riconoscimento vocale OpenAI",
       "title": "OpenAI",

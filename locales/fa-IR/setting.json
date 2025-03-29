@@ -281,6 +281,10 @@
     "title": "تنظیمات سیستم"
   },
   "settingTTS": {
+    "doubao": {
+      "title": "دوبائو",
+      "ttsModel": "مدل تولید صدا دوبائو"
+    },
     "openai": {
       "sttModel": "مدل تشخیص گفتار OpenAI",
       "title": "OpenAI",

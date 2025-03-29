@@ -281,6 +281,10 @@
     "title": "系統設定"
   },
   "settingTTS": {
+    "doubao": {
+      "title": "豆包",
+      "ttsModel": "豆包 語音合成模型"
+    },
     "openai": {
       "sttModel": "OpenAI 語音識別模型",
       "title": "OpenAI",

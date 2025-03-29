@@ -3,6 +3,10 @@
     "desc": "將當前輸入內容添加為使用者消息，但不觸發生成",
     "title": "添加一條使用者消息"
   },
+  "deleteAndRegenerateMessage": {
+    "desc": "刪除並重新生成最後一條消息",
+    "title": "刪除並重新生成消息"
+  },
   "editMessage": {
     "desc": "通過按住 Alt 並雙擊消息進入編輯模式",
     "title": "編輯消息"

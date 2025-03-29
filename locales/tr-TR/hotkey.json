@@ -3,6 +3,10 @@
     "desc": "Mevcut girdi içeriğini kullanıcı mesajı olarak ekleyin, ancak oluşturmayı tetiklemeyin",
     "title": "Bir kullanıcı mesajı ekle"
   },
+  "deleteAndRegenerateMessage": {
+    "desc": "Son mesajı sil ve yeniden oluştur",
+    "title": "Mesajı sil ve yeniden oluştur"
+  },
   "editMessage": {
     "desc": "Mesaja çift tıklayıp Alt tuşuna basarak düzenleme moduna geçin",
     "title": "Mesajı düzenle"

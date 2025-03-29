@@ -281,6 +281,10 @@
     "title": "إعدادات النظام"
   },
   "settingTTS": {
+    "doubao": {
+      "title": "دو باو",
+      "ttsModel": "نموذج تحويل النص إلى كلام دو باو"
+    },
     "openai": {
       "sttModel": "نموذج تحويل النص إلى كلام من OpenAI",
       "title": "OpenAI",

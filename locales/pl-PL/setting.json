@@ -281,6 +281,10 @@
     "title": "Ustawienia systemowe"
   },
   "settingTTS": {
+    "doubao": {
+      "title": "Fasola",
+      "ttsModel": "Model syntezatora mowy Fasola"
+    },
     "openai": {
       "sttModel": "Model rozpoznawania mowy OpenAI",
       "title": "OpenAI",

@@ -281,6 +281,10 @@
     "title": "Paramètres du système"
   },
   "settingTTS": {
+    "doubao": {
+      "title": "Pâté de soja",
+      "ttsModel": "Modèle de synthèse vocale Pâté de soja"
+    },
     "openai": {
       "sttModel": "Modèle de reconnaissance vocale OpenAI",
       "title": "OpenAI",

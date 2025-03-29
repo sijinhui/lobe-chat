@@ -281,6 +281,10 @@
     "title": "Configuración del sistema"
   },
   "settingTTS": {
+    "doubao": {
+      "title": "Bola de frijol",
+      "ttsModel": "Modelo de síntesis de voz de Bola de frijol"
+    },
     "openai": {
       "sttModel": "Modelo de reconocimiento de voz de OpenAI",
       "title": "OpenAI",

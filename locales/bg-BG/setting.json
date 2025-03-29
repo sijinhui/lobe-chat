@@ -281,6 +281,10 @@
     "title": "Системни настройки"
   },
   "settingTTS": {
+    "doubao": {
+      "title": "Доу Бао",
+      "ttsModel": "Модел за синтез на глас Доу Бао"
+    },
     "openai": {
       "sttModel": "Модел за преобразуване на реч в текст на OpenAI",
       "title": "OpenAI",

@@ -281,6 +281,10 @@
     "title": "Sistem Ayarları"
   },
   "settingTTS": {
+    "doubao": {
+      "title": "Fasulye Paketi",
+      "ttsModel": "Fasulye Paketi Ses Sentez Modeli"
+    },
     "openai": {
       "sttModel": "OpenAI Konuşmadan Metne Modeli",
       "title": "OpenAI",

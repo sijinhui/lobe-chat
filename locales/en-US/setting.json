@@ -281,6 +281,10 @@
     "title": "System Settings"
   },
   "settingTTS": {
+    "doubao": {
+      "title": "Doubao",
+      "ttsModel": "Doubao Speech Synthesis Model"
+    },
     "openai": {
       "sttModel": "OpenAI Speech-to-Text Model",
       "title": "OpenAI",

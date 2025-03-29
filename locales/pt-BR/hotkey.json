@@ -3,6 +3,10 @@
     "desc": "Adiciona o conteúdo atual como uma mensagem do usuário, mas não aciona a geração",
     "title": "Adicionar uma mensagem do usuário"
   },
+  "deleteAndRegenerateMessage": {
+    "desc": "Excluir e regenerar a última mensagem",
+    "title": "Excluir e regenerar mensagem"
+  },
   "editMessage": {
     "desc": "Entre no modo de edição pressionando Alt e clicando duas vezes na mensagem",
     "title": "Editar mensagem"

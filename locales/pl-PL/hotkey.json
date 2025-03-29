@@ -3,6 +3,10 @@
     "desc": "Dodaj bieżącą treść jako wiadomość użytkownika, ale nie wyzwalaj generowania",
     "title": "Dodaj wiadomość użytkownika"
   },
+  "deleteAndRegenerateMessage": {
+    "desc": "Usuń i wygeneruj ponownie ostatnią wiadomość",
+    "title": "Usuń i wygeneruj wiadomość"
+  },
   "editMessage": {
     "desc": "Wejdź w tryb edycji, przytrzymując klawisz Alt i podwójnie klikając wiadomość",
     "title": "Edytuj wiadomość"
