@@ -222,7 +222,7 @@
     "description": "DeepSeek-V3 é um modelo de linguagem com 671 bilhões de parâmetros, utilizando uma arquitetura de especialistas mistos (MoE) com atenção potencial de múltiplas cabeças (MLA) e uma estratégia de balanceamento de carga sem perda auxiliar, otimizando a eficiência de inferência e treinamento. Pré-treinado em 14,8 trilhões de tokens de alta qualidade, e ajustado por supervisão e aprendizado por reforço, o DeepSeek-V3 supera outros modelos de código aberto, aproximando-se de modelos fechados líderes."
   },
   "Pro/deepseek-ai/DeepSeek-V3-1226": {
-    "description": "DeepSeek-V3 é um modelo de linguagem híbrido de especialistas (MoE) com 671 bilhões de parâmetros, utilizando atenção latente multi-cabeça (MLA) e a arquitetura DeepSeekMoE, combinando uma estratégia de balanceamento de carga sem perda auxiliar para otimizar a eficiência de inferência e treinamento. Pré-treinado em 14,8 trilhões de tokens de alta qualidade e passando por ajuste fino supervisionado e aprendizado por reforço, o DeepSeek-V3 supera outros modelos de código aberto em desempenho, aproximando-se de modelos fechados líderes."
+    "description": "DeepSeek-V3 é um modelo de linguagem híbrido de especialistas (MoE) com 671 bilhões de parâmetros, utilizando atenção latente multi-cabeça (MLA) e a arquitetura DeepSeekMoE, combinando uma estratégia de balanceamento de carga sem perda auxiliar para otimizar a eficiência de inferência e treinamento. Pré-treinado em 14,8 trilhões de tokens de alta qualidade, e passando por ajuste fino supervisionado e aprendizado por reforço, o DeepSeek-V3 supera outros modelos de código aberto em desempenho, aproximando-se de modelos fechados líderes."
   },
   "QwQ-32B-Preview": {
     "description": "O QwQ-32B-Preview é um modelo de processamento de linguagem natural inovador, capaz de lidar eficientemente com tarefas complexas de geração de diálogos e compreensão de contexto."
@@ -1719,7 +1719,7 @@
     "description": "O modelo Qwen-Math possui uma forte capacidade de resolução de problemas matemáticos."
   },
   "qwen2.5-omni-7b": {
-    "description": "A série de modelos Qwen-Omni suporta a entrada de múltiplos tipos de dados, incluindo vídeo, áudio, imagens e texto, e produz saídas em áudio e texto."
+    "description": "O modelo da série Qwen-Omni suporta a entrada de múltiplos tipos de dados, incluindo vídeo, áudio, imagens e texto, e produz saídas em áudio e texto."
   },
   "qwen2.5-vl-32b-instruct": {
     "description": "A série de modelos Qwen2.5-VL aprimorou o nível de inteligência, praticidade e aplicabilidade dos modelos, proporcionando um desempenho superior em cenários como conversação natural, criação de conteúdo, serviços de conhecimento especializado e desenvolvimento de código. A versão 32B utiliza técnicas de aprendizado por reforço para otimizar o modelo, oferecendo, em comparação com outros modelos da série Qwen2.5 VL, um estilo de saída mais alinhado com as preferências humanas, capacidade de raciocínio para problemas matemáticos complexos e compreensão detalhada e raciocínio sobre imagens."

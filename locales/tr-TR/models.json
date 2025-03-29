@@ -222,7 +222,7 @@
     "description": "DeepSeek-V3, 6710 milyar parametreye sahip bir karma uzman (MoE) dil modelidir ve çok başlı potansiyel dikkat (MLA) ve DeepSeekMoE mimarisini kullanarak, yardımcı kayıplar olmadan yük dengeleme stratejileri ile çıkarım ve eğitim verimliliğini optimize etmektedir. 14.8 trilyon yüksek kaliteli token üzerinde önceden eğitilmiş ve denetimli ince ayar ve güçlendirilmiş öğrenme ile, DeepSeek-V3 performans açısından diğer açık kaynak modelleri geride bırakmakta ve lider kapalı kaynak modellere yaklaşmaktadır."
   },
   "Pro/deepseek-ai/DeepSeek-V3-1226": {
-    "description": "DeepSeek-V3, 6710 milyar parametreye sahip bir karma uzman (MoE) dil modelidir. Çok başlı potansiyel dikkat (MLA) ve DeepSeekMoE mimarisini kullanarak, yardımcı kayıpsız yük dengeleme stratejisi ile optimizasyon yapar ve çıkarım ile eğitim verimliliğini artırır. 14.8 trilyon yüksek kaliteli token üzerinde önceden eğitilmiş ve denetimli ince ayar ile pekiştirmeli öğrenme ile geliştirilmiştir. DeepSeek-V3, performans açısından diğer açık kaynaklı modellere göre üstünlük sağlamakta ve lider kapalı kaynak modellere yaklaşmaktadır."
+    "description": "DeepSeek-V3, 6710 milyar parametreye sahip bir karma uzman (MoE) dil modelidir. Çok başlı potansiyel dikkat (MLA) ve DeepSeekMoE mimarisini kullanarak, yardımcı kayıpsız yük dengeleme stratejileri ile optimizasyon yapar ve çıkarım ile eğitim verimliliğini artırır. 14.8 trilyon yüksek kaliteli token üzerinde önceden eğitilmiş ve denetimli ince ayar ile pekiştirmeli öğrenme ile geliştirilmiştir; DeepSeek-V3, performans açısından diğer açık kaynaklı modellere göre üstünlük sağlar ve lider kapalı kaynak modellere yakın bir performans sergiler."
   },
   "QwQ-32B-Preview": {
     "description": "QwQ-32B-Preview, karmaşık diyalog oluşturma ve bağlam anlama görevlerini etkili bir şekilde işleyebilen yenilikçi bir doğal dil işleme modelidir."
@@ -747,7 +747,7 @@
     "description": "DeepSeek-V3, Hangzhou DeepSeek Yapay Zeka Temel Teknoloji Araştırma Şirketi tarafından geliştirilen MoE modelidir, birçok değerlendirme sonucunda öne çıkmakta ve ana akım listelerde açık kaynak modeller arasında birinci sırada yer almaktadır. V3, V2.5 modeline göre üretim hızında 3 kat artış sağlamış, kullanıcılara daha hızlı ve akıcı bir deneyim sunmuştur."
   },
   "deepseek-v3-0324": {
-    "description": "DeepSeek-V3-0324, 671B parametreye sahip bir MoE modelidir ve programlama ile teknik yetenekler, bağlam anlama ve uzun metin işleme gibi alanlarda belirgin avantajlar sunmaktadır."
+    "description": "DeepSeek-V3-0324, 671B parametreye sahip bir MoE modelidir ve programlama ile teknik yetenekler, bağlam anlama ve uzun metin işleme gibi alanlarda belirgin avantajlar sunar."
   },
   "deepseek/deepseek-chat": {
     "description": "Genel ve kod yeteneklerini birleştiren yeni açık kaynak model, yalnızca mevcut Chat modelinin genel diyalog yeteneklerini ve Coder modelinin güçlü kod işleme yeteneklerini korumakla kalmaz, aynı zamanda insan tercihleriyle daha iyi hizalanmıştır. Ayrıca, DeepSeek-V2.5 yazma görevleri, talimat takibi gibi birçok alanda da büyük iyileştirmeler sağlamıştır."
