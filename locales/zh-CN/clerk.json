@@ -372,8 +372,8 @@
       "actionLink__use_passkey": "改用密钥",
       "actionLink__use_phone": "使用手机",
       "actionLink__use_username": "使用用户名",
-      "actionText": "没有帐户？",
-      "actionText__join_waitlist": "没有帐户？",
+      "actionText": "⚠️没有帐户？",
+      "actionText__join_waitlist": "⚠️没有帐户？",
       "subtitle": "欢迎回来！请登录以继续",
       "title": "登录到 {{applicationName}}"
     },
@@ -773,7 +773,7 @@
       "actionLink": "登录",
       "actionText": "已有账户？",
       "formButton": "申请加入",
-      "subtitle": "输入您的邮箱地址，等待管理员处理后即可登录",
+      "subtitle": "输入您的邮箱地址，等待或联系管理员处理后即可登录",
       "title": "申请 加入候补"
     }
   }
