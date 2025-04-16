@@ -32,6 +32,16 @@ export interface LobeAgentConfig {
    * @default gpt-4o-mini
    */
   model: string;
+
+  /**
+   * 开场白
+   */
+  openingMessage?: string;
+  /**
+   * 开场问题
+   */
+  openingQuestions?: string[];
+
   /**
    * 语言模型参数
    */
@@ -40,10 +50,12 @@ export interface LobeAgentConfig {
    * 启用的插件
    */
   plugins?: string[];
+
   /**
    *  模型供应商
    */
   provider?: string;
+
   /**
    * 系统角色
    */
