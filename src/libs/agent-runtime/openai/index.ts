@@ -13,8 +13,7 @@ export const LobeOpenAI = LobeOpenAICompatibleFactory({
   chatCompletion: {
     handlePayload: (payload) => {
       const { model } = payload;
-
-      if (model.startsWith('o1') || model.startsWith('o3')) {
+      if (model.startsWith('o1') || model.startsWith('o3') || model.startsWith('o4')) {
         return pruneReasoningPayload(payload) as any;
       }
 
