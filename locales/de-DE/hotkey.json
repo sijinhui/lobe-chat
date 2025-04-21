@@ -7,6 +7,10 @@
     "desc": "Aktuelle Nachrichten und hochgeladene Dateien im Gespräch löschen",
     "title": "Gesprächsnachrichten löschen"
   },
+  "deleteAndRegenerateMessage": {
+    "desc": "Löschen und die letzte Nachricht neu generieren",
+    "title": "Nachricht löschen und neu generieren"
+  },
   "editMessage": {
     "desc": "Treten Sie in den Bearbeitungsmodus, indem Sie die Alt-Taste gedrückt halten und auf die Nachricht doppelklicken",
     "title": "Nachricht bearbeiten"

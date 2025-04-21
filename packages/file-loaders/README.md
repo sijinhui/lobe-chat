@@ -24,40 +24,40 @@
 
 ### `FileDocument` Interface
 
-| 字段              | 类型              | 描述                                                           |
-| :---------------- | :---------------- | :------------------------------------------------------------- |
-| `content`         | `string`          | 文件内容 (聚合后的内容)                                        |
-| `createdTime`     | `Date`            | 文件创建时间戳。                                               |
-| `fileType`        | `string`          | 文件类型或扩展名。                                             |
-| `filename`        | `string`          | 原始文件名。                                                   |
-| `metadata`        | `object`          | 文件级别的元数据。                                             |
-| `metadata.author` | `string?`         | 文档作者 (如果可用)。                                          |
-| `metadata.error`  | `string?`         | 如果整个文件加载失败，记录错误信息。                           |
-| `metadata.title`  | `string?`         | 文档标题 (如果可用)。                                          |
-| `...`             | `any`             | 其他文件级别的元数据。                                         |
-| `modifiedTime`    | `Date`            | 文件最后修改时间戳。                                           |
-| `pages`           | `DocumentPage[]?` | 包含文档中所有逻辑页面 / 块的数组 (可选)。                     |
-| `source`          | `string`          | 原始文件的完整路径。                                           |
+| 字段                | 类型                | 描述                                              |
+| :---------------- | :---------------- | :---------------------------------------------- |
+| `content`         | `string`          | 文件内容 (聚合后的内容)                                   |
+| `createdTime`     | `Date`            | 文件创建时间戳。                                        |
+| `fileType`        | `string`          | 文件类型或扩展名。                                       |
+| `filename`        | `string`          | 原始文件名。                                          |
+| `metadata`        | `object`          | 文件级别的元数据。                                       |
+| `metadata.author` | `string?`         | 文档作者 (如果可用)。                                    |
+| `metadata.error`  | `string?`         | 如果整个文件加载失败，记录错误信息。                              |
+| `metadata.title`  | `string?`         | 文档标题 (如果可用)。                                    |
+| `...`             | `any`             | 其他文件级别的元数据。                                     |
+| `modifiedTime`    | `Date`            | 文件最后修改时间戳。                                      |
+| `pages`           | `DocumentPage[]?` | 包含文档中所有逻辑页面 / 块的数组 (可选)。                        |
+| `source`          | `string`          | 原始文件的完整路径。                                      |
 | `totalCharCount`  | `number`          | 整个文档的总字符数 (所有 `DocumentPage` 的 `charCount` 之和)。 |
-| `totalLineCount`  | `number`          | 整个文档的总行数 (所有 `DocumentPage` 的 `lineCount` 之和)。   |
+| `totalLineCount`  | `number`          | 整个文档的总行数 (所有 `DocumentPage` 的 `lineCount` 之和)。  |
 
 ### `DocumentPage` Interface
 
-| 字段                       | 类型      | 描述                         |
-| :------------------------- | :-------- | :--------------------------- |
-| `charCount`                | `number`  | 此页 / 块内容的字符数。      |
+| 字段                         | 类型        | 描述                  |
+| :------------------------- | :-------- | :------------------ |
+| `charCount`                | `number`  | 此页 / 块内容的字符数。       |
 | `lineCount`                | `number`  | 此页 / 块内容的行数。        |
-| `metadata`                 | `object`  | 与此页 / 块相关的元数据。    |
-| `metadata.chunkIndex`      | `number?` | 如果分割成块，当前块的索引。 |
-| `metadata.error`           | `string?` | 处理此页 / 块时发生的错误。  |
-| `metadata.lineNumberEnd`   | `number?` | 在原始文件中的结束行号。     |
-| `metadata.lineNumberStart` | `number?` | 在原始文件中的起始行号。     |
-| `metadata.pageNumber`      | `number?` | 页码 (适用于 PDF, DOCX)。    |
-| `metadata.sectionTitle`    | `string?` | 相关的章节标题。             |
+| `metadata`                 | `object`  | 与此页 / 块相关的元数据。      |
+| `metadata.chunkIndex`      | `number?` | 如果分割成块，当前块的索引。      |
+| `metadata.error`           | `string?` | 处理此页 / 块时发生的错误。     |
+| `metadata.lineNumberEnd`   | `number?` | 在原始文件中的结束行号。        |
+| `metadata.lineNumberStart` | `number?` | 在原始文件中的起始行号。        |
+| `metadata.pageNumber`      | `number?` | 页码 (适用于 PDF, DOCX)。 |
+| `metadata.sectionTitle`    | `string?` | 相关的章节标题。            |
 | `metadata.sheetName`       | `string?` | 工作表名称 (适用于 XLSX)。   |
 | `metadata.slideNumber`     | `number?` | 幻灯片编号 (适用于 PPTX)。   |
-| `metadata.totalChunks`     | `number?` | 如果分割成块，总块数。       |
-| `...`                      | `any`     | 其他特定于页 / 块的元数据。  |
-| `pageContent`              | `string`  | 此页 / 块的核心文本内容。    |
+| `metadata.totalChunks`     | `number?` | 如果分割成块，总块数。         |
+| `...`                      | `any`     | 其他特定于页 / 块的元数据。     |
+| `pageContent`              | `string`  | 此页 / 块的核心文本内容。      |
 
 如果你对我们的项目感兴趣，欢迎在 [GitHub](https://github.com/lobehub/lobe-chat) 上查看、点赞或贡献代码！

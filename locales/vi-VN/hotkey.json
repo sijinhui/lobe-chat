@@ -7,6 +7,10 @@
     "desc": "Xóa tất cả tin nhắn và tệp đã tải lên trong cuộc trò chuyện hiện tại",
     "title": "Xóa tin nhắn cuộc trò chuyện"
   },
+  "deleteAndRegenerateMessage": {
+    "desc": "Xóa và tái tạo lại tin nhắn cuối cùng",
+    "title": "Xóa và tái tạo tin nhắn"
+  },
   "editMessage": {
     "desc": "Vào chế độ chỉnh sửa bằng cách giữ phím Alt và nhấp đúp vào tin nhắn",
     "title": "Chỉnh sửa tin nhắn"

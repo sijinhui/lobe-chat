@@ -7,6 +7,10 @@
     "desc": "清空當前會話的消息和上傳的檔案",
     "title": "清空會話消息"
   },
+  "deleteAndRegenerateMessage": {
+    "desc": "刪除並重新生成最後一條消息",
+    "title": "刪除並重新生成消息"
+  },
   "editMessage": {
     "desc": "通過按住 Alt 並雙擊消息進入編輯模式",
     "title": "編輯消息"

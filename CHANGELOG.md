@@ -1533,7 +1533,7 @@
 
 #### 🐛 Bug Fixes
 
-- **misc**: Set max_completion_tokens to undefined for Azure OpenAI.
+- **misc**: Set max\_completion\_tokens to undefined for Azure OpenAI.
 
 <br/>
 
@@ -1542,7 +1542,7 @@
 
 #### What's fixed
 
-- **misc**: Set max_completion_tokens to undefined for Azure OpenAI, closes [#7114](https://github.com/lobehub/lobe-chat/issues/7114) ([30b66b9](https://github.com/lobehub/lobe-chat/commit/30b66b9))
+- **misc**: Set max\_completion\_tokens to undefined for Azure OpenAI, closes [#7114](https://github.com/lobehub/lobe-chat/issues/7114) ([30b66b9](https://github.com/lobehub/lobe-chat/commit/30b66b9))
 
 </details>
 
@@ -4164,7 +4164,7 @@
 
 #### 🐛 Bug Fixes
 
-- **misc**: Match o1 series models more robust in Azure OpenAI provider, set max_completion_tokens to null for Azure OpenAI.
+- **misc**: Match o1 series models more robust in Azure OpenAI provider, set max\_completion\_tokens to null for Azure OpenAI.
 
 <br/>
 
@@ -4174,7 +4174,7 @@
 #### What's fixed
 
 - **misc**: Match o1 series models more robust in Azure OpenAI provider, closes [#6193](https://github.com/lobehub/lobe-chat/issues/6193) ([f444e66](https://github.com/lobehub/lobe-chat/commit/f444e66))
-- **misc**: Set max_completion_tokens to null for Azure OpenAI, closes [#6198](https://github.com/lobehub/lobe-chat/issues/6198) ([e9e8da4](https://github.com/lobehub/lobe-chat/commit/e9e8da4))
+- **misc**: Set max\_completion\_tokens to null for Azure OpenAI, closes [#6198](https://github.com/lobehub/lobe-chat/issues/6198) ([e9e8da4](https://github.com/lobehub/lobe-chat/commit/e9e8da4))
 
 </details>
 
@@ -8090,7 +8090,7 @@
 
 #### 🐛 Bug Fixes
 
-- **misc**: Fix custom max_token not saved from customModelCards.
+- **misc**: Fix custom max\_token not saved from customModelCards.
 
 <br/>
 
@@ -8099,7 +8099,7 @@
 
 #### What's fixed
 
-- **misc**: Fix custom max_token not saved from customModelCards, closes [#5226](https://github.com/lobehub/lobe-chat/issues/5226) ([ab6d17c](https://github.com/lobehub/lobe-chat/commit/ab6d17c))
+- **misc**: Fix custom max\_token not saved from customModelCards, closes [#5226](https://github.com/lobehub/lobe-chat/issues/5226) ([ab6d17c](https://github.com/lobehub/lobe-chat/commit/ab6d17c))
 
 </details>
 
@@ -10632,7 +10632,7 @@
 
 #### ♻ Code Refactoring
 
-- **misc**: `genServerLLMConfig` function, get \*\_MODEL_LIST from env.
+- **misc**: `genServerLLMConfig` function, get \*\_MODEL\_LIST from env.
 
 <br/>
 
@@ -10641,7 +10641,7 @@
 
 #### Code refactoring
 
-- **misc**: `genServerLLMConfig` function, get \*\_MODEL_LIST from env, closes [#4694](https://github.com/lobehub/lobe-chat/issues/4694) ([d84f369](https://github.com/lobehub/lobe-chat/commit/d84f369))
+- **misc**: `genServerLLMConfig` function, get \*\_MODEL\_LIST from env, closes [#4694](https://github.com/lobehub/lobe-chat/issues/4694) ([d84f369](https://github.com/lobehub/lobe-chat/commit/d84f369))
 
 </details>
 
@@ -11357,7 +11357,7 @@
 
 #### 🐛 Bug Fixes
 
-- **misc**: Fix duplicate key value violates unique constraint "slug_user_id_unique" when create inbox session.
+- **misc**: Fix duplicate key value violates unique constraint "slug\_user\_id\_unique" when create inbox session.
 
 <br/>
 
@@ -11366,7 +11366,7 @@
 
 #### What's fixed
 
-- **misc**: Fix duplicate key value violates unique constraint "slug_user_id_unique" when create inbox session, closes [#4596](https://github.com/lobehub/lobe-chat/issues/4596) ([c5af96e](https://github.com/lobehub/lobe-chat/commit/c5af96e))
+- **misc**: Fix duplicate key value violates unique constraint "slug\_user\_id\_unique" when create inbox session, closes [#4596](https://github.com/lobehub/lobe-chat/issues/4596) ([c5af96e](https://github.com/lobehub/lobe-chat/commit/c5af96e))
 
 </details>
 
@@ -18906,7 +18906,7 @@
 
 #### 🐛 Bug Fixes
 
-- **misc**: -check_updates cannot be set by FEATURE_FLAGS.
+- **misc**: -check\_updates cannot be set by FEATURE\_FLAGS.
 
 <br/>
 
@@ -18915,7 +18915,7 @@
 
 #### What's fixed
 
-- **misc**: -check_updates cannot be set by FEATURE_FLAGS, closes [#3038](https://github.com/lobehub/lobe-chat/issues/3038) ([bdadfee](https://github.com/lobehub/lobe-chat/commit/bdadfee))
+- **misc**: -check\_updates cannot be set by FEATURE\_FLAGS, closes [#3038](https://github.com/lobehub/lobe-chat/issues/3038) ([bdadfee](https://github.com/lobehub/lobe-chat/commit/bdadfee))
 
 </details>
 

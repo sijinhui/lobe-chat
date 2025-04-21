@@ -7,6 +7,10 @@
     "desc": "Effacer les messages de la session actuelle et les fichiers téléchargés",
     "title": "Effacer les messages de la session"
   },
+  "deleteAndRegenerateMessage": {
+    "desc": "Supprimer et régénérer le dernier message",
+    "title": "Supprimer et régénérer le message"
+  },
   "editMessage": {
     "desc": "Entrez en mode édition en maintenant la touche Alt enfoncée et en double-cliquant sur le message",
     "title": "Éditer le message"

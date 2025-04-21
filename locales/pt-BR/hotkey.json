@@ -7,6 +7,10 @@
     "desc": "Limpar as mensagens da conversa atual e os arquivos enviados",
     "title": "Limpar mensagens da conversa"
   },
+  "deleteAndRegenerateMessage": {
+    "desc": "Excluir e regenerar a última mensagem",
+    "title": "Excluir e regenerar mensagem"
+  },
   "editMessage": {
     "desc": "Entre no modo de edição pressionando Alt e clicando duas vezes na mensagem",
     "title": "Editar mensagem"
