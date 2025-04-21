@@ -3,6 +3,7 @@ import { parseAsBoolean, useQueryState } from 'nuqs';
 import { useEffect } from 'react';
 import { useHotkeysContext } from 'react-hotkeys-hook';
 
+import { useClearCurrentMessages } from '@/features/ChatInput/ActionBar/Clear';
 import { useSendMessage } from '@/features/ChatInput/useSend';
 import { useOpenChatSettings } from '@/hooks/useInterceptingRoutes';
 import { useActionSWR } from '@/libs/swr';
@@ -93,6 +94,11 @@ export const useAddUserMessageHotkey = () => {
   return useHotkeyById(HotkeyEnum.AddUserMessage, () => send({ onlyAddUserMessage: true }));
 };
 
+export const useClearCurrentMessagesHotkey = () => {
+  const clearCurrentMessages = useClearCurrentMessages();
+  return useHotkeyById(HotkeyEnum.ClearCurrentMessages, () => clearCurrentMessages());
+};
+
 // 注册聚合
 
 export const useRegisterChatHotkeys = () => {
@@ -111,6 +117,7 @@ export const useRegisterChatHotkeys = () => {
   useDeleteAndRegenerateMessage();
   useSaveTopicHotkey();
   useAddUserMessageHotkey();
+  useClearCurrentMessagesHotkey();
 
   useEffect(() => {
     enableScope(HotkeyScopeEnum.Chat);

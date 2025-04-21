@@ -3,9 +3,9 @@
     "desc": "Voeg de huidige invoer toe als gebruikersbericht, maar activeer geen generatie",
     "title": "Voeg een gebruikersbericht toe"
   },
-  "deleteAndRegenerateMessage": {
-    "desc": "Verwijder en genereer het laatste bericht opnieuw",
-    "title": "Verwijder en genereer bericht opnieuw"
+  "clearCurrentMessages": {
+    "desc": "Verwijder de berichten en geüploade bestanden van de huidige sessie",
+    "title": "Verwijder sessieberichten"
   },
   "editMessage": {
     "desc": "Ga naar de bewerkingsmodus door Alt ingedrukt te houden en op het bericht te dubbelklikken",

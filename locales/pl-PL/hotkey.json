@@ -3,9 +3,9 @@
     "desc": "Dodaj bieżącą treść jako wiadomość użytkownika, ale nie wyzwalaj generowania",
     "title": "Dodaj wiadomość użytkownika"
   },
-  "deleteAndRegenerateMessage": {
-    "desc": "Usuń i wygeneruj ponownie ostatnią wiadomość",
-    "title": "Usuń i wygeneruj wiadomość"
+  "clearCurrentMessages": {
+    "desc": "Wyczyść wiadomości i przesłane pliki w bieżącej rozmowie",
+    "title": "Wyczyść wiadomości rozmowy"
   },
   "editMessage": {
     "desc": "Wejdź w tryb edycji, przytrzymując klawisz Alt i podwójnie klikając wiadomość",

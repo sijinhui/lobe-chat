@@ -94,4 +94,10 @@ export const HOTKEYS_REGISTRATION: HotkeyRegistration = [
     nonEditable: true,
     scopes: [HotkeyScopeEnum.Chat],
   },
+  {
+    group: HotkeyGroupEnum.Conversation,
+    id: HotkeyEnum.ClearCurrentMessages,
+    keys: combineKeys([KeyEnum.Alt, KeyEnum.Backspace]),
+    scopes: [HotkeyScopeEnum.Chat],
+  },
 ];

@@ -5,6 +5,10 @@ const hotkey: HotkeyI18nTranslations = {
     desc: '将当前输入内容添加为用户消息，但不触发生成',
     title: '添加一条用户消息',
   },
+  clearCurrentMessages: {
+    desc: '清空当前会话的消息和上传的文件',
+    title: '清空会话消息',
+  },
   deleteAndRegenerateMessage: {
     desc: '删除并重新生成最后一条消息',
     title: '删除并重新生成消息',
