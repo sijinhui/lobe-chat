@@ -30,7 +30,7 @@ export const LobeOpenAI = LobeOpenAICompatibleFactory({
 
     const visionKeywords = ['gpt-4o', 'vision'];
 
-    const reasoningKeywords = ['o1', 'o3'];
+    const reasoningKeywords = ['o1', 'o3', 'o4'];
 
     const modelsPage = (await client.models.list()) as any;
     const modelList: OpenAIModelCard[] = modelsPage.data;
