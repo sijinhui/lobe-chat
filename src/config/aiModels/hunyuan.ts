@@ -221,8 +221,7 @@ const hunyuanChatModels: AIChatModelCard[] = [
       search: true,
     },
     contextWindowTokens: 32_000,
-    description:
-      'hunyuan-TurboS 混元旗舰大模型最新版本，具备更强的思考能力，更优的体验效果。',
+    description: 'hunyuan-TurboS 混元旗舰大模型最新版本，具备更强的思考能力，更优的体验效果。',
     displayName: 'Hunyuan TurboS',
     enabled: true,
     id: 'hunyuan-turbos-latest',
@@ -332,7 +331,8 @@ const hunyuanChatModels: AIChatModelCard[] = [
       vision: true,
     },
     contextWindowTokens: 8000,
-    description: '此模型适用于图文理解场景，是基于混元最新 turbos 的新一代视觉语言旗舰大模型，聚焦图文理解相关任务，包括基于图片的实体识别、知识问答、文案创作、拍照解题等方面，相比前一代模型全面提升。',
+    description:
+      '此模型适用于图文理解场景，是基于混元最新 turbos 的新一代视觉语言旗舰大模型，聚焦图文理解相关任务，包括基于图片的实体识别、知识问答、文案创作、拍照解题等方面，相比前一代模型全面提升。',
     displayName: 'Hunyuan TurboS Vision',
     enabled: true,
     id: 'hunyuan-turbos-vision',

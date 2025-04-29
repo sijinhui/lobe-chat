@@ -15,15 +15,17 @@ export const LobeAi360AI = LobeOpenAICompatibleFactory({
     handlePayload: (payload) => {
       const { enabledSearch, tools, ...rest } = payload;
 
-      const ai360Tools = enabledSearch ? [
-        ...(tools || []),
-        {
-          type: "web_search",
-          web_search: {
-            search_mode: "auto",
-          },
-        }
-      ] : tools;
+      const ai360Tools = enabledSearch
+        ? [
+            ...(tools || []),
+            {
+              type: 'web_search',
+              web_search: {
+                search_mode: 'auto',
+              },
+            },
+          ]
+        : tools;
 
       return {
         ...rest,

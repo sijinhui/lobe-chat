@@ -1,5 +1,5 @@
-import {Azure, Doubao, OpenAI} from '@lobehub/icons';
-import { SelectProps } from 'antd';
+import { Azure, Doubao, OpenAI } from '@lobehub/icons';
+import type { SelectProps } from '@lobehub/ui';
 
 import { LabelRenderer } from '@/components/ModelSelect';
 

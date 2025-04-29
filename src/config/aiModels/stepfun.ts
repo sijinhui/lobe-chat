@@ -11,7 +11,8 @@ const stepfunChatModels: AIChatModelCard[] = [
       vision: true,
     },
     contextWindowTokens: 100_000,
-    description: '该模型是拥有强大的图像理解能力的推理大模型，能够处理图像和文字信息，经过深度思考后输出文本生成文本内容。该模型在视觉推理领域表现突出，同时拥有第一梯队的数学、代码、文本推理能力。上下文长度为100k。',
+    description:
+      '该模型是拥有强大的图像理解能力的推理大模型，能够处理图像和文字信息，经过深度思考后输出文本生成文本内容。该模型在视觉推理领域表现突出，同时拥有第一梯队的数学、代码、文本推理能力。上下文长度为100k。',
     displayName: 'Step R1 V Mini',
     enabled: true,
     id: 'step-r1-v-mini',
@@ -259,7 +260,8 @@ const stepfunChatModels: AIChatModelCard[] = [
       vision: true,
     },
     contextWindowTokens: 32_000,
-    description: '该模型拥有强大的图像理解能力，在数理、代码领域强于1o。模型比1o更小，输出速度更快。',
+    description:
+      '该模型拥有强大的图像理解能力，在数理、代码领域强于1o。模型比1o更小，输出速度更快。',
     displayName: 'Step 1o Turbo Vision',
     enabled: true,
     id: 'step-1o-turbo-vision',

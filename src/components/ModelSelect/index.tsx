@@ -1,40 +1,30 @@
 import { IconAvatarProps, ModelIcon, ProviderIcon } from '@lobehub/icons';
-import { Avatar, Icon, Tooltip } from '@lobehub/ui';
+import { Avatar, Icon, Tag, Tooltip } from '@lobehub/ui';
 import { Typography } from 'antd';
 import { createStyles } from 'antd-style';
 import {
   Infinity,
   AtomIcon,
   LucideEye,
-  LucideFlame,
   LucideGlobe,
+  LucideFlame,
   LucideImage,
   LucidePaperclip,
   ToyBrick,
 } from 'lucide-react';
 import numeral from 'numeral';
-import { rgba } from 'polished';
 import { FC, memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Center, Flexbox } from 'react-layout-kit';
+import { Flexbox } from 'react-layout-kit';
 
 import { ModelAbilities } from '@/types/aiModel';
 import { AiProviderSourceType } from '@/types/aiProvider';
 import { ChatModelCard } from '@/types/llm';
 import { formatTokenNumber } from '@/utils/format';
 
-const useStyles = createStyles(({ css, token, isDarkMode }) => ({
-  custom: css`
-    width: 36px;
-    height: 20px;
-    border-radius: 4px;
+export const TAG_CLASSNAME = 'lobe-model-info-tags';
 
-    font-family: ${token.fontFamilyCode};
-    font-size: 12px;
-    color: ${rgba(token.colorWarning, 0.75)};
-
-    background: ${token.colorWarningBg};
-  `,
+const useStyles = createStyles(({ css, token }) => ({
   tag: css`
     cursor: default;
 
@@ -45,30 +35,6 @@ const useStyles = createStyles(({ css, token, isDarkMode }) => ({
     width: 20px;
     height: 20px;
     border-radius: 4px;
-  `,
-  tagBlue: css`
-    color: ${token.geekblue};
-    background: ${token.geekblue1};
-  `,
-  tagCyan: css`
-    color: ${isDarkMode ? token.cyan7 : token.cyan10};
-    background: ${isDarkMode ? token.cyan1 : token.cyan2};
-  `,
-  tagGreen: css`
-    color: ${token.green};
-    background: ${token.green1};
-  `,
-  tagGreenDeep: css`
-    color: ${token.green9};
-    background: ${token.green3};
-  `,
-  tagPurple: css`
-    color: ${token.purple};
-    background: ${token.purple1};
-  `,
-  tagRed: css`
-    color: ${token.red};
-    background: ${token.red1};
   `,
   token: css`
     width: 36px;
@@ -93,17 +59,22 @@ interface ModelInfoTagsProps extends ModelAbilities {
 export const ModelInfoTags = memo<ModelInfoTagsProps>(
   ({ directionReverse, placement = 'right', ...model }) => {
     const { t } = useTranslation('components');
-    const { styles, cx } = useStyles();
+    const { styles } = useStyles();
 
     return (
-      <Flexbox direction={directionReverse ? 'horizontal-reverse' : 'horizontal'} gap={5}>
+      <Flexbox
+        className={TAG_CLASSNAME}
+        direction={directionReverse ? 'horizontal-reverse' : 'horizontal'}
+        gap={4}
+        width={'fit-content'}
+      >
         {model.hot && (
           <Tooltip
             placement={placement}
             styles={{ root: { pointerEvents: 'none' } }}
             title={t('ModelSelect.featureTag.hot')}
           >
-            <div className={cx(styles.tag, styles.tagRed)} style={{ cursor: 'pointer' }} title="">
+            <div className={styles.tag} color={'error'} size={'small'}>
               <Icon icon={LucideFlame} />
             </div>
           </Tooltip>
@@ -114,9 +85,9 @@ export const ModelInfoTags = memo<ModelInfoTagsProps>(
             styles={{ root: { pointerEvents: 'none' } }}
             title={t('ModelSelect.featureTag.file')}
           >
-            <div className={cx(styles.tag, styles.tagGreen)} style={{ cursor: 'pointer' }} title="">
+            <Tag className={styles.tag} color={'success'} size={'small'}>
               <Icon icon={LucidePaperclip} />
-            </div>
+            </Tag>
           </Tooltip>
         )}
         {model.imageOutput && (
@@ -125,9 +96,9 @@ export const ModelInfoTags = memo<ModelInfoTagsProps>(
             styles={{ root: { pointerEvents: 'none' } }}
             title={t('ModelSelect.featureTag.imageOutput')}
           >
-            <div className={cx(styles.tag, styles.tagGreen)} style={{ cursor: 'pointer' }} title="">
+            <Tag className={styles.tag} color={'success'} size={'small'}>
               <Icon icon={LucideImage} />
-            </div>
+            </Tag>
           </Tooltip>
         )}
         {model.vision && (
@@ -136,9 +107,9 @@ export const ModelInfoTags = memo<ModelInfoTagsProps>(
             styles={{ root: { pointerEvents: 'none' } }}
             title={t('ModelSelect.featureTag.vision')}
           >
-            <div className={cx(styles.tag, styles.tagGreen)} style={{ cursor: 'pointer' }} title="">
+            <Tag className={styles.tag} color={'success'} size={'small'}>
               <Icon icon={LucideEye} />
-            </div>
+            </Tag>
           </Tooltip>
         )}
         {model.functionCall && (
@@ -149,9 +120,9 @@ export const ModelInfoTags = memo<ModelInfoTagsProps>(
             }}
             title={t('ModelSelect.featureTag.functionCall')}
           >
-            <div className={cx(styles.tag, styles.tagBlue)} style={{ cursor: 'pointer' }} title="">
+            <Tag className={styles.tag} color={'info'} size={'small'}>
               <Icon icon={ToyBrick} />
-            </div>
+            </Tag>
           </Tooltip>
         )}
         {model.reasoning && (
@@ -160,9 +131,9 @@ export const ModelInfoTags = memo<ModelInfoTagsProps>(
             styles={{ root: { pointerEvents: 'none' } }}
             title={t('ModelSelect.featureTag.reasoning')}
           >
-            <div className={cx(styles.tag, styles.tagPurple)} style={{ cursor: 'pointer' }}>
+            <Tag className={styles.tag} color={'purple'} size={'small'}>
               <Icon icon={AtomIcon} />
-            </div>
+            </Tag>
           </Tooltip>
         )}
         {model.search && (
@@ -171,9 +142,9 @@ export const ModelInfoTags = memo<ModelInfoTagsProps>(
             styles={{ root: { pointerEvents: 'none' } }}
             title={t('ModelSelect.featureTag.search')}
           >
-            <div className={cx(styles.tag, styles.tagCyan)} style={{ cursor: 'pointer' }} title="">
+            <Tag className={styles.tag} color={'cyan'} size={'small'}>
               <Icon icon={LucideGlobe} />
-            </div>
+            </Tag>
           </Tooltip>
         )}
         {typeof model.contextWindowTokens === 'number' && (
@@ -189,13 +160,13 @@ export const ModelInfoTags = memo<ModelInfoTagsProps>(
                   : numeral(model.contextWindowTokens).format('0,0'),
             })}
           >
-            <Center className={styles.token} title="">
+            <Tag className={styles.token} size={'small'}>
               {model.contextWindowTokens === 0 ? (
                 <Infinity size={17} strokeWidth={1.6} />
               ) : (
                 formatTokenNumber(model.contextWindowTokens as number)
               )}
-            </Center>
+            </Tag>
           </Tooltip>
         )}
       </Flexbox>
@@ -247,14 +218,17 @@ const HighlightBrackets = ({ text }: { text: string }) => {
 
 export const ModelItemRender = memo<ModelItemRenderProps>(({ showInfoTag = true, ...model }) => {
   return (
-    <Flexbox align={'center'} gap={32} horizontal justify={'space-between'}>
-      <Flexbox align={'center'} gap={8} horizontal>
+    <Flexbox
+      align={'center'}
+      gap={32}
+      horizontal
+      justify={'space-between'}
+      style={{ overflow: 'hidden', position: 'relative' }}
+    >
+      <Flexbox align={'center'} gap={8} horizontal style={{ overflow: 'hidden' }}>
         <ModelIcon model={model.id} size={20} />
-        <Typography.Paragraph ellipsis={false} style={{ marginBottom: 0 }}>
-          <HighlightBrackets text={model.displayName || model.id} />
-        </Typography.Paragraph>
+        <Typography.Text ellipsis>{model.displayName || model.id}</Typography.Text>
       </Flexbox>
-
       {showInfoTag && <ModelInfoTags {...model} />}
     </Flexbox>
   );

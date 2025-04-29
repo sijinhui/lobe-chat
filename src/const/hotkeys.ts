@@ -34,7 +34,7 @@ export const HOTKEYS_REGISTRATION: HotkeyRegistration = [
     group: HotkeyGroupEnum.Essential,
     id: HotkeyEnum.ToggleLeftPanel,
     keys: combineKeys([KeyEnum.Mod, KeyEnum.BracketLeft]),
-    scopes: [HotkeyScopeEnum.Chat],
+    scopes: [HotkeyScopeEnum.Chat, HotkeyScopeEnum.Files],
   },
   {
     group: HotkeyGroupEnum.Essential,
@@ -97,7 +97,7 @@ export const HOTKEYS_REGISTRATION: HotkeyRegistration = [
   {
     group: HotkeyGroupEnum.Conversation,
     id: HotkeyEnum.ClearCurrentMessages,
-    keys: combineKeys([KeyEnum.Alt, KeyEnum.Backspace]),
+    keys: combineKeys([KeyEnum.Alt, KeyEnum.Shift, KeyEnum.Backspace]),
     scopes: [HotkeyScopeEnum.Chat],
   },
 ];

@@ -75,8 +75,7 @@ const ai360ChatModels: AIChatModelCard[] = [
   },
   {
     contextWindowTokens: 16_000,
-    description:
-      '翻译专用模型，深度微调优化，翻译效果领先。',
+    description: '翻译专用模型，深度微调优化，翻译效果领先。',
     displayName: '360GPT Pro Trans',
     id: '360gpt-pro-trans',
     pricing: {
