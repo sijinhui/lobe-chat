@@ -57,7 +57,7 @@ const AgentTTS = memo(() => {
       {
         children: <SelectWithTTSPreview options={doubaoVoiceOptions} server={'doubao'} />,
         desc: t('settingTTS.voice.desc'),
-        hidden: ttsService !== 'doubao',
+        hidden: config.ttsService !== 'doubao',
         label: t('settingTTS.voice.title'),
         name: [TTS_SETTING_KEY, 'voice', 'doubao'],
       },

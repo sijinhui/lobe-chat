@@ -74,9 +74,9 @@ export const ModelInfoTags = memo<ModelInfoTagsProps>(
             styles={{ root: { pointerEvents: 'none' } }}
             title={t('ModelSelect.featureTag.hot')}
           >
-            <div className={styles.tag} color={'error'} size={'small'}>
+            <Tag className={styles.tag} color={'error'} size={'small'}>
               <Icon icon={LucideFlame} />
-            </div>
+            </Tag>
           </Tooltip>
         )}
         {model.files && (
@@ -227,7 +227,9 @@ export const ModelItemRender = memo<ModelItemRenderProps>(({ showInfoTag = true,
     >
       <Flexbox align={'center'} gap={8} horizontal style={{ overflow: 'hidden' }}>
         <ModelIcon model={model.id} size={20} />
-        <Typography.Text ellipsis>{model.displayName || model.id}</Typography.Text>
+        <Typography.Text ellipsis>
+          <HighlightBrackets text={model.displayName || model.id} />
+        </Typography.Text>
       </Flexbox>
       {showInfoTag && <ModelInfoTags {...model} />}
     </Flexbox>
