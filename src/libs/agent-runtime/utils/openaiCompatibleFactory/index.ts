@@ -343,7 +343,7 @@ export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>
       // 定义调用核心请求的逻辑
       const executeRequest = async () => {
         const res = await this.client.embeddings.create(
-          { ...payload, user: options?.user },
+          { ...payload, encoding_format: 'float', user: options?.user },
           { headers: options?.headers, signal: options?.signal },
         );
         return res.data.map((item) => item.embedding);
