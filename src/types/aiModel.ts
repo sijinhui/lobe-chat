@@ -135,7 +135,7 @@ export interface AIBaseModelCard {
 
 export interface AiModelConfig {
   /**
-   * used in azure and doubao
+   * used in azure and volcengine
    */
   deploymentName?: string;
 
@@ -245,7 +245,7 @@ export interface AIRealtimeModelCard extends AIBaseModelCard {
     vision?: boolean;
   };
   /**
-   * used in azure and doubao
+   * used in azure and volcengine
    */
   deploymentName?: string;
   maxOutput?: number;
