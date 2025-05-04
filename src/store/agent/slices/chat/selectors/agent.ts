@@ -13,7 +13,7 @@ import { LobeAgentConfig, LobeAgentTTSConfig } from '@/types/agent';
 import { KnowledgeItem, KnowledgeType } from '@/types/knowledgeBase';
 import { merge } from '@/utils/merge';
 
-import { doubaoVoiceOptions } from "@/config/aiModels/doubao";
+import { doubaoVoiceOptions } from "@/config/aiModels/volcengine";
 
 const isInboxSession = (s: AgentStoreState) => s.activeId === INBOX_SESSION_ID;
 

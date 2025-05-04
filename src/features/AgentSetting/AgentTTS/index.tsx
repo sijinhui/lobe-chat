@@ -16,7 +16,7 @@ import { selectors, useStore } from '../store';
 import SelectWithTTSPreview from './SelectWithTTSPreview';
 import { ttsOptions } from './options';
 
-import { doubaoVoiceOptions } from "@/config/aiModels/doubao";
+import { doubaoVoiceOptions } from "@/config/aiModels/volcengine";
 
 const TTS_SETTING_KEY = 'tts';
 const { openaiVoiceOptions, localeOptions } = VoiceList;
