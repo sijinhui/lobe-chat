@@ -29,7 +29,7 @@ jobs:
           port: ${{ env.SSH_PORT }}
           script: |
             echo "🔄 正在拉取最新代码..."
-            cd /mnt/nfs/lobe-chat  # 更改为你的服务器项目路径
+            cd /mnt/nfs/lobe-chat-new # 更改为你的服务器项目路径
             git pull
 
             echo "🔧 更新 Docker 容器..."
