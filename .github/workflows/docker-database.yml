@@ -20,7 +20,7 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: registry.si.icu
+          registry: registry.xiaosi.cc
           username: ${{ secrets.DOCKER_REGISTRY_USER }}
           password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
       - name: ready to env
@@ -32,7 +32,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: registry.si.icu/sijinhui/lobe-chat-database
+          images: registry.xiaosi.cc/sijinhui/lobe-chat-database
           tags: |
             type=raw,value=${{ env.DATE_TAG }}
             type=raw,value=latest
@@ -64,14 +64,14 @@ jobs:
           echo "Pushing image to registry..."
 
           # 直接推送所有标签
-          docker push registry.si.icu/sijinhui/lobe-chat-database --all-tags
+          docker push registry.xiaosi.cc/sijinhui/lobe-chat-database --all-tags
 
           # 如果推送失败，重试几次
           if [ $? -ne 0 ]; then
             for i in {1..3}; do
               echo "Push failed, retrying ($i)..."
               sleep 5
-              docker push registry.si.icu/sijinhui/lobe-chat-database --all-tags && break
+              docker push registry.xiaosi.cc/sijinhui/lobe-chat-database --all-tags && break
             done
           fi
 
