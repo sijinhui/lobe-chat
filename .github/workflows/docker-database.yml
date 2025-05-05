@@ -50,30 +50,30 @@ jobs:
           context: .
           file: ./Dockerfile.database  # 指定使用 Dockerfile.database 文件
           platforms: linux/amd64
-          push: true
-          #load: true
+          push: false
+          load: true
           provenance: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-#      - name: Push Docker image
-#        if: success()
-#        run: |
-#          # 登录到您的 registry
-#          echo "Pushing image to registry..."
-#
-#          # 直接推送所有标签
-#          docker push registry.xiaosi.cc/sijinhui/lobe-chat-database --all-tags
-#
-#          # 如果推送失败，重试几次
-#          if [ $? -ne 0 ]; then
-#            for i in {1..3}; do
-#              echo "Push failed, retrying ($i)..."
-#              sleep 5
-#              docker push registry.xiaosi.cc/sijinhui/lobe-chat-database --all-tags && break
-#            done
-#          fi
+      - name: Push Docker image
+        if: success()
+        run: |
+          # 登录到您的 registry
+          echo "Pushing image to registry..."
+
+          # 直接推送所有标签
+          docker push registry.xiaosi.cc/sijinhui/lobe-chat-database --all-tags
+
+          # 如果推送失败，重试几次
+          if [ $? -ne 0 ]; then
+            for i in {1..3}; do
+              echo "Push failed, retrying ($i)..."
+              sleep 5
+              docker push registry.xiaosi.cc/sijinhui/lobe-chat-database --all-tags && break
+            done
+          fi
 
 
   trigger_to_deploy:
