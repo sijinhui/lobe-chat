@@ -40,7 +40,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-#            registry.xiaosi.cc/sijinhui/lobe-chat-database
             sijinhui/lobe-chat-database
           tags: |
             type=raw,value=${{ env.DATE_TAG }}
