@@ -112,7 +112,8 @@ RUN \
     addgroup -S -g 1001 nodejs \
     && adduser -D -G nodejs -H -S -h /app -u 1001 nextjs \
     # Set permission for nextjs:nodejs
-    && chown -R nextjs:nodejs /app /etc/proxychains4.conf
+    && chown -R nextjs:nodejs /app /etc/proxychains4.conf \
+    && rm -f /app/.env
 
 ## Production image, copy all the files and run next
 FROM scratch

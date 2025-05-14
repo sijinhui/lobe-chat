@@ -2,8 +2,7 @@ version: '3.8'
 
 services:
   lobe-chat:
-    #image: lobehub/lobe-chat-database
-    image: sijinhui/lobe-chat-database
+    image: sijinhui/lobe-chat
     restart: always
     build:
       context: .

@@ -108,8 +108,7 @@ RUN \
 COPY . .
 
 # run build standalone for docker version
-RUN npm run build:docker
-RUN rm -f .env
+RUN npm run build:docker && rm -f /app/.env
 
 ## Application image, copy all the files for production
 FROM busybox:latest AS app
@@ -138,7 +137,8 @@ RUN \
     addgroup -S -g 1001 nodejs \
     && adduser -D -G nodejs -H -S -h /app -u 1001 nextjs \
     # Set permission for nextjs:nodejs
-    && chown -R nextjs:nodejs /app /etc/proxychains4.conf
+    && chown -R nextjs:nodejs /app /etc/proxychains4.conf \
+    && rm -f /app/.env
 
 ## Production image, copy all the files and run next
 FROM scratch
