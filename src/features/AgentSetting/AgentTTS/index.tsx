@@ -88,7 +88,7 @@ const AgentTTS = memo(() => {
         children: (
           <Select
             options={[
-              { label: t('settingTheme.lang.autoMode'), value: 'auto' },
+              { label: t('settingCommon.lang.autoMode'), value: 'auto' },
               ...(localeOptions || []),
             ]}
           />
