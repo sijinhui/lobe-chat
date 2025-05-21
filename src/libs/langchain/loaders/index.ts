@@ -1,5 +1,5 @@
-import chardet from 'chardet';
-import iconv from 'iconv-lite';
+import { detect as chardetDetect } from 'chardet'
+import { decode as iconvDecode } from 'iconv-lite';
 import {
   SupportedTextSplitterLanguage,
   SupportedTextSplitterLanguages,
@@ -144,7 +144,7 @@ export class ChunkingLoader {
   private uint8ArrayToString(uint8Array: Uint8Array) {
     // 2. 使用 chardet 检测编码
     //    chardet.detectSync 会返回如 'UTF-8', 'UTF-16LE', 'GB18030' 等字符串
-    const detectedEncoding = chardet.detect(uint8Array);
+    const detectedEncoding = chardetDetect(uint8Array);
     console.log('Detected Encoding:', detectedEncoding);
     // 3. 如果检测得到编码，就用 iconv-lite 去解码
     //    如果不确定，它可能返回 null，也可能返回最有可能的编码
@@ -152,7 +152,7 @@ export class ChunkingLoader {
       // 特别注意：chardet 可能返回 'GB-18030'，iconv-lite 里常用 'gb18030'
       // 如果返回 'ascii', 通常也能用 'utf8' 解码。
       // @ts-ignore
-      return iconv.decode(uint8Array, mapEncodingName(detectedEncoding));
+      return iconvDecode(uint8Array, mapEncodingName(detectedEncoding));
     } else {
       // 如果 chardet 没法判定，指定一个默认编码
       const decoder = new TextDecoder();
