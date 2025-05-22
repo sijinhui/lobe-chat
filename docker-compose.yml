@@ -10,6 +10,8 @@ services:
 #      args:
 #        USE_CN_MIRROR: true
     platform: linux/amd64
+    extra_hosts:
+      - "one-hub.xiaosi.cc:172.25.114.27"
     networks:
       - lobe-chat
     env_file:
