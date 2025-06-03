@@ -9,8 +9,8 @@ import type { ChatModelCard } from '@/types/llm';
 import { LobeRuntimeAI } from '../../BaseAI';
 import { AgentRuntimeErrorType, ILobeAgentRuntimeErrorType } from '../../error';
 import type {
-  ChatCompetitionOptions,
   ChatCompletionErrorPayload,
+  ChatMethodOptions,
   ChatStreamPayload,
   Embeddings,
   EmbeddingsOptions,
@@ -91,8 +91,8 @@ interface OpenAICompatibleFactoryOptions<T extends Record<string, any> = any> {
   models?:
     | ((params: { client: OpenAI }) => Promise<ChatModelCard[]>)
     | {
-    transformModel?: (model: OpenAI.Model) => ChatModelCard;
-  };
+        transformModel?: (model: OpenAI.Model) => ChatModelCard;
+      };
   provider: string;
 }
 
@@ -150,17 +150,17 @@ export function transformResponseToStream(data: OpenAI.ChatCompletion) {
   });
 }
 
-export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>({
-                                                                                   provider,
-                                                                                   baseURL: DEFAULT_BASE_URL,
-                                                                                   apiKey: DEFAULT_API_LEY,
-                                                                                   errorType,
-                                                                                   debug,
-                                                                                   constructorOptions,
-                                                                                   chatCompletion,
-                                                                                   models,
-                                                                                   customClient,
-                                                                                 }: OpenAICompatibleFactoryOptions<T>) => {
+export const createOpenAICompatibleRuntime = <T extends Record<string, any> = any>({
+  provider,
+  baseURL: DEFAULT_BASE_URL,
+  apiKey: DEFAULT_API_LEY,
+  errorType,
+  debug,
+  constructorOptions,
+  chatCompletion,
+  models,
+  customClient,
+}: OpenAICompatibleFactoryOptions<T>) => {
   const ErrorType = {
     bizError: errorType?.bizError || AgentRuntimeErrorType.ProviderBizError,
     invalidAPIKey: errorType?.invalidAPIKey || AgentRuntimeErrorType.InvalidProviderAPIKey,
@@ -199,15 +199,15 @@ export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>
       this.id = options.id || provider;
     }
 
-    async chat({ responseMode, ...payload }: ChatStreamPayload, options?: ChatCompetitionOptions) {
+    async chat({ responseMode, ...payload }: ChatStreamPayload, options?: ChatMethodOptions) {
       try {
         const inputStartAt = Date.now();
         const postPayload = chatCompletion?.handlePayload
           ? chatCompletion.handlePayload(payload, this._options)
           : ({
-            ...payload,
-            stream: payload.stream ?? true,
-          } as OpenAI.ChatCompletionCreateParamsStreaming);
+              ...payload,
+              stream: payload.stream ?? true,
+            } as OpenAI.ChatCompletionCreateParamsStreaming);
 
         const messages = await convertOpenAIMessages(postPayload.messages);
 
@@ -257,9 +257,9 @@ export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>
           return StreamingResponse(
             chatCompletion?.handleStream
               ? chatCompletion.handleStream(prod, {
-                callbacks: streamOptions.callbacks,
-                inputStartAt,
-              })
+                  callbacks: streamOptions.callbacks,
+                  inputStartAt,
+                })
               : OpenAIStream(prod, { ...streamOptions, inputStartAt }),
             {
               headers: options?.headers,
@@ -280,9 +280,9 @@ export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>
         return StreamingResponse(
           chatCompletion?.handleStream
             ? chatCompletion.handleStream(stream, {
-              callbacks: streamOptions.callbacks,
-              inputStartAt,
-            })
+                callbacks: streamOptions.callbacks,
+                inputStartAt,
+              })
             : OpenAIStream(stream, { ...streamOptions, inputStartAt }),
           {
             headers: options?.headers,
