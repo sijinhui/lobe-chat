@@ -143,6 +143,7 @@ const isPublicRoute = createRouteMatcher([
   // clerk
   '/login',
   '/signup',
+  '/waitlist',
 ]);
 
 const isProtectedRoute = createRouteMatcher([
@@ -151,7 +152,6 @@ const isProtectedRoute = createRouteMatcher([
   '/onboard(.*)',
   '/oauth(.*)',
   // ↓ cloud ↓
-  '/chat(.*)',
 ]);
 
 // Initialize an Edge compatible NextAuth middleware
