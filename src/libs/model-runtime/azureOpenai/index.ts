@@ -5,7 +5,14 @@ import { systemToUserModels } from '@/const/models';
 
 import { LobeRuntimeAI } from '../BaseAI';
 import { AgentRuntimeErrorType } from '../error';
-import { ChatMethodOptions, ChatStreamPayload, ModelProvider } from '../types';
+import {
+  ChatMethodOptions,
+  ChatStreamPayload,
+  Embeddings,
+  EmbeddingsOptions,
+  EmbeddingsPayload,
+  ModelProvider,
+} from '../types';
 import { AgentRuntimeError } from '../utils/createError';
 import { debugStream } from '../utils/debugStream';
 import { transformResponseToStream } from '../utils/openaiCompatibleFactory';
@@ -75,56 +82,51 @@ export class LobeAzureOpenAI implements LobeRuntimeAI {
         });
       }
     } catch (e) {
-      let error = e as { [key: string]: any; code: string; message: string };
-
-      if (error.code) {
-        switch (error.code) {
-          case 'DeploymentNotFound': {
-            error = { ...error, deployId: model };
-          }
-        }
-      } else {
-        error = {
-          cause: error.cause,
-          message: error.message,
-          name: error.name,
-        } as any;
-      }
-
-      const errorType = error.code
-        ? AgentRuntimeErrorType.ProviderBizError
-        : AgentRuntimeErrorType.AgentRuntimeError;
-
-      throw AgentRuntimeError.chat({
-        endpoint: this.maskSensitiveUrl(this.baseURL),
-        error,
-        errorType,
-        provider: ModelProvider.Azure,
-      });
+      return this.handleError(e, model);
     }
   }
 
-  // TODO: 考虑支持
-  // async embeddings(
-  //   payload: EmbeddingsPayload,
-  //   // options?: EmbeddingsOptions,
-  // ) {
-  //   try {
-  //
-  //     const res = await this.client.getEmbeddings(payload.model, payload.input as any)
-  //
-  //     // const res = await this.client.embeddings.create(
-  //     //   { ...payload, user: options?.user },
-  //     //   { headers: options?.headers, signal: options?.signal },
-  //     // );
-  //     //
-  //     console.log('333333333333', res.data)
-  //     return res.data.map((item) => item.embedding);
-  //   } catch (error) {
-  //     console.log('33333333', error, payload.input)
-  //     // throw this.handleError(error);
-  //   }
-  // }
+  async embeddings(payload: EmbeddingsPayload, options?: EmbeddingsOptions): Promise<Embeddings[]> {
+    try {
+      const res = await this.client.embeddings.create(
+        { ...payload, encoding_format: 'float', user: options?.user },
+        { headers: options?.headers, signal: options?.signal },
+      );
+
+      return res.data.map((item) => item.embedding);
+    } catch (error) {
+      return this.handleError(error, payload.model);
+    }
+  }
+
+  protected handleError(e: any, model?: string): never {
+    let error = e as { [key: string]: any; code: string; message: string };
+
+    if (error.code) {
+      switch (error.code) {
+        case 'DeploymentNotFound': {
+          error = { ...error, deployId: model };
+        }
+      }
+    } else {
+      error = {
+        cause: error.cause,
+        message: error.message,
+        name: error.name,
+      } as any;
+    }
+
+    const errorType = error.code
+      ? AgentRuntimeErrorType.ProviderBizError
+      : AgentRuntimeErrorType.AgentRuntimeError;
+
+    throw AgentRuntimeError.chat({
+      endpoint: this.maskSensitiveUrl(this.baseURL),
+      error,
+      errorType,
+      provider: ModelProvider.Azure,
+    });
+  }
 
   // Convert object keys to camel case, copy from `@azure/openai` in `node_modules/@azure/openai/dist/index.cjs`
   private camelCaseKeys = (obj: any): any => {

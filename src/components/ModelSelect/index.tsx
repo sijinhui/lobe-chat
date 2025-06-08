@@ -1,7 +1,7 @@
 import { IconAvatarProps, ModelIcon, ProviderIcon } from '@lobehub/icons';
 import { Avatar, Icon, Tag, Tooltip } from '@lobehub/ui';
 import { Typography } from 'antd';
-import { createStyles } from 'antd-style';
+import { createStyles, useResponsive } from 'antd-style';
 import {
   Infinity,
   AtomIcon,
@@ -217,17 +217,18 @@ const HighlightBrackets = ({ text }: { text: string }) => {
 };
 
 export const ModelItemRender = memo<ModelItemRenderProps>(({ showInfoTag = true, ...model }) => {
+  const { mobile } = useResponsive();
   return (
     <Flexbox
       align={'center'}
       gap={32}
       horizontal
       justify={'space-between'}
-      style={{ overflow: 'hidden', position: 'relative' }}
+      style={{ overflow: 'hidden', position: 'relative', width: mobile ? '80vw' : 'auto' }}
     >
       <Flexbox align={'center'} gap={8} horizontal style={{ overflow: 'hidden' }}>
         <ModelIcon model={model.id} size={20} />
-        <Typography.Text ellipsis>
+        <Typography.Text style={mobile ? { overflowX: 'auto', whiteSpace: 'nowrap' } : {}}>
           <HighlightBrackets text={model.displayName || model.id} />
         </Typography.Text>
       </Flexbox>
