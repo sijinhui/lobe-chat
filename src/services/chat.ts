@@ -366,9 +366,9 @@ class ChatService {
     }
 
     const traceHeader = createTraceHeader({ ...options?.trace });
-
+    // SI: 增加模型名到请求头中，便于日志处理
     const headers = await createHeaderWithAuth({
-      headers: { 'Content-Type': 'application/json', ...traceHeader },
+      headers: { 'Content-Type': 'application/json', 'X-Model-Name': payload["model"] ?? "", ...traceHeader },
       provider,
     });
 
