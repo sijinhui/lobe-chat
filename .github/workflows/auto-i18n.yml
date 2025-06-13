@@ -1,8 +1,8 @@
 name: Daily i18n Update
 
 on:
-  schedule:
-    - cron: '0 0 * * *'
+  #schedule:
+  #  - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:
@@ -106,14 +106,14 @@ jobs:
           else
             echo "❌ Rebase failed due to conflicts"
             echo "rebase_success=false" >> $GITHUB_OUTPUT
-            
+
             # Abort the failed rebase
             git rebase --abort || echo "⚠️ Failed to abort rebase cleanly"
-            
+
             # Go back to main and delete the problematic branch
             git checkout main
             git branch -D style/auto-i18n || echo "⚠️ Failed to delete local branch"
-            
+
             # Try to delete remote branch, handle if it fails
             if git push origin --delete style/auto-i18n 2>/dev/null; then
               echo "🗑️ Deleted old branch due to rebase conflicts"
@@ -178,14 +178,14 @@ jobs:
             exit_code=$?
             echo "❌ i18n update failed with exit code: $exit_code"
             echo "i18n_success=false" >> $GITHUB_OUTPUT
-            
+
             # Capture error details
             if [ $exit_code -eq 124 ]; then
               echo "ERROR_RUN_I18N=i18n update timed out after 15 minutes" >> $GITHUB_ENV
             else
               echo "ERROR_RUN_I18N=i18n update failed with exit code $exit_code" >> $GITHUB_ENV
             fi
-            
+
             # Save output for debugging
             echo "📋 Saving debug output..."
             exit 1
@@ -206,7 +206,7 @@ jobs:
           else
             echo "changes_exist=true" >> $GITHUB_OUTPUT
             echo "✨ Changes detected"
-            
+
             # Show what changed
             echo "📝 Changed files:"
             git diff --name-only | head -20
