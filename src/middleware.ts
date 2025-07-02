@@ -152,6 +152,7 @@ const isProtectedRoute = createRouteMatcher([
   '/onboard(.*)',
   '/oauth(.*)',
   // ↓ cloud ↓
+  '/chat(.*)',
 ]);
 
 // Initialize an Edge compatible NextAuth middleware
