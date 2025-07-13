@@ -524,6 +524,7 @@
     "hotkey": "Tastenkombinationen",
     "llm": "Sprachmodell",
     "provider": "KI-Dienstanbieter",
+    "proxy": "Netzwerkproxy",
     "storage": "Datenspeicher",
     "sync": "Cloud-Synchronisierung",
     "system-agent": "Systemassistent",
