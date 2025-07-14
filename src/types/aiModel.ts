@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { ModelParamsSchema } from '@/libs/standard-parameters';
+
 export type ModelPriceCurrency = 'CNY' | 'USD';
 
 export const AiModelSourceEnum = {
@@ -190,15 +192,16 @@ export interface AIEmbeddingModelCard extends AIBaseModelCard {
   type: 'embedding';
 }
 
-export interface AIText2ImageModelCard extends AIBaseModelCard {
+export interface AIImageModelCard extends AIBaseModelCard {
+  parameters?: ModelParamsSchema;
   pricing?: {
     /**
      * the currency of the pricing
      * @default USD
      */
     currency?: ModelPriceCurrency;
-  } & Record<string, number>; // [resolution: string]: number;
-  resolutions: string[];
+  } & Record<string, number>;
+  resolutions?: string[];
   type: 'image';
 }
 
@@ -303,6 +306,7 @@ export interface AiProviderModelListItem {
   displayName?: string;
   enabled: boolean;
   id: string;
+  parameters?: Record<string, any>;
   pricing?: ChatModelPricing;
   releasedAt?: string;
   settings?: AiModelSettings;
@@ -354,6 +358,7 @@ export interface EnabledAiModel {
   displayName?: string;
   enabled?: boolean;
   id: string;
+  parameters?: Record<string, any>;
   providerId: string;
   settings?: AiModelSettings;
   sort?: number;
