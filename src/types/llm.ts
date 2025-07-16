@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { ChatModelPricing } from '@/types/aiModel';
+import { AiModelType, ChatModelPricing } from '@/types/aiModel';
 import { AiProviderSettings } from '@/types/aiProvider';
 
 export type ModelPriceCurrency = 'CNY' | 'USD';
@@ -60,6 +60,9 @@ export interface ChatModelCard {
    * whether model supports search web
    */
   search?: boolean;
+
+  type?: AiModelType;
+
   /**
    *  whether model supports vision
    */

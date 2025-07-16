@@ -272,6 +272,7 @@ export interface AiFullModelCard extends AIBaseModelCard {
   displayName?: string;
   id: string;
   maxDimension?: number;
+  parameters?: ModelParamsSchema;
   pricing?: ChatModelPricing;
   type: AiModelType;
 }
