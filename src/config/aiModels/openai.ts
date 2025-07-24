@@ -1,4 +1,4 @@
-import { gptImage1ParamsSchema } from '@/config/paramsSchemas/openai/gpt-image-1';
+import { ModelParamsSchema } from '@/libs/standard-parameters';
 import {
   AIChatModelCard,
   AIEmbeddingModelCard,
@@ -9,6 +9,15 @@ import {
 } from '@/types/aiModel';
 
 import { allModels as doubaoChatModels } from './volcengine';
+
+export const gptImage1ParamsSchema: ModelParamsSchema = {
+  imageUrls: { default: [] },
+  prompt: { default: '' },
+  size: {
+    default: 'auto',
+    enum: ['auto', '1024x1024', '1536x1024', '1024x1536'],
+  },
+};
 
 export const openaiChatModels: AIChatModelCard[] = [
   {
