@@ -38,6 +38,7 @@ services:
 
   reverse-proxy:
     image: traefik
+    restart: always
     command:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
