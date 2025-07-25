@@ -11,6 +11,16 @@
     "desc": "마지막 메시지를 삭제하고 다시 생성하기",
     "title": "메시지 삭제 및 재생성"
   },
+  "desktop": {
+    "openSettings": {
+      "desc": "애플리케이션 설정 페이지 열기",
+      "title": "애플리케이션 설정"
+    },
+    "showApp": {
+      "desc": "글로벌 단축키로 메인 창 표시 또는 숨기기",
+      "title": "메인 창 표시/숨기기"
+    }
+  },
   "editMessage": {
     "desc": "Alt 키를 누른 채로 메시지를 더블 클릭하여 편집 모드로 들어갑니다",
     "title": "메시지 편집"
@@ -22,10 +32,6 @@
   "openHotkeyHelper": {
     "desc": "모든 단축키 사용 설명을 확인합니다.",
     "title": "단축키 도움말 열기"
-  },
-  "openSettings": {
-    "desc": "앱 설정 페이지 열기",
-    "title": "앱 설정"
   },
   "regenerateMessage": {
     "desc": "마지막 메시지를 다시 생성합니다",

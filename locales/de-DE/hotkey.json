@@ -11,6 +11,16 @@
     "desc": "Löschen und die letzte Nachricht neu generieren",
     "title": "Nachricht löschen und neu generieren"
   },
+  "desktop": {
+    "openSettings": {
+      "desc": "Öffnet die Anwendungseinstellungsseite",
+      "title": "Anwendungseinstellungen"
+    },
+    "showApp": {
+      "desc": "Globale Tastenkombination zum Anzeigen oder Verbergen des Hauptfensters",
+      "title": "Hauptfenster anzeigen/verbergen"
+    }
+  },
   "editMessage": {
     "desc": "Treten Sie in den Bearbeitungsmodus, indem Sie die Alt-Taste gedrückt halten und auf die Nachricht doppelklicken",
     "title": "Nachricht bearbeiten"
@@ -22,10 +32,6 @@
   "openHotkeyHelper": {
     "desc": "Anleitung zur Verwendung aller Tastenkombinationen anzeigen",
     "title": "Tastenkombinationshilfe öffnen"
-  },
-  "openSettings": {
-    "desc": "Öffnen Sie die Anwendungseinstellungen",
-    "title": "Anwendungseinstellungen"
   },
   "regenerateMessage": {
     "desc": "Die letzte Nachricht neu generieren",
