@@ -8,7 +8,7 @@ import {
   AITTSModelCard,
 } from '@/types/aiModel';
 
-import { allModels as doubaoChatModels } from './volcengine';
+// import { allModels as doubaoChatModels } from './volcengine';
 
 export const gptImage1ParamsSchema: ModelParamsSchema = {
   imageUrls: { default: [] },
@@ -741,7 +741,7 @@ export const openaiChatModels: AIChatModelCard[] = [
     },
     type: 'chat',
   },
-  ...doubaoChatModels,
+  // ...doubaoChatModels,
 ];
 
 export const openaiEmbeddingModels: AIEmbeddingModelCard[] = [
