@@ -2,6 +2,139 @@
 
 # Changelog
 
+### [Version 1.106.8](https://github.com/lobehub/lobe-chat/compare/v1.106.7...v1.106.8)
+
+<sup>Released on **2025-07-31**</sup>
+
+#### 💄 Styles
+
+- **misc**: Support SenseNova V6.5 models.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### Styles
+
+- **misc**: Support SenseNova V6.5 models, closes [#8569](https://github.com/lobehub/lobe-chat/issues/8569) ([411ed7e](https://github.com/lobehub/lobe-chat/commit/411ed7e))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 1.106.7](https://github.com/lobehub/lobe-chat/compare/v1.106.6...v1.106.7)
+
+<sup>Released on **2025-07-31**</sup>
+
+#### 💄 Styles
+
+- **misc**: Update Aliyun Bailian models.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### Styles
+
+- **misc**: Update Aliyun Bailian models, closes [#8612](https://github.com/lobehub/lobe-chat/issues/8612) ([433e679](https://github.com/lobehub/lobe-chat/commit/433e679))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 1.106.6](https://github.com/lobehub/lobe-chat/compare/v1.106.5...v1.106.6)
+
+<sup>Released on **2025-07-31**</sup>
+
+#### 🐛 Bug Fixes
+
+- **misc**: Fix oidc oauth callback pages 404.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **misc**: Fix oidc oauth callback pages 404, closes [#8620](https://github.com/lobehub/lobe-chat/issues/8620) ([d136b6e](https://github.com/lobehub/lobe-chat/commit/d136b6e))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 1.106.5](https://github.com/lobehub/lobe-chat/compare/v1.106.4...v1.106.5)
+
+<sup>Released on **2025-07-30**</sup>
+
+#### 💄 Styles
+
+- **misc**: Improve mcp plugin calling and display.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### Styles
+
+- **misc**: Improve mcp plugin calling and display, closes [#8619](https://github.com/lobehub/lobe-chat/issues/8619) ([14c41c4](https://github.com/lobehub/lobe-chat/commit/14c41c4))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### [Version 1.106.4](https://github.com/lobehub/lobe-chat/compare/v1.106.3...v1.106.4)
+
+<sup>Released on **2025-07-30**</sup>
+
+#### 🐛 Bug Fixes
+
+- **misc**: Fix mcp calling missing array content.
+
+#### 💄 Styles
+
+- **misc**: Update i18n.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **misc**: Fix mcp calling missing array content, closes [#8615](https://github.com/lobehub/lobe-chat/issues/8615) ([b7f8e6e](https://github.com/lobehub/lobe-chat/commit/b7f8e6e))
+
+#### Styles
+
+- **misc**: Update i18n, closes [#8609](https://github.com/lobehub/lobe-chat/issues/8609) ([21cac39](https://github.com/lobehub/lobe-chat/commit/21cac39))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
 ### [Version 1.106.3](https://github.com/lobehub/lobe-chat/compare/v1.106.2...v1.106.3)
 
 <sup>Released on **2025-07-29**</sup>
