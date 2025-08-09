@@ -54,6 +54,7 @@ export const KeyEnum = {
   Space: 'space',
   Tab: 'tab',
   Up: 'up',
+  Zero: '0',
 } as const;
 
 export const HotkeyEnum = {
@@ -61,6 +62,7 @@ export const HotkeyEnum = {
   ClearCurrentMessages: 'clearCurrentMessages',
   DeleteAndRegenerateMessage: 'deleteAndRegenerateMessage',
   EditMessage: 'editMessage',
+  NavigateToChat: 'navigateToChat',
   OpenChatSettings: 'openChatSettings',
   OpenHotkeyHelper: 'openHotkeyHelper',
   RegenerateMessage: 'regenerateMessage',
