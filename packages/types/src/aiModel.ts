@@ -330,7 +330,7 @@ export interface AiProviderModelListItem {
   displayName?: string;
   enabled: boolean;
   id: string;
-  parameters?: Record<string, any>;
+  parameters?: ModelParamsSchema;
   pricing?: Pricing;
   releasedAt?: string;
   settings?: AiModelSettings;
@@ -382,7 +382,7 @@ export interface EnabledAiModel {
   displayName?: string;
   enabled?: boolean;
   id: string;
-  parameters?: Record<string, any>;
+  parameters?: ModelParamsSchema;
   providerId: string;
   settings?: AiModelSettings;
   sort?: number;
