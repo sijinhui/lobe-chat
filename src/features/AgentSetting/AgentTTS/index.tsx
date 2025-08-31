@@ -16,7 +16,7 @@ import { selectors, useStore } from '../store';
 import SelectWithTTSPreview from './SelectWithTTSPreview';
 import { ttsOptions } from './options';
 
-import { doubaoVoiceOptions } from "@/config/aiModels/volcengine";
+// import { doubaoVoiceOptions } from "@/config/aiModels/volcengine";
 
 const TTS_SETTING_KEY = 'tts';
 const { openaiVoiceOptions, localeOptions } = VoiceList;
@@ -54,13 +54,13 @@ const AgentTTS = memo(() => {
         name: [TTS_SETTING_KEY, 'showAllLocaleVoice'],
         valuePropName: 'checked',
       },
-      {
-        children: <SelectWithTTSPreview options={doubaoVoiceOptions} server={'doubao'} />,
-        desc: t('settingTTS.voice.desc'),
-        hidden: config.ttsService !== 'doubao',
-        label: t('settingTTS.voice.title'),
-        name: [TTS_SETTING_KEY, 'voice', 'doubao'],
-      },
+      // {
+      //   children: <SelectWithTTSPreview options={doubaoVoiceOptions} server={'doubao'} />,
+      //   desc: t('settingTTS.voice.desc'),
+      //   hidden: config.ttsService !== 'doubao',
+      //   label: t('settingTTS.voice.title'),
+      //   name: [TTS_SETTING_KEY, 'voice', 'doubao'],
+      // },
       {
         children: <SelectWithTTSPreview options={openaiVoiceOptions} server={'openai'} />,
         desc: t('settingTTS.voice.desc'),
