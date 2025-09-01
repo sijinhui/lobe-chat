@@ -75,6 +75,7 @@ jobs:
     name: Trigger Another Workflow
     runs-on: ubuntu-latest
     needs: push_to_registry
+    if: github.event_name == 'release'
     steps:
       - name: Trigger Another Workflow on Success
         env:
