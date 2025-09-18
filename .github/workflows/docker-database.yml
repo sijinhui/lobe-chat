@@ -58,13 +58,10 @@ jobs:
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-#      - name: Cache Docker layers
-#        uses: actions/cache@v4
-#        with:
-#          path: ${{ runner.temp }}/.buildx-cache
-#          key: ${{ runner.os }}-buildx-${{ github.sha }}
-#          restore-keys: |
-#            ${{ runner.os }}-buildx-
+      - # cache
+        name: use cache
+        run: |
+          mkdir -p ${{ runner.workspace }}/_cache/.buildx-cache
 
       - name: Build and export
         id: build
@@ -79,8 +76,8 @@ jobs:
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push=true
           tags: ${{ steps.meta.outputs.tags }}
           provenance: false
-          cache-from: type=local,src=${{ runner.temp }}/.buildx-cache
-          cache-to: type=local,dest=${{ runner.temp }}/.buildx-cache-new,mode=max
+          cache-from: type=local,src=${{ runner.workspace }}/_cache/.buildx-cache
+          cache-to: type=local,dest=${{ runner.workspace }}/_cache/.buildx-cache-new,mode=max
 
       - # Temp fix
         # https://github.com/docker/build-push-action/issues/252
