@@ -82,7 +82,7 @@ COPY package.json pnpm-workspace.yaml ./
 COPY .npmrc ./
 COPY packages ./packages
 
-RUN \
+RUN --mount=type=cache,id=pnpm,target=/app/node_modules \
     # If you want to build docker in China, build with --build-arg USE_CN_MIRROR=true
     if [ "${USE_CN_MIRROR:-false}" = "true" ]; then \
         export SENTRYCLI_CDNURL="https://npmmirror.com/mirrors/sentry-cli"; \
@@ -108,7 +108,7 @@ RUN \
 COPY . .
 
 # run build standalone for docker version
-RUN npm run build:docker && rm -f .env
+RUN --mount=type=cache,id=pnpm,target=/app/node_modules --mount=type=cache,target=/app/.next/cache,id=next_cache npm run build:docker && rm -f .env
 
 ## Application image, copy all the files for production
 FROM busybox:latest AS app
