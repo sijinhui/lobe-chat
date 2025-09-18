@@ -58,11 +58,6 @@ jobs:
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      - # cache
-        name: use cache
-        run: |
-          mkdir -p ${{ runner.workspace }}/_cache/.buildx-cache
-
       - name: Build and export
         id: build
         uses: docker/build-push-action@v6
@@ -85,7 +80,7 @@ jobs:
         name: Move cache
         run: |
           rm -rf ${{ runner.temp }}/.buildx-cache
-          mv ${{ runner.temp }}/.buildx-cache-new ${{ runner.temp }}/.buildx-cache
+          ${{ runner.workspace }}/_cache/.buildx-cache-new ${{ runner.workspace }}/_cache/.buildx-cache
 
   trigger_to_deploy:
     name: Trigger Another Workflow
