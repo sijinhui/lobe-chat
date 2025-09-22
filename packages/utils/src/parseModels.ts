@@ -100,6 +100,10 @@ export const parseModelString = async (
             model.abilities!.hot = true;
             break;
           }
+          case 'video': {
+            model.abilities!.video = true;
+            break;
+          }
           case 'search': {
             model.abilities!.search = true;
             break;
