@@ -14,6 +14,13 @@ const prunePrefixes = ['o1', 'o3', 'o4', 'codex', 'computer-use', 'gpt-5'];
 const oaiSearchContextSize = process.env.OPENAI_SEARCH_CONTEXT_SIZE; // low, medium, high
 const enableServiceTierFlex = process.env.OPENAI_SERVICE_TIER_FLEX === '1';
 const flexSupportedModels = ['gpt-5', 'o3', 'o4-mini']; // Flex 处理仅适用于这些模型
+// models after Opus 4.1 that don't allow both temperature and top_p parameters
+// TODO: 1 claude 等待修复
+const modelsWithTempAndTopPConflict = new Set([
+  'claude-opus-4-1',
+  'claude-opus-4-1-20250805',
+  'claude-sonnet-4-5-20250929',
+]);
 
 const supportsFlexTier = (model: string) => {
   // 排除 o3-mini，其不支持 Flex 处理
@@ -53,6 +60,16 @@ export const LobeOpenAI = createOpenAICompatibleRuntime({
             },
           }),
         } as any;
+      }
+      // TODO: 1 claude 等待修复
+      if (modelsWithTempAndTopPConflict.has(model)) {
+        return {
+          ...rest,
+          model,
+          ...(enableServiceTierFlex && supportsFlexTier(model) && { service_tier: 'flex' }),
+          stream: payload.stream ?? true,
+          top_p: undefined,
+        };
       }
 
       return {
