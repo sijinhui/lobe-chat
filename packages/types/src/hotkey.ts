@@ -61,6 +61,7 @@ export const HotkeyEnum = {
   AddUserMessage: 'addUserMessage',
   ClearCurrentMessages: 'clearCurrentMessages',
   DeleteAndRegenerateMessage: 'deleteAndRegenerateMessage',
+  DeleteLastMessage: 'deleteLastMessage',
   EditMessage: 'editMessage',
   NavigateToChat: 'navigateToChat',
   OpenChatSettings: 'openChatSettings',

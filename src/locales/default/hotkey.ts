@@ -12,8 +12,12 @@ const hotkey: HotkeyI18nTranslations & {
     title: '清空会话消息',
   },
   deleteAndRegenerateMessage: {
-    desc: '删除并重新生成最后一条消息',
-    title: '删除并重新生成消息',
+    desc: '删除最后一条消息并重新生成',
+    title: '删除并重新生成',
+  },
+  deleteLastMessage: {
+    desc: '删除最后一条消息',
+    title: '删除最后一条消息',
   },
   desktop: {
     openSettings: {

@@ -47,7 +47,7 @@ export const useRegenerateMessageHotkey = () => {
   );
 };
 
-export const useDeleteAndRegenerateMessage = () => {
+export const useDeleteAndRegenerateMessageHotkey = () => {
   const delAndRegenerateMessage = useChatStore((s) => s.delAndRegenerateMessage);
   const lastMessage = useChatStore(chatSelectors.latestMessage, isEqual);
 
@@ -57,6 +57,23 @@ export const useDeleteAndRegenerateMessage = () => {
     HotkeyEnum.DeleteAndRegenerateMessage,
     () => !disable && delAndRegenerateMessage(lastMessage.id),
     {
+      enableOnContentEditable: true,
+      enabled: !disable,
+    },
+  );
+};
+
+export const useDeleteLastMessageHotkey = () => {
+  const deleteMessage = useChatStore((s) => s.deleteMessage);
+  const lastMessage = useChatStore(chatSelectors.latestMessage, isEqual);
+
+  const disable = !lastMessage || lastMessage.id === 'default' || lastMessage.role === 'system';
+
+  return useHotkeyById(
+    HotkeyEnum.DeleteLastMessage,
+    () => !disable && deleteMessage(lastMessage.id),
+    {
+      enableOnContentEditable: true,
       enabled: !disable,
     },
   );
@@ -127,7 +144,8 @@ export const useRegisterChatHotkeys = () => {
 
   // Conversation
   useRegenerateMessageHotkey();
-  useDeleteAndRegenerateMessage();
+  useDeleteAndRegenerateMessageHotkey();
+  useDeleteLastMessageHotkey();
   useSaveTopicHotkey();
   useAddUserMessageHotkey();
   useClearCurrentMessagesHotkey();
