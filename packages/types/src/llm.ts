@@ -62,10 +62,10 @@ export interface ChatModelCard {
    * the date when model is released
    */
   releasedAt?: string;
-  /**
-   * whether model supports search web
-   */
-  search?: boolean;
+  // /**
+  //  * whether model supports search web
+  //  */
+  // search?: boolean;
 
   /**
    *  whether model supports search
