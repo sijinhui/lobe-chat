@@ -8,8 +8,12 @@
     "title": "Cancella messaggi della conversazione"
   },
   "deleteAndRegenerateMessage": {
-    "desc": "Elimina e rigenera l'ultimo messaggio",
-    "title": "Elimina e rigenera messaggio"
+    "desc": "Elimina l'ultimo messaggio e rigeneralo",
+    "title": "Elimina e rigenera"
+  },
+  "deleteLastMessage": {
+    "desc": "Elimina l'ultimo messaggio",
+    "title": "Elimina l'ultimo messaggio"
   },
   "desktop": {
     "openSettings": {

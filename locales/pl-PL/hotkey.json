@@ -8,8 +8,12 @@
     "title": "Wyczyść wiadomości rozmowy"
   },
   "deleteAndRegenerateMessage": {
-    "desc": "Usuń i wygeneruj ponownie ostatnią wiadomość",
-    "title": "Usuń i wygeneruj wiadomość ponownie"
+    "desc": "Usuń ostatnią wiadomość i wygeneruj ponownie",
+    "title": "Usuń i wygeneruj ponownie"
+  },
+  "deleteLastMessage": {
+    "desc": "Usuń ostatnią wiadomość",
+    "title": "Usuń ostatnią wiadomość"
   },
   "desktop": {
     "openSettings": {

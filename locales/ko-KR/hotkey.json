@@ -8,8 +8,12 @@
     "title": "대화 메시지 지우기"
   },
   "deleteAndRegenerateMessage": {
-    "desc": "마지막 메시지를 삭제하고 다시 생성하기",
-    "title": "메시지 삭제 및 재생성"
+    "desc": "마지막 메시지를 삭제하고 다시 생성합니다",
+    "title": "삭제 후 다시 생성"
+  },
+  "deleteLastMessage": {
+    "desc": "마지막 메시지를 삭제합니다",
+    "title": "마지막 메시지 삭제"
   },
   "desktop": {
     "openSettings": {

@@ -9,7 +9,11 @@
   },
   "deleteAndRegenerateMessage": {
     "desc": "Son mesajı sil ve yeniden oluştur",
-    "title": "Mesajı sil ve yeniden oluştur"
+    "title": "Sil ve Yeniden Oluştur"
+  },
+  "deleteLastMessage": {
+    "desc": "Son mesajı sil",
+    "title": "Son Mesajı Sil"
   },
   "desktop": {
     "openSettings": {

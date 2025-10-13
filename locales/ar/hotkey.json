@@ -8,8 +8,12 @@
     "title": "مسح رسائل المحادثة"
   },
   "deleteAndRegenerateMessage": {
-    "desc": "حذف وإعادة توليد آخر رسالة",
-    "title": "حذف وإعادة توليد الرسالة"
+    "desc": "حذف الرسالة الأخيرة وإعادة إنشائها",
+    "title": "حذف وإعادة إنشاء"
+  },
+  "deleteLastMessage": {
+    "desc": "حذف الرسالة الأخيرة",
+    "title": "حذف الرسالة الأخيرة"
   },
   "desktop": {
     "openSettings": {

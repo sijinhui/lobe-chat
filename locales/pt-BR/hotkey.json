@@ -8,8 +8,12 @@
     "title": "Limpar mensagens da conversa"
   },
   "deleteAndRegenerateMessage": {
-    "desc": "Excluir e regenerar a última mensagem",
-    "title": "Excluir e regenerar mensagem"
+    "desc": "Excluir a última mensagem e gerar novamente",
+    "title": "Excluir e gerar novamente"
+  },
+  "deleteLastMessage": {
+    "desc": "Excluir a última mensagem",
+    "title": "Excluir a última mensagem"
   },
   "desktop": {
     "openSettings": {

@@ -8,8 +8,12 @@
     "title": "Eliminar mensajes de la conversación"
   },
   "deleteAndRegenerateMessage": {
-    "desc": "Eliminar y regenerar el último mensaje",
-    "title": "Eliminar y regenerar mensaje"
+    "desc": "Eliminar el último mensaje y volver a generarlo",
+    "title": "Eliminar y regenerar"
+  },
+  "deleteLastMessage": {
+    "desc": "Eliminar el último mensaje",
+    "title": "Eliminar el último mensaje"
   },
   "desktop": {
     "openSettings": {

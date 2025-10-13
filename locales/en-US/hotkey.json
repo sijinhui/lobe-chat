@@ -8,8 +8,12 @@
     "title": "Clear Conversation Messages"
   },
   "deleteAndRegenerateMessage": {
-    "desc": "Delete and regenerate the last message",
-    "title": "Delete and regenerate message"
+    "desc": "Delete the last message and regenerate",
+    "title": "Delete and Regenerate"
+  },
+  "deleteLastMessage": {
+    "desc": "Delete the last message",
+    "title": "Delete Last Message"
   },
   "desktop": {
     "openSettings": {

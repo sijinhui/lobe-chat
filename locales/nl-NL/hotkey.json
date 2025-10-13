@@ -8,8 +8,12 @@
     "title": "Verwijder sessieberichten"
   },
   "deleteAndRegenerateMessage": {
-    "desc": "Verwijder en genereer het laatste bericht opnieuw",
-    "title": "Verwijder en genereer bericht opnieuw"
+    "desc": "Verwijder het laatste bericht en genereer opnieuw",
+    "title": "Verwijderen en opnieuw genereren"
+  },
+  "deleteLastMessage": {
+    "desc": "Verwijder het laatste bericht",
+    "title": "Laatste bericht verwijderen"
   },
   "desktop": {
     "openSettings": {

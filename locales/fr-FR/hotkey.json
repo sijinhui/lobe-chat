@@ -8,8 +8,12 @@
     "title": "Effacer les messages de la session"
   },
   "deleteAndRegenerateMessage": {
-    "desc": "Supprimer et régénérer le dernier message",
-    "title": "Supprimer et régénérer le message"
+    "desc": "Supprimer le dernier message et régénérer",
+    "title": "Supprimer et régénérer"
+  },
+  "deleteLastMessage": {
+    "desc": "Supprimer le dernier message",
+    "title": "Supprimer le dernier message"
   },
   "desktop": {
     "openSettings": {

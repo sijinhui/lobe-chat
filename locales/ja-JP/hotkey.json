@@ -9,7 +9,11 @@
   },
   "deleteAndRegenerateMessage": {
     "desc": "最後のメッセージを削除して再生成する",
-    "title": "メッセージを削除して再生成する"
+    "title": "削除して再生成"
+  },
+  "deleteLastMessage": {
+    "desc": "最後のメッセージを削除する",
+    "title": "最後のメッセージを削除"
   },
   "desktop": {
     "openSettings": {

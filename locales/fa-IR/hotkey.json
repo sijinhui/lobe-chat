@@ -8,8 +8,12 @@
     "title": "حذف پیام‌های جلسه"
   },
   "deleteAndRegenerateMessage": {
-    "desc": "حذف و باز生成 آخرین پیام",
-    "title": "حذف و باز生成 پیام"
+    "desc": "آخرین پیام را حذف کرده و دوباره تولید کن",
+    "title": "حذف و تولید مجدد"
+  },
+  "deleteLastMessage": {
+    "desc": "آخرین پیام را حذف کن",
+    "title": "حذف آخرین پیام"
   },
   "desktop": {
     "openSettings": {

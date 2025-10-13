@@ -8,8 +8,12 @@
     "title": "Xóa tin nhắn cuộc trò chuyện"
   },
   "deleteAndRegenerateMessage": {
-    "desc": "Xóa và tái tạo lại tin nhắn cuối cùng",
-    "title": "Xóa và tái tạo tin nhắn"
+    "desc": "Xoá tin nhắn cuối cùng và tạo lại",
+    "title": "Xoá và tạo lại"
+  },
+  "deleteLastMessage": {
+    "desc": "Xoá tin nhắn cuối cùng",
+    "title": "Xoá tin nhắn cuối cùng"
   },
   "desktop": {
     "openSettings": {
