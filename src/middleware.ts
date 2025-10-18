@@ -189,6 +189,8 @@ const isPublicRoute = createRouteMatcher([
   '/oauth/consent/(.*)',
   '/oidc/handoff',
   '/oidc/token',
+  // health
+  '/health',
 ]);
 
 const isProtectedRoute = createRouteMatcher([
