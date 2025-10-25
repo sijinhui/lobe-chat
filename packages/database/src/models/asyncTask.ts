@@ -1,14 +1,13 @@
-import { and, eq, inArray, lt } from 'drizzle-orm';
-
-import { LobeChatDatabase } from '../type';
 import {
   AsyncTaskError,
   AsyncTaskErrorType,
   AsyncTaskStatus,
   AsyncTaskType,
-} from '@/types/asyncTask';
+} from '@lobechat/types';
+import { and, eq, inArray, lt } from 'drizzle-orm';
 
 import { AsyncTaskSelectItem, NewAsyncTaskItem, asyncTasks } from '../schemas';
+import { LobeChatDatabase } from '../type';
 
 // set timeout to about 20 minutes, and give 2s padding time
 export const ASYNC_TASK_TIMEOUT = 6 * 298 * 1000;
