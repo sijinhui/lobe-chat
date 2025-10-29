@@ -75,7 +75,6 @@ export const openaiChatModels: AIChatModelCard[] = [
     abilities: {
       functionCall: true,
       reasoning: true,
-      search: true,
       structuredOutput: true,
       vision: true,
     },
@@ -401,30 +400,6 @@ export const openaiChatModels: AIChatModelCard[] = [
     releasedAt: '2024-12-17',
     settings: {
       extendParams: ['reasoningEffort'],
-    },
-    type: 'chat',
-  },
-  {
-    abilities: {
-      functionCall: true,
-      search: true,
-      vision: true,
-    },
-    contextWindowTokens: 1_047_576,
-    description: 'GPT-4.1 是我们用于复杂任务的旗舰模型。它非常适合跨领域解决问题。',
-    displayName: 'GPT-4.1',
-    id: 'gpt-4.1',
-    maxOutput: 32_768,
-    pricing: {
-      units: [
-        { name: 'textInput_cacheRead', rate: 0.5, strategy: 'fixed', unit: 'millionTokens' },
-        { name: 'textInput', rate: 2, strategy: 'fixed', unit: 'millionTokens' },
-        { name: 'textOutput', rate: 8, strategy: 'fixed', unit: 'millionTokens' },
-      ],
-    },
-    releasedAt: '2025-04-14',
-    settings: {
-      searchImpl: 'params',
     },
     type: 'chat',
   },
