@@ -19,7 +19,7 @@ import { useOpenChatSettings } from '@/hooks/useInterceptingRoutes';
 import { useAgentStore } from '@/store/agent';
 import { agentChatConfigSelectors } from '@/store/agent/selectors';
 import { useChatStore } from '@/store/chat';
-import { chatSelectors } from '@/store/chat/selectors';
+import { messageStateSelectors } from '@/store/chat/slices/message/selectors';
 import { chatGroupSelectors, useChatGroupStore } from '@/store/chatGroup';
 import { useGlobalStore } from '@/store/global';
 import { useSessionStore } from '@/store/session';
@@ -81,9 +81,9 @@ const AssistantMessage = memo<AssistantMessageProps>((props) => {
   );
 
   const [generating, isInRAGFlow, editing] = useChatStore((s) => [
-    chatSelectors.isMessageGenerating(id)(s),
-    chatSelectors.isMessageInRAGFlow(id)(s),
-    chatSelectors.isMessageEditing(id)(s),
+    messageStateSelectors.isMessageGenerating(id)(s),
+    messageStateSelectors.isMessageInRAGFlow(id)(s),
+    messageStateSelectors.isMessageEditing(id)(s),
   ]);
 
   const { styles } = useStyles({
@@ -204,75 +204,72 @@ const AssistantMessage = memo<AssistantMessageProps>((props) => {
   );
   const errorMessage = <ErrorMessageExtra data={props} />;
   return (
-    <Flexbox
-      className={styles.container}
-      direction={placement === 'left' ? 'horizontal' : 'horizontal-reverse'}
-      gap={mobile ? 6 : 12}
-    >
-      <Avatar
-        alt={avatar.title || 'avatar'}
-        avatar={avatar}
-        loading={loading}
-        onClick={onAvatarClick}
-        placement={placement}
-        size={mobile ? MOBILE_AVATAR_SIZE : undefined}
-        style={{ marginTop: 6 }}
-      />
-      <Flexbox align={'flex-start'} className={styles.messageContainer}>
+    <Flexbox className={styles.container} gap={mobile ? 6 : 12}>
+      <Flexbox gap={4} horizontal>
+        <Avatar
+          alt={avatar.title || 'avatar'}
+          avatar={avatar}
+          loading={loading}
+          onClick={onAvatarClick}
+          placement={placement}
+          size={MOBILE_AVATAR_SIZE}
+          style={{ marginTop: 6 }}
+        />
         <Title
           avatar={avatar}
           placement={placement}
-          showTitle={showTitle}
+          showTitle
           time={createdAt}
           titleAddon={dmIndicator}
         />
-        <Flexbox
-          align={'flex-start'}
-          className={styles.messageContent}
-          data-layout={'vertical'} // 添加数据属性以方便样式选择
-          direction={'vertical'}
-          gap={8}
-        >
-          <Flexbox style={{ flex: 1, maxWidth: '100%' }}>
-            {error && (message === LOADING_FLAT || !message) ? (
-              <ErrorContent error={errorContent} message={errorMessage} placement={placement} />
-            ) : (
-              <MessageContent
-                editing={editing}
-                id={id}
-                markdownProps={markdownProps}
-                message={reducted ? `*${t('hideForYou')}*` : message}
-                messageExtra={
-                  <>
-                    {errorContent && (
-                      <ErrorContent
-                        error={errorContent}
-                        message={errorMessage}
-                        placement={placement}
-                      />
-                    )}
-                    <AssistantMessageExtra
-                      content={content}
-                      extra={extra}
-                      id={id}
-                      metadata={metadata}
-                      tools={tools}
+      </Flexbox>
+      <Flexbox
+        align={'flex-start'}
+        className={styles.messageContent}
+        data-layout={'vertical'} // 添加数据属性以方便样式选择
+        direction={'vertical'}
+        gap={8}
+        width={'fit-content'}
+      >
+        <Flexbox style={{ flex: 1, maxWidth: '100%' }}>
+          {error && (message === LOADING_FLAT || !message) ? (
+            <ErrorContent error={errorContent} message={errorMessage} placement={placement} />
+          ) : (
+            <MessageContent
+              editing={editing}
+              id={id}
+              markdownProps={markdownProps}
+              message={reducted ? `*${t('hideForYou')}*` : message}
+              messageExtra={
+                <>
+                  {errorContent && (
+                    <ErrorContent
+                      error={errorContent}
+                      message={errorMessage}
+                      placement={placement}
                     />
-                  </>
-                }
-                onDoubleClick={onDoubleClick}
-                placement={placement}
-                renderMessage={renderMessage}
-                variant={variant}
-              />
-            )}
-          </Flexbox>
-          {!disableEditing && !editing && (
-            <Flexbox align={'flex-start'} className={styles.actions} role="menubar">
-              <AssistantActionsBar data={props} id={id} index={index} />
-            </Flexbox>
+                  )}
+                  <AssistantMessageExtra
+                    content={content}
+                    extra={extra}
+                    id={id}
+                    metadata={metadata}
+                    tools={tools}
+                  />
+                </>
+              }
+              onDoubleClick={onDoubleClick}
+              placement={placement}
+              renderMessage={renderMessage}
+              variant={variant}
+            />
           )}
         </Flexbox>
+        {!disableEditing && !editing && (
+          <Flexbox align={'flex-start'} className={styles.actions} role="menubar">
+            <AssistantActionsBar data={props} id={id} index={index} />
+          </Flexbox>
+        )}
       </Flexbox>
       {mobile && <BorderSpacing borderSpacing={MOBILE_AVATAR_SIZE} />}
     </Flexbox>

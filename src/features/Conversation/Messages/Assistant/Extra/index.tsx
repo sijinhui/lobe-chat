@@ -8,7 +8,7 @@ import TTS from '@/features/Conversation/components/Extras/TTS';
 import Translate from '@/features/Conversation/components/Extras/Translate';
 import Usage from '@/features/Conversation/components/Extras/Usage';
 import { useChatStore } from '@/store/chat';
-import { chatSelectors } from '@/store/chat/selectors';
+import { messageStateSelectors } from '@/store/chat/selectors';
 
 interface AssistantMessageExtraProps {
   content: string;
@@ -20,16 +20,12 @@ interface AssistantMessageExtraProps {
 
 export const AssistantMessageExtra = memo<AssistantMessageExtraProps>(
   ({ extra, id, content, metadata, tools }) => {
-    const loading = useChatStore(chatSelectors.isMessageGenerating(id));
+    const loading = useChatStore(messageStateSelectors.isMessageGenerating(id));
 
     return (
       <Flexbox gap={8} style={{ marginTop: !!tools?.length ? 8 : 4 }}>
-        {content !== LOADING_FLAT && extra?.fromModel && (
-          <Usage
-            metadata={metadata || {}}
-            model={extra?.fromModel}
-            provider={extra.fromProvider!}
-          />
+        {content !== LOADING_FLAT && extra?.model && (
+          <Usage metadata={metadata || {}} model={extra?.model} provider={extra.provider!} />
         )}
         <>
           {!!extra?.tts && (
