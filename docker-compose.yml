@@ -7,28 +7,26 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.database
-#      args:
-#        USE_CN_MIRROR: true
+    #      args:
+    #        USE_CN_MIRROR: true
     platform: linux/amd64
     extra_hosts:
       - "one-hub.xiaosi.cc:172.25.114.28"
-    networks:
-      - lobe-chat
+    #    networks:
+    #      - lobe-chat
+    network_mode: host
+    #    ports:
+    #      - "23210:3210"
+    environment:
+      - PORT=23210
     env_file:
       - .env
     healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 3210 || exit 1"]
+      test: ["CMD-SHELL", "nc -z localhost 23210 || exit 1"]
       interval: 5s
       timeout: 2s
       start_period: 3s
       retries: 3
-#    deploy:
-#      replicas: 1
-#      update_config:
-#        parallelism: 1
-#        delay: 30s
-#        order: start-first
-#        failure_action: rollback
     labels:
       - "traefik.enable=true"
       - "traefik.tcp.routers.lobe-tcp.rule=HostSNI(`*`)"
@@ -36,27 +34,27 @@ services:
       - "traefik.tcp.routers.lobe-tcp.service=lobe-tcp-service"
       - "traefik.tcp.services.lobe-tcp-service.loadbalancer.server.port=3210"
 
-  reverse-proxy:
-    image: traefik
-    restart: always
-    platform: linux/amd64
-    command:
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.tcpservice.address=:23210"
-#      - "--api.insecure=true"
-      # 优化配置
-      - "--ping.entryPoint=tcpservice"
-      - "--providers.docker.network=lobe-chat"
-      # 热加载和更新配置
-      - "--providers.docker.watch=true"
-    ports:
-      - "23210:23210"
-#      - "8080:8080"
-    networks:
-      - lobe-chat
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+#  reverse-proxy:
+#    image: traefik
+#    restart: always
+#    platform: linux/amd64
+#    command:
+#      - "--providers.docker=true"
+#      - "--providers.docker.exposedbydefault=false"
+#      - "--entrypoints.tcpservice.address=:23210"
+##      - "--api.insecure=true"
+#      # 优化配置
+#      - "--ping.entryPoint=tcpservice"
+#      - "--providers.docker.network=lobe-chat"
+#      # 热加载和更新配置
+#      - "--providers.docker.watch=true"
+#    ports:
+#      - "23210:23210"
+##      - "8080:8080"
+#    networks:
+#      - lobe-chat
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
 
 #  postgresql:
 #    image: pgvector/pgvector:pg16
