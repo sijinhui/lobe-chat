@@ -36,6 +36,8 @@ export const convertOpenAIMessages = async (messages: OpenAI.ChatCompletionMessa
                 convertMessageContent(c as OpenAI.ChatCompletionContentPart),
               ),
             ),
+      // TODO: 后续可能会有更好的方法
+      reasoning: "",
     })),
   )) as OpenAI.ChatCompletionMessageParam[];
 };
