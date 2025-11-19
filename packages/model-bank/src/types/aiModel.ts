@@ -35,6 +35,10 @@ export interface ModelAbilities {
    */
   functionCall?: boolean;
   /**
+   * whether model supports hot tag
+   */
+  hot?: boolean;
+  /**
    * whether model supports image output
    */
   imageOutput?: boolean;
