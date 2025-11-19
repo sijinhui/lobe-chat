@@ -35,10 +35,6 @@ export interface ModelAbilities {
    */
   functionCall?: boolean;
   /**
-   * whether model supports hot tag
-   */
-  hot?: boolean;
-  /**
    * whether model supports image output
    */
   imageOutput?: boolean;
@@ -133,7 +129,7 @@ export interface ChatModelPricing extends BasicModelPricing {
 
 // New pricing system types
 export type PricingUnitName =
-  // Text-based pricing units
+// Text-based pricing units
   | 'textInput' // corresponds to ChatModelPricing.input
   | 'textOutput' // corresponds to ChatModelPricing.output
   | 'textInput_cacheRead' // corresponds to ChatModelPricing.cachedInput
@@ -238,6 +234,7 @@ export type ExtendParamsType =
   | 'disableContextCaching'
   | 'reasoningEffort'
   | 'gpt5ReasoningEffort'
+  | 'gpt5_1ReasoningEffort'
   | 'textVerbosity'
   | 'thinking'
   | 'thinkingBudget'
