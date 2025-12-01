@@ -4,7 +4,7 @@ import { ControllerModule, ipcClientEvent } from '.';
 
 export default class ShortcutController extends ControllerModule {
   /**
-   * Get all shortcut configurations
+   * 获取所有快捷键配置
    */
   @ipcClientEvent('getShortcutsConfig')
   getShortcutsConfig() {
@@ -12,7 +12,7 @@ export default class ShortcutController extends ControllerModule {
   }
 
   /**
-   * Update a single shortcut configuration
+   * 更新单个快捷键配置
    */
   @ipcClientEvent('updateShortcutConfig')
   updateShortcutConfig({

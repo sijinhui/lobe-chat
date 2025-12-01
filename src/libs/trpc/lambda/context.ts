@@ -7,7 +7,6 @@ import { NextRequest } from 'next/server';
 import {
   LOBE_CHAT_AUTH_HEADER,
   LOBE_CHAT_OIDC_AUTH_HEADER,
-  enableBetterAuth,
   enableClerk,
   enableNextAuth,
 } from '@/const/auth';
@@ -81,10 +80,7 @@ export const createLambdaContext = async (request: NextRequest): Promise<LambdaC
   const isMockUser = process.env.ENABLE_MOCK_DEV_USER === '1';
 
   if (process.env.NODE_ENV === 'development' && (isDebugApi || isMockUser)) {
-    return {
-      authorizationHeader: request.headers.get(LOBE_CHAT_AUTH_HEADER),
-      userId: process.env.MOCK_DEV_USER_ID,
-    };
+    return { userId: process.env.MOCK_DEV_USER_ID };
   }
 
   log('createLambdaContext called for request');
@@ -162,32 +158,6 @@ export const createLambdaContext = async (request: NextRequest): Promise<LambdaC
       ...commonContext,
       userId,
     });
-  }
-
-  if (enableBetterAuth) {
-    log('Attempting Better Auth authentication');
-    try {
-      const { auth: betterAuth } = await import('@/auth');
-
-      const session = await betterAuth.api.getSession({
-        headers: request.headers,
-      });
-
-      if (session && session?.user?.id) {
-        userId = session.user.id;
-        log('Better Auth authentication successful, userId: %s', userId);
-      } else {
-        log('Better Auth authentication failed, no valid session');
-      }
-
-      return createContextInner({
-        ...commonContext,
-        userId,
-      });
-    } catch (e) {
-      log('Better Auth authentication error: %O', e);
-      console.error('better auth err', e);
-    }
   }
 
   if (enableNextAuth) {

@@ -77,10 +77,6 @@ export interface StreamProtocolChunk {
     | 'reasoning_signature'
     // flagged reasoning signature
     | 'flagged_reasoning_signature'
-    // multimodal content part in reasoning
-    | 'reasoning_part'
-    // multimodal content part in content
-    | 'content_part'
     // Search or Grounding
     | 'grounding'
     // stop signal
@@ -95,21 +91,6 @@ export interface StreamProtocolChunk {
     | 'data';
 }
 
-/**
- * Stream content part chunk data for multimodal support
- */
-export interface StreamPartChunkData {
-  content: string;
-  // whether this part is in reasoning or regular content
-  inReasoning: boolean;
-  // image MIME type
-  mimeType?: string;
-  // text content or base64 image data
-  partType: 'text' | 'image';
-  // Optional signature for reasoning verification (Google Gemini feature)
-  thoughtSignature?: string;
-}
-
 export interface StreamToolCallChunkData {
   function?: {
     arguments?: string;
@@ -117,7 +98,6 @@ export interface StreamToolCallChunkData {
   };
   id?: string;
   index: number;
-  thoughtSignature?: string;
   type: 'function' | string;
 }
 

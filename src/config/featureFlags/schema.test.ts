@@ -5,7 +5,7 @@ import { FeatureFlagsSchema, evaluateFeatureFlag, mapFeatureFlagsEnvToState } fr
 describe('FeatureFlagsSchema', () => {
   it('should validate correct feature flags with boolean values', () => {
     const result = FeatureFlagsSchema.safeParse({
-      provider_settings: false,
+      language_model_settings: false,
       openai_api_key: true,
       openai_proxy_url: false,
       create_session: true,
@@ -98,6 +98,7 @@ describe('evaluateFeatureFlag', () => {
 describe('mapFeatureFlagsEnvToState', () => {
   it('should correctly map boolean feature flags to state', () => {
     const config = {
+      language_model_settings: false,
       provider_settings: true,
       openai_api_key: true,
       openai_proxy_url: false,
@@ -110,6 +111,7 @@ describe('mapFeatureFlagsEnvToState', () => {
       plugins: true,
       knowledge_base: false,
       rag_eval: true,
+      clerk_sign_up: false,
       market: true,
       speech_to_text: true,
       changelog: false,
@@ -125,6 +127,7 @@ describe('mapFeatureFlagsEnvToState', () => {
     expect(mappedState).toMatchObject({
       isAgentEditable: false,
       showCreateSession: true,
+      showLLM: false,
       showProvider: true,
       showOpenAIApiKey: true,
       showOpenAIProxyUrl: false,
@@ -137,6 +140,7 @@ describe('mapFeatureFlagsEnvToState', () => {
       showWelcomeSuggest: true,
       enableKnowledgeBase: false,
       enableRAGEval: true,
+      enableClerkSignUp: false,
       showMarket: true,
       enableSTT: true,
       showPinList: true,

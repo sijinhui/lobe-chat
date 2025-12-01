@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/interface */
 // Define types for local file operations
 export interface LocalFileItem {
   contentType?: string;
@@ -48,7 +47,6 @@ export interface RenameLocalFileResult {
 }
 
 export interface LocalReadFileParams {
-  fullContent?: boolean;
   loc?: [number, number];
   path: string;
 }
@@ -98,31 +96,8 @@ export interface LocalReadFileResult {
 }
 
 export interface LocalSearchFilesParams {
-  // Basic search
-  keywords: string;
-
-  // Path options
-  directory?: string; // Limit search to specific directory
-  exclude?: string[]; // Paths to exclude from search
-
-  // File type options
-  fileTypes?: string[]; // File extensions to filter (e.g., ['pdf', 'docx'])
-
-  // Content options
-  contentContains?: string; // Search for files containing specific text
-
-  // Time options (ISO 8601 date strings)
-  createdAfter?: string;
-  createdBefore?: string;
-  modifiedAfter?: string;
-  modifiedBefore?: string;
-
-  // Result options
-  detailed?: boolean;
-  limit?: number;
-  liveUpdate?: boolean;
-  sortBy?: 'name' | 'date' | 'size';
-  sortDirection?: 'asc' | 'desc';
+  directory?: string;
+  keywords: string; // Optional directory to limit search
 }
 
 export interface OpenLocalFileParams {
@@ -218,10 +193,7 @@ export interface EditLocalFileParams {
 }
 
 export interface EditLocalFileResult {
-  diffText?: string;
   error?: string;
-  linesAdded?: number;
-  linesDeleted?: number;
   replacements: number;
   success: boolean;
 }

@@ -60,7 +60,6 @@ export const KeyEnum = {
 export const HotkeyEnum = {
   AddUserMessage: 'addUserMessage',
   ClearCurrentMessages: 'clearCurrentMessages',
-  CommandPalette: 'commandPalette',
   DeleteAndRegenerateMessage: 'deleteAndRegenerateMessage',
   DeleteLastMessage: 'deleteLastMessage',
   EditMessage: 'editMessage',
@@ -85,7 +84,7 @@ export const HotkeyGroupEnum = {
 export const HotkeyScopeEnum = {
   Chat: 'chat',
   Files: 'files',
-  // Default globally registered hotkey scope
+  // 默认全局注册的快捷键 scope
   // https://react-hotkeys-hook.vercel.app/docs/documentation/hotkeys-provider
   Global: 'global',
 
@@ -97,13 +96,13 @@ export type HotkeyGroupId = (typeof HotkeyGroupEnum)[keyof typeof HotkeyGroupEnu
 export type HotkeyScopeId = (typeof HotkeyScopeEnum)[keyof typeof HotkeyScopeEnum];
 
 export interface HotkeyItem {
-  // Hotkey grouping for display purposes
+  // 快捷键分组用于展示
   group: HotkeyGroupId;
   id: HotkeyId;
   keys: string;
-  // Whether the hotkey is non-editable
+  // 是否为不可编辑的快捷键
   nonEditable?: boolean;
-  // Hotkey scope
+  // 快捷键作用域
   scopes?: HotkeyScopeId[];
 }
 
@@ -120,7 +119,7 @@ export interface DesktopHotkeyItem {
   id: DesktopHotkeyId;
 
   keys: string;
-  // Whether the hotkey is non-editable
+  // 是否为不可编辑的快捷键
   nonEditable?: boolean;
 }
 

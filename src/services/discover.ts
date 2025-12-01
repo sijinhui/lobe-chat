@@ -7,7 +7,6 @@ import { useUserStore } from '@/store/user';
 import { preferenceSelectors } from '@/store/user/selectors';
 import {
   AssistantListResponse,
-  AssistantMarketSource,
   AssistantQueryParams,
   DiscoverAssistantDetail,
   DiscoverMcpDetail,
@@ -31,37 +30,27 @@ class DiscoverService {
   private _isRetrying = false;
 
   // ============================== Assistant Market ==============================
-  getAssistantCategories = async (
-    params: CategoryListQuery & { source?: AssistantMarketSource } = {},
-  ): Promise<CategoryItem[]> => {
+  getAssistantCategories = async (params: CategoryListQuery = {}): Promise<CategoryItem[]> => {
     const locale = globalHelpers.getCurrentLanguage();
-    const { source, ...rest } = params;
     return lambdaClient.market.getAssistantCategories.query({
-      ...rest,
+      ...params,
       locale,
-      source,
     });
   };
 
   getAssistantDetail = async (params: {
     identifier: string;
     locale?: string;
-    source?: AssistantMarketSource;
-    version?: string;
   }): Promise<DiscoverAssistantDetail | undefined> => {
     const locale = globalHelpers.getCurrentLanguage();
     return lambdaClient.market.getAssistantDetail.query({
-      identifier: params.identifier,
+      ...params,
       locale,
-      source: params.source,
-      version: params.version,
     });
   };
 
-  getAssistantIdentifiers = async (
-    params: { source?: AssistantMarketSource } = {},
-  ): Promise<IdentifiersResponse> => {
-    return lambdaClient.market.getAssistantIdentifiers.query(params);
+  getAssistantIdentifiers = async (): Promise<IdentifiersResponse> => {
+    return lambdaClient.market.getAssistantIdentifiers.query();
   };
 
   getAssistantList = async (params: AssistantQueryParams = {}): Promise<AssistantListResponse> => {
@@ -148,7 +137,7 @@ class DiscoverService {
   };
 
   /**
-   * Report MCP plugin installation result
+   * 上报 MCP 插件安装结果
    */
   reportMcpInstallResult = async ({
     success,
@@ -179,7 +168,7 @@ class DiscoverService {
   };
 
   /**
-   * Report plugin call result
+   * 上报插件调用结果
    */
   reportPluginCall = async (reportData: CallReportRequest) => {
     // if user don't allow tracing , just not report calling
@@ -294,27 +283,27 @@ class DiscoverService {
   private async injectMPToken() {
     if (typeof localStorage === 'undefined') return;
 
-    // Check server-set status flag cookie
+    // 检查服务端设置的状态标记 cookie
     const tokenStatus = this.getTokenStatusFromCookie();
     if (tokenStatus === 'active') return;
 
     let clientId: string;
     let clientSecret: string;
 
-    // 1. Get client information from localStorage
+    // 1. 从 localStorage 获取客户端信息
     const item = localStorage.getItem('_mpc');
     if (!item) {
-      // 2. If not exists, register client
+      // 2. 如果没有，则注册客户端
       const clientInfo = await this.registerClient();
       clientId = clientInfo.clientId;
       clientSecret = clientInfo.clientSecret;
 
-      // 3. Base64 encode and save to localStorage
+      // 3. Base64 编码并保存到 localStorage
       const clientData = JSON.stringify({ clientId, clientSecret });
       const encodedData = btoa(clientData);
       localStorage.setItem('_mpc', encodedData);
     } else {
-      // 4. If exists, decode to get client information
+      // 4. 如果有，则解码获取客户端信息
       try {
         const decodedData = atob(item);
         const clientData = JSON.parse(decodedData);
@@ -322,7 +311,7 @@ class DiscoverService {
         clientSecret = clientData.clientSecret;
       } catch (error) {
         console.error('Failed to decode client data:', error);
-        // If decoding fails, re-register
+        // 如果解码失败，重新注册
         const clientInfo = await this.registerClient();
         clientId = clientInfo.clientId;
         clientSecret = clientInfo.clientSecret;
@@ -333,23 +322,23 @@ class DiscoverService {
       }
     }
 
-    // 5. Get access token (server will automatically set HTTP-Only cookie)
+    // 5. 获取访问令牌（服务端会自动设置 HTTP-Only cookie）
     try {
       const result = await lambdaClient.market.registerM2MToken.query({
         clientId,
         clientSecret,
       });
 
-      // Check server response result
+      // 检查服务端返回的结果
       if (!result.success) {
         console.warn(
           'Token registration failed, client credentials may be invalid. Clearing and retrying...',
         );
 
-        // Clear related local storage data
+        // 清空相关的本地存储数据
         localStorage.removeItem('_mpc');
 
-        // Re-execute the complete registration process (but only retry once)
+        // 重新执行完整的注册流程（但只重试一次）
         if (!this._isRetrying) {
           this._isRetrying = true;
           try {

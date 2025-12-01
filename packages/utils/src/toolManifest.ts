@@ -4,7 +4,7 @@ import { LobeChatPluginManifest, pluginManifestSchema } from '@lobehub/chat-plug
 import { API_ENDPOINTS } from '@/services/_url';
 
 const fetchJSON = async <T = any>(url: string, proxy = false): Promise<T> => {
-  // 2. Send request
+  // 2. 发送请求
   let res: Response;
   try {
     res = await (proxy ? fetch(API_ENDPOINTS.proxy, { body: url, method: 'POST' }) : fetch(url));
@@ -80,12 +80,12 @@ export const getToolManifest = async (
   url?: string,
   useProxy: boolean = false,
 ): Promise<LobeChatPluginManifest> => {
-  // 1. Validate plugin
+  // 1. valid plugin
   if (!url) {
     throw new TypeError('noManifest');
   }
 
-  // 2. Send request
+  // 2. 发送请求
   let data = await fetchJSON<LobeChatPluginManifest>(url, useProxy);
 
   // @ts-ignore
@@ -94,7 +94,7 @@ export const getToolManifest = async (
   if (data['description_for_model']) {
     data = convertOpenAIManifestToLobeManifest(data as any);
   }
-  // 3. Validate plugin file format specification
+  // 3. 校验插件文件格式规范
   const parser = pluginManifestSchema.safeParse(data);
 
   if (!parser.success) {

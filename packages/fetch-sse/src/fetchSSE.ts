@@ -17,7 +17,7 @@ import { nanoid } from '@lobechat/utils/uuid';
 
 import { getMessageError } from './parseError';
 
-type SSEFinishType = 'done' | 'error' | 'abort' | string;
+type SSEFinishType = 'done' | 'error' | 'abort';
 
 export type OnFinishHandler = (
   text: string,
@@ -48,10 +48,6 @@ export interface MessageTextChunk {
   text: string;
   type: 'text';
 }
-export interface MessageStopChunk {
-  reason: string;
-  type: 'stop';
-}
 
 export interface MessageBase64ImageChunk {
   id: string;
@@ -71,22 +67,6 @@ export interface MessageGroundingChunk {
   type: 'grounding';
 }
 
-export interface MessageReasoningPartChunk {
-  content: string;
-  mimeType?: string;
-  partType: 'text' | 'image';
-  thoughtSignature?: string;
-  type: 'reasoning_part';
-}
-
-export interface MessageContentPartChunk {
-  content: string;
-  mimeType?: string;
-  partType: 'text' | 'image';
-  thoughtSignature?: string;
-  type: 'content_part';
-}
-
 interface MessageToolCallsChunk {
   isAnimationActives?: boolean[];
   tool_calls: MessageToolCall[];
@@ -103,18 +83,15 @@ export interface FetchSSEOptions {
       | MessageTextChunk
       | MessageToolCallsChunk
       | MessageReasoningChunk
-      | MessageReasoningPartChunk
-      | MessageContentPartChunk
       | MessageGroundingChunk
       | MessageUsageChunk
       | MessageBase64ImageChunk
-      | MessageSpeedChunk
-      | MessageStopChunk,
+      | MessageSpeedChunk,
   ) => void;
   responseAnimation?: ResponseAnimation;
 }
 
-const START_ANIMATION_SPEED = 10; // Default starting speed
+const START_ANIMATION_SPEED = 10; // 默认起始速度
 
 const createSmoothMessage = (params: {
   onTextUpdate: (delta: string, text: string) => void;
@@ -129,7 +106,7 @@ const createSmoothMessage = (params: {
   let lastFrameTime = 0;
   let accumulatedTime = 0;
   let currentSpeed = startSpeed;
-  let lastQueueLength = 0; // Record the queue length from the previous frame
+  let lastQueueLength = 0; // 记录上一帧的队列长度
 
   const stopAnimation = () => {
     isAnimationActive = false;
@@ -150,7 +127,7 @@ const createSmoothMessage = (params: {
       lastFrameTime = performance.now();
       accumulatedTime = 0;
       currentSpeed = speed;
-      lastQueueLength = 0; // Reset previous frame queue length
+      lastQueueLength = 0; // 重置上一帧队列长度
 
       const updateText = (timestamp: number) => {
         if (!isAnimationActive) {
@@ -167,9 +144,9 @@ const createSmoothMessage = (params: {
 
         let charsToProcess = 0;
         if (outputQueue.length > 0) {
-          // Smoother speed adjustment
+          // 更平滑的速度调整
           const targetSpeed = Math.max(speed, outputQueue.length);
-          // Adjust speed change rate based on queue length changes
+          // 根据队列长度变化调整速度变化率
           const speedChangeRate = Math.abs(outputQueue.length - lastQueueLength) * 0.0008 + 0.005;
           currentSpeed += (targetSpeed - currentSpeed) * speedChangeRate;
 
@@ -180,7 +157,7 @@ const createSmoothMessage = (params: {
           accumulatedTime -= (charsToProcess * 1000) / currentSpeed;
 
           let actualChars = Math.min(charsToProcess, outputQueue.length);
-          // actualChars = Math.min(speed, actualChars); // Speed upper limit
+          // actualChars = Math.min(speed, actualChars); // 速度上限
 
           // if (actualChars * 2 < outputQueue.length && /[\dA-Za-z]/.test(outputQueue[actualChars])) {
           //   actualChars *= 2;
@@ -191,7 +168,7 @@ const createSmoothMessage = (params: {
           params.onTextUpdate(charsToAdd, buffer);
         }
 
-        lastQueueLength = outputQueue.length; // Update previous frame queue length
+        lastQueueLength = outputQueue.length; // 更新上一帧的队列长度
 
         if (outputQueue.length > 0 && isAnimationActive) {
           animationFrameId = requestAnimationFrame(updateText);
@@ -242,7 +219,7 @@ export const fetchSSE = async (url: string, options: RequestInit & FetchSSEOptio
   const shouldSkipTextProcessing = text === 'none';
   const textSmoothing = text === 'smooth';
 
-  // Add text buffer and timer related variables
+  // 添加文本buffer和计时器相关变量
   let textBuffer = '';
   let bufferTimer: ReturnType<typeof setTimeout> | null = null;
   const BUFFER_INTERVAL = 300; // 300ms
@@ -277,7 +254,7 @@ export const fetchSSE = async (url: string, options: RequestInit & FetchSSEOptio
   let thinkingBuffer = '';
   let thinkingBufferTimer: ReturnType<typeof setTimeout> | null = null;
 
-  // Create a function to handle buffer flushing
+  // 创建一个函数来处理buffer的刷新
   const flushThinkingBuffer = () => {
     if (thinkingBuffer) {
       options.onMessageHandle?.({ text: thinkingBuffer, type: 'reasoning' });
@@ -372,10 +349,10 @@ export const fetchSSE = async (url: string, options: RequestInit & FetchSSEOptio
           } else {
             output += data;
 
-            // Use buffer mechanism
+            // 使用buffer机制
             textBuffer += data;
 
-            // If timer not set yet, create one
+            // 如果还没有设置计时器，创建一个
             if (!bufferTimer) {
               bufferTimer = setTimeout(() => {
                 flushTextBuffer();
@@ -410,11 +387,6 @@ export const fetchSSE = async (url: string, options: RequestInit & FetchSSEOptio
           break;
         }
 
-        case 'stop': {
-          options.onMessageHandle?.({ reason: data, type: 'stop' });
-          break;
-        }
-
         case 'reasoning': {
           if (textSmoothing) {
             thinkingController.pushToQueue(data);
@@ -423,10 +395,10 @@ export const fetchSSE = async (url: string, options: RequestInit & FetchSSEOptio
           } else {
             thinking += data;
 
-            // Use buffer mechanism
+            // 使用buffer机制
             thinkingBuffer += data;
 
-            // If timer not set yet, create one
+            // 如果还没有设置计时器，创建一个
             if (!thinkingBufferTimer) {
               thinkingBufferTimer = setTimeout(() => {
                 flushThinkingBuffer();
@@ -435,37 +407,6 @@ export const fetchSSE = async (url: string, options: RequestInit & FetchSSEOptio
             }
           }
 
-          break;
-        }
-
-        case 'reasoning_part': {
-          // For reasoning_part, accumulate thinking content
-          if (data.partType === 'text' && data.content) {
-            thinking += data.content;
-          }
-          options.onMessageHandle?.({
-            content: data.content,
-            mimeType: data.mimeType,
-            partType: data.partType,
-            thoughtSignature: data.thoughtSignature,
-            type: ev.event,
-          });
-          break;
-        }
-
-        case 'content_part': {
-          // For content_part, accumulate text content to output
-          // This is critical for Gemini 2.5 models which use content_part instead of text events
-          if (data.partType === 'text' && data.content) {
-            output += data.content;
-          }
-          options.onMessageHandle?.({
-            content: data.content,
-            mimeType: data.mimeType,
-            partType: data.partType,
-            thoughtSignature: data.thoughtSignature,
-            type: ev.event,
-          });
           break;
         }
 
@@ -480,7 +421,7 @@ export const fetchSSE = async (url: string, options: RequestInit & FetchSSEOptio
     },
     onopen: async (res) => {
       response = res.clone();
-      // If not ok, it means there is a request error
+      // 如果不 ok 说明有请求错误
       if (!response.ok) {
         throw await getMessageError(res);
       }
@@ -493,7 +434,7 @@ export const fetchSSE = async (url: string, options: RequestInit & FetchSSEOptio
   if (response) {
     textController.stopAnimation();
 
-    // Ensure all buffered data is processed
+    // 确保所有缓冲区数据都被处理
     if (bufferTimer) {
       clearTimeout(bufferTimer);
       flushTextBuffer();

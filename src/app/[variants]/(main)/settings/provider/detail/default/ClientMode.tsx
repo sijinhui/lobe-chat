@@ -15,7 +15,7 @@ const ClientMode = memo<{ id: string }>(({ id }) => {
   const useFetchAiProviderItem = useAiInfraStore((s) => s.useFetchAiProviderItem);
   useFetchAiProviderItem(id);
 
-  const { data, isLoading } = useClientDataSWR(`get-client-provider-${id}`, () =>
+  const { data, isLoading } = useClientDataSWR('get-client-provider', () =>
     aiProviderService.getAiProviderById(id),
   );
 

@@ -13,6 +13,7 @@ import SearchView from './SearchView';
 
 interface SearchQueryViewProps {
   args: LocalSearchFilesParams;
+
   messageId: string;
   pluginState?: LocalFileSearchState;
 }

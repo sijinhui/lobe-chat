@@ -78,11 +78,10 @@ const McpItem = memo<DiscoverMcpItem>(
     const { t } = useTranslation('discover');
     const { styles, theme } = useStyles();
     const navigate = useNavigate();
-    const link = urlJoin('/discover/mcp', identifier);
+    const link = urlJoin('/mcp', identifier);
     return (
       <Block
         clickable
-        data-testid="mcp-item"
         height={'100%'}
         onClick={() => {
           navigate(link);

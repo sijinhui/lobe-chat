@@ -4,12 +4,11 @@ import { App, Switch } from 'antd';
 import { createStyles, useTheme } from 'antd-style';
 import { LucidePencil, TrashIcon } from 'lucide-react';
 import { AiModelSourceEnum, AiProviderModelListItem } from 'model-bank';
-import React, { memo, use, useState } from 'react';
+import { memo, use, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flexbox } from 'react-layout-kit';
 
 import { ModelInfoTags } from '@/components/ModelSelect';
-import NewModelBadge from '@/components/ModelSelect/NewModelBadge';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { aiModelSelectors, useAiInfraStore } from '@/store/aiInfra';
 import { formatPriceByCurrency } from '@/utils/format';
@@ -163,65 +162,6 @@ const ModelItem = memo<ModelItemProps>(
 
     const isMobile = useIsMobile();
 
-    const NewTag = <NewModelBadge releasedAt={releasedAt} />;
-
-    const ModelIdTag = (
-      <Tag onClick={copyModelId} style={{ cursor: 'pointer', marginRight: 0 }}>
-        {id}
-      </Tag>
-    );
-
-    const EnableSwitch = (
-      <Switch
-        checked={checked}
-        loading={isModelLoading}
-        onChange={async (e) => {
-          setChecked(e);
-          await toggleModelEnabled({ enabled: e, id, source, type });
-        }}
-        size={'small'}
-      />
-    );
-
-    const Actions =
-      modelEditable &&
-      ((style?: React.CSSProperties) => (
-        <Flexbox className={styles.config} horizontal style={style}>
-          <ActionIcon
-            icon={LucidePencil}
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowConfig(true);
-            }}
-            size={'small'}
-            title={t('providerModels.item.config')}
-          />
-          {source !== AiModelSourceEnum.Builtin && (
-            <ActionIcon
-              icon={TrashIcon}
-              onClick={() => {
-                modal.confirm({
-                  centered: true,
-                  okButtonProps: {
-                    danger: true,
-                    type: 'primary',
-                  },
-                  onOk: async () => {
-                    await removeAiModel(id, activeAiProvider!);
-                    message.success(t('providerModels.item.delete.success'));
-                  },
-                  title: t('providerModels.item.delete.confirm', {
-                    displayName: displayName || id,
-                  }),
-                });
-              }}
-              size={'small'}
-              title={t('providerModels.item.delete.title')}
-            />
-          )}
-        </Flexbox>
-      ));
-
     const dom = isMobile ? (
       <Flexbox
         align={'center'}
@@ -255,14 +195,58 @@ const ModelItem = memo<ModelItemProps>(
               </Flexbox>
             </Flexbox>
             <div>
-              {ModelIdTag}
-              {NewTag}
+              <Tag onClick={copyModelId} style={{ cursor: 'pointer', marginRight: 0 }}>
+                {id}
+              </Tag>
             </div>
           </Flexbox>
         </Flexbox>
         <Flexbox align={'center'} gap={4} horizontal>
-          {Actions && Actions({ opacity: 1 })}
-          {EnableSwitch}
+          {modelEditable && (
+            <Flexbox className={styles.config} horizontal style={{ opacity: 1 }}>
+              <ActionIcon
+                icon={LucidePencil}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowConfig(true);
+                }}
+                size={'small'}
+                title={t('providerModels.item.config')}
+              />
+              {source !== AiModelSourceEnum.Builtin && (
+                <ActionIcon
+                  icon={TrashIcon}
+                  onClick={() => {
+                    modal.confirm({
+                      centered: true,
+                      okButtonProps: {
+                        danger: true,
+                        type: 'primary',
+                      },
+                      onOk: async () => {
+                        await removeAiModel(id, activeAiProvider!);
+                        message.success(t('providerModels.item.delete.success'));
+                      },
+                      title: t('providerModels.item.delete.confirm', {
+                        displayName: displayName || id,
+                      }),
+                    });
+                  }}
+                  size={'small'}
+                  title={t('providerModels.item.delete.title')}
+                />
+              )}
+            </Flexbox>
+          )}
+          <Switch
+            checked={checked}
+            loading={isModelLoading}
+            onChange={async (e) => {
+              setChecked(e);
+              await toggleModelEnabled({ enabled: e, id, source, type });
+            }}
+            size={'small'}
+          />
         </Flexbox>
       </Flexbox>
     ) : (
@@ -280,9 +264,45 @@ const ModelItem = memo<ModelItemProps>(
           <Flexbox flex={1} gap={2} style={{ minWidth: 0 }}>
             <Flexbox align={'center'} gap={8} horizontal>
               {displayName || id}
-              {ModelIdTag}
-              {NewTag}
-              {Actions && Actions()}
+              <Tag onClick={copyModelId} style={{ cursor: 'pointer', marginRight: 0 }}>
+                {id}
+              </Tag>
+              {modelEditable && (
+                <Flexbox className={styles.config} horizontal>
+                  <ActionIcon
+                    icon={LucidePencil}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowConfig(true);
+                    }}
+                    size={'small'}
+                    title={t('providerModels.item.config')}
+                  />
+                  {source !== AiModelSourceEnum.Builtin && (
+                    <ActionIcon
+                      icon={TrashIcon}
+                      onClick={() => {
+                        modal.confirm({
+                          centered: true,
+                          okButtonProps: {
+                            danger: true,
+                            type: 'primary',
+                          },
+                          onOk: async () => {
+                            await removeAiModel(id, activeAiProvider!);
+                            message.success(t('providerModels.item.delete.success'));
+                          },
+                          title: t('providerModels.item.delete.confirm', {
+                            displayName: displayName || id,
+                          }),
+                        });
+                      }}
+                      size={'small'}
+                      title={t('providerModels.item.delete.title')}
+                    />
+                  )}
+                </Flexbox>
+              )}
             </Flexbox>
             <Flexbox align={'baseline'} gap={8} horizontal>
               {content.length > 0 && (
@@ -309,7 +329,15 @@ const ModelItem = memo<ModelItemProps>(
           {/*    <ActionIcon icon={Recycle} style={{ color: theme.colorWarning }} />*/}
           {/*  </Tooltip>*/}
           {/*)}*/}
-          {EnableSwitch}
+          <Switch
+            checked={checked}
+            loading={isModelLoading}
+            onChange={async (e) => {
+              setChecked(e);
+              await toggleModelEnabled({ enabled: e, id, source, type });
+            }}
+            size={'small'}
+          />
         </Flexbox>
       </Flexbox>
     );

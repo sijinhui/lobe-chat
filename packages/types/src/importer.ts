@@ -26,11 +26,11 @@ export interface ImportMessage {
   createdAt: number;
   error?: ChatMessageError;
 
-  // Extended fields
+  // 扩展字段
   extra?: {
-    model?: string;
-    provider?: string;
-    // Translation
+    fromModel?: string;
+    fromProvider?: string;
+    // 翻译
     translate?: ChatTranslate | false | null;
     // TTS
     tts?: ChatTTS;
@@ -116,7 +116,7 @@ export enum ImportStage {
   Finished,
 }
 
-export interface ImportFileUploadState {
+export interface FileUploadState {
   progress: number;
   /**
    * rest time in ms
@@ -137,7 +137,7 @@ export interface ErrorShape {
 
 export interface OnImportCallbacks {
   onError?: (error: ErrorShape) => void;
-  onFileUploading?: (state: ImportFileUploadState) => void;
+  onFileUploading?: (state: FileUploadState) => void;
   onStageChange?: (stage: ImportStage) => void;
   /**
    *

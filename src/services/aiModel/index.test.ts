@@ -1,7 +1,10 @@
 import { testService } from '~test-utils';
 
-import { AiModelService } from './index';
+import { ClientService } from './client';
+import { ServerService } from './server';
 
-describe('AiModelService', () => {
-  testService(AiModelService);
+describe('aiModelService', () => {
+  testService(ServerService);
+
+  testService(ClientService);
 });

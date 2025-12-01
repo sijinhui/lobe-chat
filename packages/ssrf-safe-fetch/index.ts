@@ -4,8 +4,6 @@ import { RequestFilteringAgentOptions, useAgent as ssrfAgent } from 'request-fil
 /**
  * SSRF-safe fetch implementation for server-side use
  * Uses request-filtering-agent to prevent requests to private IP addresses
- *
- * @see https://lobehub.com/docs/self-hosting/environment-variables/basic#ssrf-allow-private-ip-address
  */
 // eslint-disable-next-line no-undef
 export const ssrfSafeFetch = async (url: string, options?: RequestInit): Promise<Response> => {
@@ -33,8 +31,7 @@ export const ssrfSafeFetch = async (url: string, options?: RequestInit): Promise
   } catch (error) {
     console.error('SSRF-safe fetch error:', error);
     throw new Error(
-      `SSRF-safe fetch failed: ${error instanceof Error ? error.message : String(error)}. ` +
-        'See: https://lobehub.com/docs/self-hosting/environment-variables/basic#ssrf-allow-private-ip-address',
+      `SSRF-safe fetch failed: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
 };

@@ -50,9 +50,7 @@ export class ProtocolManager {
 
     // Check if already registered
     const isCurrentlyRegistered = app.isDefaultProtocolClient(this.protocolScheme);
-    logger.debug(
-      `🔗 [Protocol] ${this.protocolScheme}:// is currently registered: ${isCurrentlyRegistered}`,
-    );
+    logger.debug(`🔗 [Protocol] Is currently default protocol client: ${isCurrentlyRegistered}`);
 
     // Register as default protocol client
     let registrationResult: boolean;
@@ -73,9 +71,7 @@ export class ProtocolManager {
       registrationResult = app.setAsDefaultProtocolClient(this.protocolScheme);
     }
 
-    logger.debug(
-      `🔗 [Protocol] Registration result for ${this.protocolScheme}://: ${registrationResult}`,
-    );
+    logger.debug(`🔗 [Protocol] Registration result: ${registrationResult}`);
 
     if (!registrationResult) {
       logger.error(
@@ -87,9 +83,7 @@ export class ProtocolManager {
 
     // Verify registration
     const isRegisteredAfter = app.isDefaultProtocolClient(this.protocolScheme);
-    logger.debug(
-      `🔗 [Protocol] Final registration status for ${this.protocolScheme}://: ${isRegisteredAfter}`,
-    );
+    logger.debug(`🔗 [Protocol] Final registration status: ${isRegisteredAfter}`);
   }
 
   /**
@@ -129,6 +123,7 @@ export class ProtocolManager {
    */
   private getProtocolUrlFromArgs(args: string[]): string | null {
     const protocolPrefix = `${this.protocolScheme}://`;
+
     logger.debug(`🔗 [Protocol] Searching for protocol URLs in args: ${JSON.stringify(args)}`);
     logger.debug(`🔗 [Protocol] Looking for prefix: ${protocolPrefix}`);
 

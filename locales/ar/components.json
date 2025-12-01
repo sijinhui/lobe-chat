@@ -106,12 +106,6 @@
     "keyPlaceholder": "المفتاح",
     "valuePlaceholder": "القيمة"
   },
-  "LocalFile": {
-    "action": {
-      "open": "فتح",
-      "showInFolder": "عرض في المجلد"
-    }
-  },
   "MaxTokenSlider": {
     "unlimited": "غير محدود"
   },

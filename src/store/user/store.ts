@@ -7,6 +7,7 @@ import { createDevtools } from '../middleware/createDevtools';
 import { type UserState, initialState } from './initialState';
 import { type UserAuthAction, createAuthSlice } from './slices/auth/action';
 import { type CommonAction, createCommonSlice } from './slices/common/action';
+import { type ModelListAction, createModelListSlice } from './slices/modelList/action';
 import { type PreferenceAction, createPreferenceSlice } from './slices/preference/action';
 import { type UserSettingsAction, createSettingsSlice } from './slices/settings/action';
 
@@ -15,6 +16,7 @@ import { type UserSettingsAction, createSettingsSlice } from './slices/settings/
 export type UserStore = UserState &
   UserSettingsAction &
   PreferenceAction &
+  ModelListAction &
   UserAuthAction &
   CommonAction;
 
@@ -24,6 +26,7 @@ const createStore: StateCreator<UserStore, [['zustand/devtools', never]]> = (...
   ...createPreferenceSlice(...parameters),
   ...createAuthSlice(...parameters),
   ...createCommonSlice(...parameters),
+  ...createModelListSlice(...parameters),
 });
 
 //  ===============  实装 useStore ============ //

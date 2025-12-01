@@ -11,7 +11,7 @@ export class DrizzleMigrationModel {
   }
 
   getTableCounts = async () => {
-    // Use pg_tables system table to query the number of user tables
+    // 这里使用 pg_tables 系统表查询用户表数量
     const result = await this.db.execute(
       sql`
         SELECT COUNT(*) as table_count

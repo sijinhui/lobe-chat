@@ -5,13 +5,11 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flexbox } from 'react-layout-kit';
 import { useMediaQuery } from 'react-responsive';
-import { useParams } from 'react-router-dom';
 
 import NProgress from '@/components/NProgress';
 import PanelTitle from '@/components/PanelTitle';
+import FileManager from '@/features/FileManager';
 import FilePanel from '@/features/FileSidePanel';
-import KnowledgeItemManager from '@/features/KnowledgeManager';
-import TogglePanelButton from '@/features/KnowledgeManager/Header/TogglePanelButton';
 import { useShowMobileWorkspace } from '@/hooks/useShowMobileWorkspace';
 import { FilesTabs } from '@/types/files';
 
@@ -20,8 +18,8 @@ import FileModalQueryRoute from '../../shared/FileModalQueryRoute';
 import { useSetFileModalId } from '../../shared/useFileQueryParam';
 import Container from './layout/Container';
 import RegisterHotkeys from './layout/RegisterHotkeys';
-import CategoryMenu from './menu/CategoryMenu';
-import Collection from './menu/KnowledgeBase';
+import FileMenu from './menu/FileMenu';
+import KnowledgeBase from './menu/KnowledgeBase';
 
 const useStyles = createStyles(({ css, token }) => ({
   main: css`
@@ -29,63 +27,42 @@ const useStyles = createStyles(({ css, token }) => ({
     overflow: hidden;
     background: ${token.colorBgLayout};
   `,
-  sidebar: css`
-    position: relative;
-
-    &:hover .toggle-button {
-      opacity: 1;
-    }
-  `,
-  toggleButton: css`
-    position: absolute;
-    z-index: 10;
-    inset-block-start: 8px;
-    inset-inline-end: 8px;
-
-    opacity: 0;
-
-    transition: opacity ${token.motionDurationSlow};
-  `,
 }));
 
-const Sidebar = memo(() => {
+// Menu content component
+const MenuContent = memo(() => {
   const { t } = useTranslation('file');
-  const { styles } = useStyles();
 
   return (
-    <Flexbox className={styles.sidebar} gap={16} height={'100%'}>
-      <div className={`${styles.toggleButton} toggle-button`}>
-        <TogglePanelButton />
-      </div>
+    <Flexbox gap={16} height={'100%'}>
       <Flexbox paddingInline={8}>
         <PanelTitle desc={t('desc')} title={t('title')} />
-        <CategoryMenu />
+        <FileMenu />
       </Flexbox>
-      <Collection />
+      <KnowledgeBase />
     </Flexbox>
   );
 });
 
-Sidebar.displayName = 'Sidebar';
+MenuContent.displayName = 'MenuContent';
 
 // Main files list component
-const MainContent = memo(() => {
-  const { id } = useParams<{ id: string }>();
+const FilesListPage = memo(() => {
   const [category] = useFileCategory();
   const setFileModalId = useSetFileModalId();
 
   return (
-    <KnowledgeItemManager
+    <FileManager
       category={category}
-      documentId={id}
       onOpenFile={setFileModalId}
       title={`${category as FilesTabs}`}
     />
   );
 });
 
-MainContent.displayName = 'FilesListPage';
+FilesListPage.displayName = 'FilesListPage';
 
+// Desktop layout
 const DesktopLayout = memo(() => {
   return (
     <>
@@ -97,10 +74,10 @@ const DesktopLayout = memo(() => {
         width={'100%'}
       >
         <FilePanel>
-          <Sidebar />
+          <MenuContent />
         </FilePanel>
         <Container>
-          <MainContent />
+          <FilesListPage />
         </Container>
       </Flexbox>
       <RegisterHotkeys />
@@ -111,6 +88,7 @@ const DesktopLayout = memo(() => {
 
 DesktopLayout.displayName = 'DesktopLayout';
 
+// Mobile layout
 const MobileLayout = memo(() => {
   const showMobileWorkspace = useShowMobileWorkspace();
   const { styles } = useStyles();
@@ -124,7 +102,7 @@ const MobileLayout = memo(() => {
         style={showMobileWorkspace ? { display: 'none' } : undefined}
         width="100%"
       >
-        <Sidebar />
+        <MenuContent />
       </Flexbox>
       <Flexbox
         className={styles.main}
@@ -132,7 +110,7 @@ const MobileLayout = memo(() => {
         style={showMobileWorkspace ? undefined : { display: 'none' }}
         width="100%"
       >
-        <MainContent />
+        <FilesListPage />
       </Flexbox>
       <FileModalQueryRoute />
     </>

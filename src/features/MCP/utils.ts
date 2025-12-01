@@ -1,24 +1,7 @@
 import { ConnectionConfig, DeploymentOption } from '@lobehub/market-types';
 
-export const genServerConfig = (identifier?: string, connection?: ConnectionConfig) => {
-  // 检查是否为 HTTP 类型
-  if (connection?.url) {
-    // HTTP 类型配置
-    return JSON.stringify(
-      {
-        mcpServers: {
-          [String(identifier)]: {
-            url: connection.url,
-          },
-        },
-      },
-      null,
-      2,
-    );
-  }
-
-  // stdio 类型配置
-  return JSON.stringify(
+export const genServerConfig = (identifier?: string, connection?: ConnectionConfig) =>
+  JSON.stringify(
     {
       mcpServers: {
         [String(identifier)]: {
@@ -30,7 +13,6 @@ export const genServerConfig = (identifier?: string, connection?: ConnectionConf
     null,
     2,
   );
-};
 
 export const getRecommendedDeployment = (deploymentOptions: DeploymentOption[]) =>
   deploymentOptions?.find((item) => item.isRecommended) || deploymentOptions?.[0];

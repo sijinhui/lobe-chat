@@ -14,7 +14,7 @@ import { getTracePayload } from '@/utils/trace';
 export const maxDuration = 300;
 
 export const POST = checkAuth(async (req: Request, { params, jwtPayload, createRuntime }) => {
-  const provider = (await params)!.provider!;
+  const { provider } = await params;
 
   try {
     // ============  1. init chat model   ============ //

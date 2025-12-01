@@ -1,39 +1,32 @@
-import { DataSyncConfig, MarketAuthorizationParams, dispatch } from '@lobechat/electron-client-ipc';
+import { DataSyncConfig, dispatch } from '@lobechat/electron-client-ipc';
 
 class RemoteServerService {
   /**
-   * Get remote server configuration
+   * 获取远程服务器配置
    */
   getRemoteServerConfig = async () => {
     return dispatch('getRemoteServerConfig');
   };
 
   /**
-   * Set remote server configuration
+   * 设置远程服务器配置
    */
   setRemoteServerConfig = async (config: DataSyncConfig) => {
     return dispatch('setRemoteServerConfig', config);
   };
 
   /**
-   * Clear remote server configuration
+   * 清除远程服务器配置
    */
   clearRemoteServerConfig = async () => {
     return dispatch('clearRemoteServerConfig');
   };
 
   /**
-   * Request authorization
+   * 请求授权
    */
   requestAuthorization = async (config: DataSyncConfig) => {
     return dispatch('requestAuthorization', config);
-  };
-
-  /**
-   * Request Market authorization
-   */
-  requestMarketAuthorization = async (params: MarketAuthorizationParams) => {
-    return dispatch('requestMarketAuthorization', params);
   };
 }
 

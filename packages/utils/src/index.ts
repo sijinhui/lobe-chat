@@ -5,7 +5,6 @@ export * from './format';
 export * from './imageToBase64';
 export * from './keyboard';
 export * from './merge';
-export * from './multimodalContent';
 export * from './number';
 export * from './object';
 export * from './pricing';

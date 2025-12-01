@@ -106,12 +106,6 @@
     "keyPlaceholder": "Khóa",
     "valuePlaceholder": "Giá trị"
   },
-  "LocalFile": {
-    "action": {
-      "open": "Mở",
-      "showInFolder": "Hiển thị trong thư mục"
-    }
-  },
   "MaxTokenSlider": {
     "unlimited": "Không giới hạn"
   },

@@ -24,7 +24,7 @@ const Category = memo(() => {
     qs.stringifyUrl(
       {
         query: { category: key === 'all' ? null : key, q },
-        url: '/discover/model',
+        url: '/model',
       },
       { skipNull: true },
     );

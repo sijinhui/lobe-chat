@@ -42,16 +42,6 @@ export const createTraceOptions = (
     startTime: new Date(),
   });
 
-  const headers = new Headers();
-
-  if (trace?.id) {
-    headers.set(LOBE_CHAT_TRACE_ID, trace.id);
-  }
-
-  if (generation?.id) {
-    headers.set(LOBE_CHAT_OBSERVATION_ID, generation.id);
-  }
-
   return {
     callback: {
       onCompletion: async ({ text, thinking, usage, grounding, toolsCalling }) => {
@@ -104,6 +94,9 @@ export const createTraceOptions = (
         });
       },
     } as ChatStreamCallbacks,
-    headers: headers,
+    headers: {
+      [LOBE_CHAT_OBSERVATION_ID]: generation?.id,
+      [LOBE_CHAT_TRACE_ID]: trace?.id,
+    },
   };
 };

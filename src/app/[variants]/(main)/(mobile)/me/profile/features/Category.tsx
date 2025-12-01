@@ -1,11 +1,13 @@
 'use client';
 
 import { ChartColumnBigIcon, LogOut, ShieldCheck, UserCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import Cell, { CellProps } from '@/components/Cell';
+import { enableAuth } from '@/const/auth';
+import { isDeprecatedEdition } from '@/const/version';
 import { ProfileTabs } from '@/store/global/initialState';
 import { useUserStore } from '@/store/user';
 import { authSelectors } from '@/store/user/selectors';
@@ -16,39 +18,42 @@ const Category = memo(() => {
     authSelectors.isLoginWithClerk(s),
     s.logout,
   ]);
-  const navigate = useNavigate();
+  const router = useRouter();
   const { t } = useTranslation('auth');
   const items: CellProps[] = [
     {
       icon: UserCircle,
       key: ProfileTabs.Profile,
       label: t('tab.profile'),
-      onClick: () => navigate('/profile'),
+      onClick: () => router.push('/profile'),
     },
-    isLoginWithClerk && {
-      icon: ShieldCheck,
-      key: ProfileTabs.Security,
-      label: t('tab.security'),
-      onClick: () => navigate('/profile/security'),
-    },
-    {
+    enableAuth &&
+      isLoginWithClerk && {
+        icon: ShieldCheck,
+        key: ProfileTabs.Security,
+        label: t('tab.security'),
+        onClick: () => router.push('/profile/security'),
+      },
+    !isDeprecatedEdition && {
       icon: ChartColumnBigIcon,
       key: ProfileTabs.Stats,
       label: t('tab.stats'),
-      onClick: () => navigate('/profile/stats'),
+      onClick: () => router.push('/profile/stats'),
     },
-    isLogin && {
-      type: 'divider',
-    },
-    isLogin && {
-      icon: LogOut,
-      key: 'logout',
-      label: t('signout', { ns: 'auth' }),
-      onClick: () => {
-        signOut();
-        navigate('/login');
+    enableAuth &&
+      isLogin && {
+        type: 'divider',
       },
-    },
+    enableAuth &&
+      isLogin && {
+        icon: LogOut,
+        key: 'logout',
+        label: t('signout', { ns: 'auth' }),
+        onClick: () => {
+          signOut();
+          router.push('/login');
+        },
+      },
   ].filter(Boolean) as CellProps[];
 
   return items?.map(({ key, ...item }, index) => <Cell key={key || index} {...item} />);

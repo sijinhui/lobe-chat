@@ -5,7 +5,7 @@ import { AIChatModelCard } from '../types/aiModel';
 const nebiusChatModels: AIChatModelCard[] = [
 ];
 
-// Models below are pending verification
+// 下述模型待验证
 
 // export const nebiusImageModels: AIImageModelCard[] = [
 //   {

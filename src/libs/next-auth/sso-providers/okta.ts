@@ -7,6 +7,10 @@ const provider = {
   provider: Okta({
     ...CommonProviderConfig,
     authorization: { params: { scope: 'openid email profile' } },
+    clientId: process.env.AUTH_OKTA_ID,
+    clientSecret: process.env.AUTH_OKTA_SECRET,
+    issuer: process.env.AUTH_OKTA_ISSUER,
+    // Remove End
     profile(profile) {
       return {
         email: profile.email,

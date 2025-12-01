@@ -210,24 +210,20 @@ export class Sitemap {
       const endIndex = startIndex + ITEMS_PER_PAGE;
       const pageAssistants = list.slice(startIndex, endIndex);
 
-      const sitmap = pageAssistants
-        .filter((item) => item.identifier) // 过滤掉 identifier 为空的项目
-        .map((item) =>
-          this._genSitemap(urlJoin('/discover/assistant', item.identifier), {
-            lastModified: item?.lastModified || LAST_MODIFIED,
-          }),
-        );
-      return flatten(sitmap);
-    }
-
-    // 如果没有指定页数，返回所有（向后兼容）
-    const sitmap = list
-      .filter((item) => item.identifier) // 过滤掉 identifier 为空的项目
-      .map((item) =>
+      const sitmap = pageAssistants.map((item) =>
         this._genSitemap(urlJoin('/discover/assistant', item.identifier), {
           lastModified: item?.lastModified || LAST_MODIFIED,
         }),
       );
+      return flatten(sitmap);
+    }
+
+    // 如果没有指定页数，返回所有（向后兼容）
+    const sitmap = list.map((item) =>
+      this._genSitemap(urlJoin('/discover/assistant', item.identifier), {
+        lastModified: item?.lastModified || LAST_MODIFIED,
+      }),
+    );
     return flatten(sitmap);
   }
 
@@ -239,24 +235,20 @@ export class Sitemap {
       const endIndex = startIndex + ITEMS_PER_PAGE;
       const pagePlugins = list.slice(startIndex, endIndex);
 
-      const sitmap = pagePlugins
-        .filter((item) => item.identifier) // 过滤掉 identifier 为空的项目
-        .map((item) =>
-          this._genSitemap(urlJoin('/discover/plugin', item.identifier), {
-            lastModified: item?.lastModified || LAST_MODIFIED,
-          }),
-        );
-      return flatten(sitmap);
-    }
-
-    // 如果没有指定页数，返回所有（向后兼容）
-    const sitmap = list
-      .filter((item) => item.identifier) // 过滤掉 identifier 为空的项目
-      .map((item) =>
+      const sitmap = pagePlugins.map((item) =>
         this._genSitemap(urlJoin('/discover/plugin', item.identifier), {
           lastModified: item?.lastModified || LAST_MODIFIED,
         }),
       );
+      return flatten(sitmap);
+    }
+
+    // 如果没有指定页数，返回所有（向后兼容）
+    const sitmap = list.map((item) =>
+      this._genSitemap(urlJoin('/discover/plugin', item.identifier), {
+        lastModified: item?.lastModified || LAST_MODIFIED,
+      }),
+    );
     return flatten(sitmap);
   }
 
@@ -268,36 +260,30 @@ export class Sitemap {
       const endIndex = startIndex + ITEMS_PER_PAGE;
       const pageModels = list.slice(startIndex, endIndex);
 
-      const sitmap = pageModels
-        .filter((item) => item.identifier) // 过滤掉 identifier 为空的项目
-        .map((item) =>
-          this._genSitemap(urlJoin('/discover/model', item.identifier), {
-            lastModified: item?.lastModified || LAST_MODIFIED,
-          }),
-        );
-      return flatten(sitmap);
-    }
-
-    // 如果没有指定页数，返回所有（向后兼容）
-    const sitmap = list
-      .filter((item) => item.identifier) // 过滤掉 identifier 为空的项目
-      .map((item) =>
+      const sitmap = pageModels.map((item) =>
         this._genSitemap(urlJoin('/discover/model', item.identifier), {
           lastModified: item?.lastModified || LAST_MODIFIED,
         }),
       );
+      return flatten(sitmap);
+    }
+
+    // 如果没有指定页数，返回所有（向后兼容）
+    const sitmap = list.map((item) =>
+      this._genSitemap(urlJoin('/discover/model', item.identifier), {
+        lastModified: item?.lastModified || LAST_MODIFIED,
+      }),
+    );
     return flatten(sitmap);
   }
 
   async getProviders(): Promise<MetadataRoute.Sitemap> {
     const list = await this.discoverService.getProviderIdentifiers();
-    const sitmap = list
-      .filter((item) => item.identifier) // 过滤掉 identifier 为空的项目
-      .map((item) =>
-        this._genSitemap(urlJoin('/discover/provider', item.identifier), {
-          lastModified: item?.lastModified || LAST_MODIFIED,
-        }),
-      );
+    const sitmap = list.map((item) =>
+      this._genSitemap(urlJoin('/discover/provider', item.identifier), {
+        lastModified: item?.lastModified || LAST_MODIFIED,
+      }),
+    );
     return flatten(sitmap);
   }
 

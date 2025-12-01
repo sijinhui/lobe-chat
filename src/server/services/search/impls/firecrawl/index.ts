@@ -26,7 +26,7 @@ export class FirecrawlImpl implements SearchServiceImpl {
 
   private get baseUrl(): string {
     // Assuming the base URL is consistent with the crawl endpoint
-    return process.env.FIRECRAWL_URL || 'https://api.firecrawl.dev/v2';
+    return process.env.FIRECRAWL_URL || 'https://api.firecrawl.dev/v1';
   }
 
   async query(query: string, params: SearchParams = {}): Promise<UniformSearchResponse> {
@@ -34,14 +34,13 @@ export class FirecrawlImpl implements SearchServiceImpl {
     const endpoint = urlJoin(this.baseUrl, '/search');
 
     const defaultQueryParams: FirecrawlSearchParameters = {
-      limit: 20,
+      limit: 15,
       query,
       /*
       scrapeOptions: {
         formats: ["markdown"]
       },
       */
-      sources: [{ type: 'web' }, { type: 'news' }],
     };
 
     let body: FirecrawlSearchParameters = {
@@ -96,64 +95,25 @@ export class FirecrawlImpl implements SearchServiceImpl {
 
       log('Parsed Firecrawl response: %o', firecrawlResponse);
 
-      // V2 API returns data as object with web/images/news arrays
-      const webResults = firecrawlResponse.data.web || [];
-      const imageResults = firecrawlResponse.data.images || [];
-      const newsResults = firecrawlResponse.data.news || [];
-
-      // Map web results
-      const mappedWebResults = webResults.map(
+      const mappedResults = (firecrawlResponse.data || []).map(
         (result): UniformSearchResult => ({
-          category: 'general',
-          content: result.description || result.markdown || '',
-          engines: ['firecrawl'],
-          parsedUrl: result.url ? new URL(result.url).hostname : '',
-          score: 1,
+          category: 'general', // Default category
+          content: result.description || '', // Prioritize content, fallback to snippet
+          engines: ['firecrawl'], // Use 'firecrawl' as the engine name
+          parsedUrl: result.url ? new URL(result.url).hostname : '', // Basic URL parsing
+          score: 1, // Default score to 1
           title: result.title || '',
           url: result.url,
         }),
       );
 
-      // Map news results
-      const mappedNewsResults = newsResults.map(
-        (result): UniformSearchResult => ({
-          category: 'news',
-          content: result.snippet || result.markdown || '',
-          engines: ['firecrawl'],
-          parsedUrl: result.url ? new URL(result.url).hostname : '',
-          score: 1,
-          title: result.title || '',
-          url: result.url,
-        }),
-      );
-
-      // Map image results
-      const mappedImageResults = imageResults.map(
-        (result): UniformSearchResult => ({
-          category: 'images',
-          content: result.title || '',
-          engines: ['firecrawl'],
-          parsedUrl: result.url ? new URL(result.url).hostname : '',
-          score: 1,
-          title: result.title || '',
-          url: result.imageUrl, // Use imageUrl for images
-        }),
-      );
-
-      // Combine all results
-      const allResults = [...mappedWebResults, ...mappedNewsResults, ...mappedImageResults];
-
-      log('Mapped %d results to SearchResult format', allResults.length);
-
-      if (firecrawlResponse.warning) {
-        log.extend('warn')('Firecrawl warning: %s', firecrawlResponse.warning);
-      }
+      log('Mapped %d results to SearchResult format', mappedResults.length);
 
       return {
         costTime,
         query: query,
-        resultNumbers: allResults.length,
-        results: allResults,
+        resultNumbers: mappedResults.length,
+        results: mappedResults,
       };
     } catch (error) {
       log.extend('error')('Error parsing Firecrawl response: %o', error);

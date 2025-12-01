@@ -2,12 +2,10 @@ import { GetStreamableMcpServerManifestInputSchema } from '@lobechat/types';
 import debug from 'debug';
 import { z } from 'zod';
 
-import { ToolCallContent } from '@/libs/mcp';
+import { isServerMode } from '@/const/version';
+import { passwordProcedure } from '@/libs/trpc/edge';
 import { authedProcedure, router } from '@/libs/trpc/lambda';
-import { serverDatabase } from '@/libs/trpc/lambda/middleware';
-import { FileService } from '@/server/services/file';
 import { mcpService } from '@/server/services/mcp';
-import { processContentBlocks } from '@/server/services/mcp/contentProcessor';
 
 const log = debug('lobe-mcp:router');
 
@@ -26,13 +24,7 @@ const stdioParamsSchema = z.object({
   type: z.literal('stdio').default('stdio'),
 });
 
-const mcpProcedure = authedProcedure.use(serverDatabase).use(async ({ ctx, next }) => {
-  return next({
-    ctx: {
-      fileService: new FileService(ctx.serverDB, ctx.userId),
-    },
-  });
-});
+const mcpProcedure = isServerMode ? authedProcedure : passwordProcedure;
 
 export const mcpRouter = router({
   getStdioMcpServerManifest: mcpProcedure.input(stdioParamsSchema).query(async ({ input }) => {
@@ -95,18 +87,15 @@ export const mcpRouter = router({
         toolName: z.string(),
       }),
     )
-    .mutation(async ({ input, ctx }) => {
-      // Create a closure that binds fileService and userId to processContentBlocks
-      const boundProcessContentBlocks = async (blocks: ToolCallContent[]) =>
-        processContentBlocks(blocks, ctx.fileService);
+    .mutation(async ({ input }) => {
+      // Pass the validated params, toolName, and args to the service
+      const data = await mcpService.callTool(
+        { ...input.params, env: input.env },
+        input.toolName,
+        input.args,
+      );
 
-      // Pass the validated params, toolName, args, and bound processContentBlocks to the service
-      return await mcpService.callTool({
-        clientParams: { ...input.params, env: input.env },
-        toolName: input.toolName,
-        argsStr: input.args,
-        processContentBlocks: boundProcessContentBlocks,
-      });
+      return JSON.stringify(data);
     }),
 
   validMcpServerInstallable: mcpProcedure

@@ -1,4 +1,4 @@
-import { parseAsBoolean, useQueryState } from './useQueryParam';
+import { parseAsBoolean, useQueryState } from 'nuqs';
 
 export const useShowMobileWorkspace = () => {
   const [showMobileWorkspace] = useQueryState('showMobileWorkspace', parseAsBoolean);

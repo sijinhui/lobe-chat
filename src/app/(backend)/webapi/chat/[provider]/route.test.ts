@@ -135,7 +135,6 @@ describe('POST handler', () => {
       expect(checkAuthMethod).toBeCalledWith({
         accessCode: 'test-access-code',
         apiKey: 'test-api-key',
-        betterAuthAuthorized: false,
         clerkAuth: {},
         nextAuthAuthorized: true,
       });

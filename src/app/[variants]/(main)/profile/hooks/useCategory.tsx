@@ -1,9 +1,11 @@
 import { Icon } from '@lobehub/ui';
-import { BadgeCentIcon, ChartColumnBigIcon, KeyIcon, ShieldCheck, UserCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ChartColumnBigIcon, KeyIcon, ShieldCheck, UserCircle } from 'lucide-react';
+import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
 import type { MenuProps } from '@/components/Menu';
+import { enableAuth } from '@/const/auth';
+import { isDeprecatedEdition } from '@/const/version';
 import { ProfileTabs } from '@/store/global/initialState';
 import { featureFlagsSelectors, useServerConfigStore } from '@/store/serverConfig';
 import { useUserStore } from '@/store/user';
@@ -19,25 +21,26 @@ export const useCategory = () => {
       icon: <Icon icon={UserCircle} />,
       key: ProfileTabs.Profile,
       label: (
-        <Link onClick={(e) => e.preventDefault()} to={'/profile'}>
+        <Link href={'/profile'} onClick={(e) => e.preventDefault()}>
           {t('tab.profile')}
         </Link>
       ),
     },
-    isLoginWithClerk && {
-      icon: <Icon icon={ShieldCheck} />,
-      key: ProfileTabs.Security,
-      label: (
-        <Link onClick={(e) => e.preventDefault()} to={'/profile/security'}>
-          {t('tab.security')}
-        </Link>
-      ),
-    },
-    {
+    enableAuth &&
+      isLoginWithClerk && {
+        icon: <Icon icon={ShieldCheck} />,
+        key: ProfileTabs.Security,
+        label: (
+          <Link href={'/profile/security'} onClick={(e) => e.preventDefault()}>
+            {t('tab.security')}
+          </Link>
+        ),
+      },
+    !isDeprecatedEdition && {
       icon: <Icon icon={ChartColumnBigIcon} />,
       key: ProfileTabs.Stats,
       label: (
-        <Link onClick={(e) => e.preventDefault()} to={'/profile/stats'}>
+        <Link href={'/profile/stats'} onClick={(e) => e.preventDefault()}>
           {t('tab.stats')}
         </Link>
       ),
@@ -46,17 +49,8 @@ export const useCategory = () => {
       icon: <Icon icon={KeyIcon} />,
       key: ProfileTabs.APIKey,
       label: (
-        <Link onClick={(e) => e.preventDefault()} to={'/profile/apikey'}>
+        <Link href={'/profile/apikey'} onClick={(e) => e.preventDefault()}>
           {t('tab.apikey')}
-        </Link>
-      ),
-    },
-    {
-      icon: <Icon icon={BadgeCentIcon} />,
-      key: ProfileTabs.Usage,
-      label: (
-        <Link onClick={(e) => e.preventDefault()} to={'/profile/usage'}>
-          {t('tab.usage')}
         </Link>
       ),
     },

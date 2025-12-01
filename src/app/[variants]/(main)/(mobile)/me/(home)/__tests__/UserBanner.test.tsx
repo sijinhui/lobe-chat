@@ -6,12 +6,10 @@ import { useUserStore } from '@/store/user';
 import UserBanner from '../features/UserBanner';
 
 // Mock dependencies
-const mockNavigate = vi.fn();
-vi.mock('react-router-dom', () => ({
-  Link: ({ to, children }: { to: string; children: React.ReactNode }) => (
-    <a href={to}>{children}</a>
-  ),
-  useNavigate: () => mockNavigate,
+vi.mock('next/navigation', () => ({
+  useRouter: vi.fn(() => ({
+    push: vi.fn(),
+  })),
 }));
 
 vi.mock('@/features/User/UserInfo', () => ({
@@ -31,25 +29,22 @@ vi.mock('@/const/version', () => ({
   isDesktop: false,
 }));
 
-// Use vi.hoisted to ensure variables exist before vi.mock factory executes
-const { enableAuth, enableClerk } = vi.hoisted(() => ({
-  enableAuth: { value: true },
-  enableClerk: { value: false },
-}));
+// 定义一个变量来存储 enableAuth 的值
+let enableAuth = true;
+let enableClerk = false;
 
+// 模拟 @/const/auth 模块
 vi.mock('@/const/auth', () => ({
   get enableAuth() {
-    return enableAuth.value;
+    return enableAuth;
   },
   get enableClerk() {
-    return enableClerk.value;
+    return enableClerk;
   },
 }));
 
 afterEach(() => {
-  enableAuth.value = true;
-  enableClerk.value = false;
-  mockNavigate.mockReset();
+  enableAuth = true;
 });
 
 describe('UserBanner', () => {
@@ -57,7 +52,7 @@ describe('UserBanner', () => {
     act(() => {
       useUserStore.setState({ isSignedIn: false });
     });
-    enableAuth.value = false;
+    enableAuth = false;
 
     render(<UserBanner />);
 
@@ -71,7 +66,7 @@ describe('UserBanner', () => {
       useUserStore.setState({ isSignedIn: true });
     });
 
-    enableClerk.value = true;
+    enableClerk = true;
 
     render(<UserBanner />);
 
@@ -84,7 +79,7 @@ describe('UserBanner', () => {
     act(() => {
       useUserStore.setState({ isSignedIn: false });
     });
-    enableClerk.value = true;
+    enableClerk = true;
 
     render(<UserBanner />);
 

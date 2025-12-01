@@ -8,7 +8,7 @@ export const initPgliteWorker = async (meta: InitMeta) => {
     { meta },
   );
 
-  // Listen for worker status changes
+  // 监听 worker 状态变化
   worker.onLeaderChange(() => {
     console.log('Worker leader changed, isLeader:', worker?.isLeader);
   });

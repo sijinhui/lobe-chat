@@ -1,9 +1,12 @@
+import { isServerMode } from '@lobechat/const';
 import { z } from 'zod';
 
+import { passwordProcedure } from '@/libs/trpc/edge';
 import { authedProcedure, router } from '@/libs/trpc/lambda';
 import { searchService } from '@/server/services/search';
 
-const searchProcedure = authedProcedure;
+// TODO: password procedure 未来的处理方式可能要思考下
+const searchProcedure = isServerMode ? authedProcedure : passwordProcedure;
 
 export const searchRouter = router({
   crawlPages: searchProcedure

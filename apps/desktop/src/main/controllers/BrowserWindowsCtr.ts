@@ -1,8 +1,9 @@
 import { InterceptRouteParams, OpenSettingsWindowOptions } from '@lobechat/electron-client-ipc';
-import { findMatchingRoute } from '~common/routes';
+import { extractSubPath, findMatchingRoute } from '~common/routes';
 
 import {
   AppBrowsersIdentifiers,
+  BrowsersIdentifiers,
   WindowTemplateIdentifiers,
 } from '@/appBrowsers';
 import { IpcClientEventSender } from '@/types/ipcClientEvent';
@@ -23,32 +24,14 @@ export default class BrowserWindowsCtr extends ControllerModule {
         ? { tab: typeof options === 'string' ? options : undefined }
         : options;
 
-    console.log('[BrowserWindowsCtr] Received request to open settings', normalizedOptions);
+    console.log('[BrowserWindowsCtr] Received request to open settings window', normalizedOptions);
 
     try {
-      const query = new URLSearchParams();
-      if (normalizedOptions.searchParams) {
-        Object.entries(normalizedOptions.searchParams).forEach(([key, value]) => {
-          if (value !== undefined) query.set(key, value);
-        });
-      }
-
-      const tab = normalizedOptions.tab;
-      if (tab && tab !== 'common' && !query.has('active')) {
-        query.set('active', tab);
-      }
-
-      const queryString = query.toString();
-      const subPath = tab && !queryString ? `/${tab}` : '';
-      const fullPath = `/settings${subPath}${queryString ? `?${queryString}` : ''}`;
-
-      const mainWindow = this.app.browserManager.getMainWindow();
-      await mainWindow.loadUrl(fullPath);
-      mainWindow.show();
+      await this.app.browserManager.showSettingsWindowWithTab(normalizedOptions);
 
       return { success: true };
     } catch (error) {
-      console.error('[BrowserWindowsCtr] Failed to open settings:', error);
+      console.error('[BrowserWindowsCtr] Failed to open settings window:', error);
       return { error: error.message, success: false };
     }
   }
@@ -93,14 +76,50 @@ export default class BrowserWindowsCtr extends ControllerModule {
     );
 
     try {
-      await this.openTargetWindow(matchedRoute.targetWindow as AppBrowsersIdentifiers);
+      if (matchedRoute.targetWindow === BrowsersIdentifiers.settings) {
+        const extractedSubPath = extractSubPath(path, matchedRoute.pathPrefix);
+        const sanitizedSubPath =
+          extractedSubPath && !extractedSubPath.startsWith('?') ? extractedSubPath : undefined;
+        let searchParams: Record<string, string> | undefined;
+        try {
+          const url = new URL(params.url);
+          const entries = Array.from(url.searchParams.entries());
+          if (entries.length > 0) {
+            searchParams = entries.reduce<Record<string, string>>((acc, [key, value]) => {
+              acc[key] = value;
+              return acc;
+            }, {});
+          }
+        } catch (error) {
+          console.warn(
+            '[BrowserWindowsCtr] Failed to parse URL for settings route interception:',
+            params.url,
+            error,
+          );
+        }
 
-      return {
-        intercepted: true,
-        path,
-        source,
-        targetWindow: matchedRoute.targetWindow,
-      };
+        await this.app.browserManager.showSettingsWindowWithTab({
+          searchParams,
+          tab: sanitizedSubPath,
+        });
+
+        return {
+          intercepted: true,
+          path,
+          source,
+          subPath: sanitizedSubPath,
+          targetWindow: matchedRoute.targetWindow,
+        };
+      } else {
+        await this.openTargetWindow(matchedRoute.targetWindow as AppBrowsersIdentifiers);
+
+        return {
+          intercepted: true,
+          path,
+          source,
+          targetWindow: matchedRoute.targetWindow,
+        };
+      }
     } catch (error) {
       console.error('[BrowserWindowsCtr] Error while processing route interception:', error);
       return {

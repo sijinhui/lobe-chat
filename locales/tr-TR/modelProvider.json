@@ -199,12 +199,6 @@
     "all": "Tümü",
     "list": {
       "disabled": "Devre Dışı",
-      "disabledActions": {
-        "sort": "Sıralama Yöntemi",
-        "sortAlphabetical": "Alfabetik Sırala",
-        "sortAlphabeticalDesc": "Alfabetik Ters Sırala",
-        "sortDefault": "Varsayılan Sıralama"
-      },
       "enabled": "Aktif"
     },
     "notFound": "Arama sonuçları bulunamadı",
@@ -295,7 +289,7 @@
       },
       "helpDoc": "Yapılandırma Kılavuzu",
       "responsesApi": {
-        "desc": "OpenAI'nin yeni nesil istek formatı standardını kullanır, düşünce zinciri gibi gelişmiş özelliklerin kilidini açar (yalnızca OpenAI modelleri desteklenir)",
+        "desc": "OpenAI'nin yeni nesil istek formatı standardını kullanarak düşünce zinciri gibi gelişmiş özelliklerin kilidini açın",
         "title": "Responses API Standardını Kullan"
       },
       "waitingForMore": "Daha fazla model <1>planlanıyor</1>, lütfen bekleyin"
@@ -397,13 +391,7 @@
       "addNew": "Model Ekle",
       "disabled": "Devre dışı",
       "disabledActions": {
-        "showMore": "Hepsini Göster",
-        "sort": "Sıralama Yöntemi",
-        "sortAlphabetical": "Alfabetik Sırala",
-        "sortAlphabeticalDesc": "Alfabetik Ters Sırala",
-        "sortDefault": "Varsayılan Sıralama",
-        "sortReleasedAt": "En Eski Yayın Tarihine Göre Sırala",
-        "sortReleasedAtDesc": "En Yeni Yayın Tarihine Göre Sırala"
+        "showMore": "Hepsini Göster"
       },
       "empty": {
         "desc": "Lütfen özel bir model oluşturun veya kullanmaya başlamadan önce bir model çekin",

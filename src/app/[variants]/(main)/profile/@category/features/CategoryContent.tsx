@@ -1,19 +1,20 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { memo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import urlJoin from 'url-join';
 
 import Menu from '@/components/Menu';
+import { useQueryRoute } from '@/hooks/useQueryRoute';
 import { ProfileTabs } from '@/store/global/initialState';
 
 import { useCategory } from '../../hooks/useCategory';
 
 const CategoryContent = memo(() => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const activeTab = location.pathname.split('/').at(-1);
+  const pathname = usePathname();
+  const activeTab = pathname.split('/').at(-1);
   const cateItems = useCategory();
+  const router = useQueryRoute();
 
   return (
     <Menu
@@ -21,7 +22,8 @@ const CategoryContent = memo(() => {
       items={cateItems}
       onClick={({ key }) => {
         const activeKey = key === ProfileTabs.Profile ? '/' : key;
-        navigate(urlJoin('/profile', activeKey));
+
+        router.push(urlJoin('/profile', activeKey));
       }}
       selectable
       selectedKeys={activeTab ? [activeTab] : []}

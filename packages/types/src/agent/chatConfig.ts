@@ -17,16 +17,16 @@ export interface LobeAgentChatConfig {
   enableMaxTokens?: boolean;
 
   /**
-   * Whether to enable streaming output
+   * 是否开启流式输出
    */
   enableStreaming?: boolean;
 
   /**
-   * Whether to enable reasoning
+   * 是否开启推理
    */
   enableReasoning?: boolean;
   /**
-   * Custom reasoning effort level
+   * 自定义推理强度
    */
   enableReasoningEffort?: boolean;
   reasoningBudgetToken?: number;
@@ -34,34 +34,25 @@ export interface LobeAgentChatConfig {
   gpt5ReasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
   gpt5_1ReasoningEffort?: 'none' | 'low' | 'medium' | 'high';
   /**
-   * Output text verbosity control
+   * 输出文本详细程度控制
    */
   textVerbosity?: 'low' | 'medium' | 'high';
   thinking?: 'disabled' | 'auto' | 'enabled';
-  thinkingLevel?: 'low' | 'high';
   thinkingBudget?: number;
   /**
-   * Image aspect ratio for image generation models
-   */
-  imageAspectRatio?: string;
-  /**
-   * Image resolution for image generation models
-   */
-  imageResolution?: '1K' | '2K' | '4K';
-  /**
-   * Disable context caching
+   * 禁用上下文缓存
    */
   disableContextCaching?: boolean;
   /**
-   * Number of historical messages
+   * 历史消息条数
    */
   historyCount?: number;
   /**
-   * Enable historical message count
+   * 开启历史记录条数
    */
   enableHistoryCount?: boolean;
   /**
-   * Enable history message compression threshold
+   * 历史消息长度压缩阈值
    */
   enableCompressHistory?: boolean;
 
@@ -88,8 +79,6 @@ export const AgentChatConfigSchema = z.object({
   gpt5ReasoningEffort: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
   gpt5_1ReasoningEffort: z.enum(['none', 'low', 'medium', 'high']).optional(),
   historyCount: z.number().optional(),
-  imageAspectRatio: z.string().optional(),
-  imageResolution: z.enum(['1K', '2K', '4K']).optional(),
   reasoningBudgetToken: z.number().optional(),
   reasoningEffort: z.enum(['low', 'medium', 'high']).optional(),
   searchFCModel: z
@@ -102,7 +91,6 @@ export const AgentChatConfigSchema = z.object({
   textVerbosity: z.enum(['low', 'medium', 'high']).optional(),
   thinking: z.enum(['disabled', 'auto', 'enabled']).optional(),
   thinkingBudget: z.number().optional(),
-  thinkingLevel: z.enum(['low', 'high']).optional(),
   urlContext: z.boolean().optional(),
   useModelBuiltinSearch: z.boolean().optional(),
 });

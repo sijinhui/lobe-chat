@@ -1,6 +1,5 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/interface */
 // Disable the auto sort key eslint rule to make the code more logic and readable
-import { LOADING_FLAT } from '@lobechat/const';
 import {
   GroupMemberInfo,
   buildGroupChatSystemPrompt,
@@ -15,6 +14,7 @@ import {
 import { produce } from 'immer';
 import { StateCreator } from 'zustand/vanilla';
 
+import { LOADING_FLAT } from '@/const/message';
 import { DEFAULT_CHAT_GROUP_CHAT_CONFIG } from '@/const/settings';
 import { ChatStore } from '@/store/chat/store';
 import { messageMapKey } from '@/store/chat/utils/messageMapKey';
@@ -271,7 +271,7 @@ export const chatAiGroupChat: StateCreator<
   return {
     sendGroupMessage: async ({ groupId, message, files, onlyAddUserMessage, targetMemberId }) => {
       const {
-        optimisticCreateMessage,
+        internal_createMessage,
         internal_triggerSupervisorDecisionDebounced,
         internal_setActiveGroup,
         activeTopicId,
@@ -294,16 +294,13 @@ export const chatAiGroupChat: StateCreator<
           targetId: targetMemberId,
         };
 
-        const result = await optimisticCreateMessage(userMessage);
+        const messageId = await internal_createMessage(userMessage);
 
         // if only add user message, then stop
         if (onlyAddUserMessage) {
           set({ isCreatingMessage: false }, false, n('creatingGroupMessage/onlyUser'));
           return;
         }
-
-        if (!result) return;
-        const messageId = result.id;
 
         if (messageId) {
           // Use the specific group's config rather than relying on active session
@@ -379,7 +376,7 @@ export const chatAiGroupChat: StateCreator<
       const {
         messagesMap,
         internal_toggleSupervisorLoading,
-        optimisticCreateMessage,
+        internal_createMessage,
         supervisorTodos,
       } = get();
 
@@ -398,8 +395,8 @@ export const chatAiGroupChat: StateCreator<
         const content = formatSupervisorTodoContent(todoList);
         const supervisorMessage: CreateMessageParams = {
           content,
-          model: groupConfig.orchestratorModel,
-          provider: groupConfig.orchestratorProvider,
+          fromModel: groupConfig.orchestratorModel,
+          fromProvider: groupConfig.orchestratorProvider,
           groupId,
           role: 'supervisor',
           sessionId,
@@ -408,7 +405,7 @@ export const chatAiGroupChat: StateCreator<
 
         console.log('Creating supervisor todo message:', supervisorMessage);
 
-        await optimisticCreateMessage(supervisorMessage);
+        await internal_createMessage(supervisorMessage);
       };
 
       const messages = messagesMap[messageMapKey(groupId, currentTopicId)] || [];
@@ -597,11 +594,13 @@ export const chatAiGroupChat: StateCreator<
       });
       const {
         messagesMap,
-        optimisticCreateMessage,
+        internal_createMessage,
         internal_fetchAIChatMessage,
         refreshMessages,
         activeTopicId,
         internal_dispatchMessage,
+        internal_toggleChatLoading,
+        triggerToolCalls,
       } = get();
 
       try {
@@ -657,10 +656,10 @@ export const chatAiGroupChat: StateCreator<
         // Create agent message using real agent config
         const agentMessage: CreateMessageParams = {
           role: 'assistant',
-          model: agentModel,
+          fromModel: agentModel,
           groupId,
           content: LOADING_FLAT,
-          provider: agentProvider,
+          fromProvider: agentProvider,
           agentId,
           sessionId: useSessionStore.getState().activeId,
           topicId: activeTopicId,
@@ -669,9 +668,7 @@ export const chatAiGroupChat: StateCreator<
 
         console.log('DEBUG: Creating agent message with:', agentMessage);
 
-        const result = await optimisticCreateMessage(agentMessage);
-        if (!result) return;
-        const assistantId = result.id;
+        const assistantId = await internal_createMessage(agentMessage);
 
         const systemMessage: UIChatMessage = {
           id: 'group-system',
@@ -708,14 +705,30 @@ export const chatAiGroupChat: StateCreator<
         const messagesForAPI = [systemMessage, ...messagesWithAuthors];
 
         if (assistantId) {
-          await internal_fetchAIChatMessage({
-            messageId: assistantId,
+          const { isFunctionCall } = await internal_fetchAIChatMessage({
             messages: messagesForAPI,
+            messageId: assistantId,
             model: agentModel,
             provider: agentProvider,
-            agentConfig: agentData,
-            traceId: `group-${groupId}-agent-${agentId}`,
+            params: {
+              traceId: `group-${groupId}-agent-${agentId}`,
+              agentConfig: agentData,
+            },
           });
+
+          // Handle tool calling in group chat like single chat
+          if (isFunctionCall) {
+            get().internal_toggleMessageInToolsCalling(true, assistantId);
+            await refreshMessages();
+            await triggerToolCalls(assistantId, {
+              threadId: undefined,
+              inPortalThread: false,
+            });
+            // Change: if an agent message is a tool call, make the same agent speak again
+            // instead of asking supervisor for a decision.
+            await get().internal_processAgentMessage(groupId, agentId, targetId, instruction);
+            return;
+          }
         }
 
         await refreshMessages();
@@ -752,6 +765,8 @@ export const chatAiGroupChat: StateCreator<
             },
           });
         }
+      } finally {
+        internal_toggleChatLoading(false, undefined, n('processAgentMessage(end)'));
       }
     },
 
@@ -916,7 +931,7 @@ export const chatAiGroupChat: StateCreator<
     },
 
     internal_createSupervisorErrorMessage: async (groupId: string, error: Error | string) => {
-      const { optimisticCreateTmpMessage, activeTopicId } = get();
+      const { internal_createTmpMessage, activeTopicId } = get();
 
       try {
         const errorMessage = error instanceof Error ? error.message : error;
@@ -924,8 +939,8 @@ export const chatAiGroupChat: StateCreator<
 
         const supervisorMessage: CreateMessageParams = {
           role: 'supervisor',
-          model: groupConfig.orchestratorModel,
-          provider: groupConfig.orchestratorProvider,
+          fromModel: groupConfig.orchestratorModel,
+          fromProvider: groupConfig.orchestratorProvider,
           groupId,
           sessionId: useSessionStore.getState().activeId || groupId,
           topicId: activeTopicId,
@@ -937,7 +952,7 @@ export const chatAiGroupChat: StateCreator<
         };
 
         // Create a temporary message that only exists in UI state, no API call
-        optimisticCreateTmpMessage(supervisorMessage);
+        internal_createTmpMessage(supervisorMessage);
       } catch (createError) {
         console.error('Failed to create supervisor error message:', createError);
       }

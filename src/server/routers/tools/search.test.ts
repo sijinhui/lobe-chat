@@ -23,7 +23,13 @@ vi.mock('@/server/services/search/impls/searxng/client');
 
 describe('searchRouter', () => {
   const mockContext = {
-    userId: 'test-user-id',
+    req: {
+      headers: {
+        authorization: 'Bearer mock-token',
+      },
+    },
+    authorizationHeader: 'Bearer mock-token',
+    jwtPayload: { userId: '1' },
   };
 
   beforeEach(() => {

@@ -1,6 +1,6 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix , typescript-sort-keys/interface */
 import { GroundingSearch } from '../../search';
-import { MessageMetadata, ModelReasoning, ToolIntervention } from '../common';
+import { MessageMetadata, ModelReasoning } from '../common';
 
 export interface DBMessageItem {
   id: string;
@@ -32,18 +32,4 @@ export interface DBMessageItem {
   userId: string;
   updatedAt: Date;
   createdAt: Date;
-}
-
-export interface MessagePluginItem {
-  id: string;
-  toolCallId?: string;
-  type: string;
-  intervention?: ToolIntervention;
-  apiName?: string;
-  arguments?: string;
-  identifier?: string;
-  state?: any;
-  error?: any;
-  clientId?: string;
-  userId: string;
 }

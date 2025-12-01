@@ -6,7 +6,6 @@ import { createDevtools } from '../middleware/createDevtools';
 import { FilesStoreState, initialState } from './initialState';
 import { FileAction, createFileSlice } from './slices/chat';
 import { FileChunkAction, createFileChunkSlice } from './slices/chunk';
-import { DocumentAction, createDocumentSlice } from './slices/document';
 import { FileManageAction, createFileManageSlice } from './slices/fileManager';
 import { TTSFileAction, createTTSFileSlice } from './slices/tts';
 import { FileUploadAction, createFileUploadSlice } from './slices/upload/action';
@@ -15,7 +14,6 @@ import { FileUploadAction, createFileUploadSlice } from './slices/upload/action'
 
 export type FileStore = FilesStoreState &
   FileAction &
-  DocumentAction &
   TTSFileAction &
   FileManageAction &
   FileChunkAction &
@@ -24,7 +22,6 @@ export type FileStore = FilesStoreState &
 const createStore: StateCreator<FileStore, [['zustand/devtools', never]]> = (...parameters) => ({
   ...initialState,
   ...createFileSlice(...parameters),
-  ...createDocumentSlice(...parameters),
   ...createFileManageSlice(...parameters),
   ...createTTSFileSlice(...parameters),
   ...createFileChunkSlice(...parameters),

@@ -16,7 +16,7 @@ export interface ThreadItem {
   id: string;
   lastActiveAt: Date;
   parentThreadId?: string;
-  sourceMessageId?: string | null;
+  sourceMessageId: string;
   status: ThreadStatus;
   title: string;
   topicId: string;
@@ -27,7 +27,7 @@ export interface ThreadItem {
 
 export interface CreateThreadParams {
   parentThreadId?: string;
-  sourceMessageId?: string;
+  sourceMessageId: string;
   title?: string;
   topicId: string;
   type: ThreadType;
@@ -35,7 +35,7 @@ export interface CreateThreadParams {
 
 export const createThreadSchema = z.object({
   parentThreadId: z.string().optional(),
-  sourceMessageId: z.string().optional(),
+  sourceMessageId: z.string(),
   title: z.string().optional(),
   topicId: z.string(),
   type: z.nativeEnum(ThreadType),

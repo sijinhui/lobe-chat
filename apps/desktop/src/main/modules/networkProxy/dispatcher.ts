@@ -10,14 +10,14 @@ import { ProxyUrlBuilder } from './urlBuilder';
 const logger = createLogger('modules:networkProxy:dispatcher');
 
 /**
- * Proxy dispatcher manager
+ * 代理管理器
  */
 export class ProxyDispatcherManager {
   private static isChanging = false;
   private static changeQueue: Array<() => Promise<void>> = [];
 
   /**
-   * Apply proxy settings (with concurrency control)
+   * 应用代理设置（带并发控制）
    */
   static async applyProxySettings(config: NetworkProxySettings): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -31,17 +31,17 @@ export class ProxyDispatcherManager {
       };
 
       if (this.isChanging) {
-        // If currently switching, add to queue
+        // 如果正在切换，加入队列
         this.changeQueue.push(operation);
       } else {
-        // Execute immediately
+        // 立即执行
         operation();
       }
     });
   }
 
   /**
-   * Execute proxy settings application
+   * 执行代理设置应用
    */
   private static async doApplyProxySettings(config: NetworkProxySettings): Promise<void> {
     this.isChanging = true;
@@ -49,22 +49,22 @@ export class ProxyDispatcherManager {
     try {
       const currentDispatcher = getGlobalDispatcher();
 
-      // Disable proxy, restore default connection
+      // 禁用代理，恢复默认连接
       if (!config.enableProxy) {
         await this.safeDestroyDispatcher(currentDispatcher);
-        // Create a new default Agent to replace the proxy
+        // 创建一个新的默认 Agent 来替代代理
         setGlobalDispatcher(new Agent());
         logger.debug('Proxy disabled, reset to direct connection mode');
         return;
       }
 
-      // Build proxy URL
+      // 构建代理 URL
       const proxyUrl = ProxyUrlBuilder.build(config);
 
-      // Create proxy agent
+      // 创建代理 agent
       const agent = this.createProxyAgent(config.proxyType, proxyUrl);
 
-      // Destroy old dispatcher before switching proxy
+      // 切换代理前销毁旧 dispatcher
       await this.safeDestroyDispatcher(currentDispatcher);
       setGlobalDispatcher(agent);
 
@@ -77,7 +77,7 @@ export class ProxyDispatcherManager {
     } finally {
       this.isChanging = false;
 
-      // Process next operation in queue
+      // 处理队列中的下一个操作
       if (this.changeQueue.length > 0) {
         const nextOperation = this.changeQueue.shift();
         if (nextOperation) {
@@ -88,12 +88,12 @@ export class ProxyDispatcherManager {
   }
 
   /**
-   * Create proxy agent
+   * 创建代理 agent
    */
   static createProxyAgent(proxyType: string, proxyUrl: string) {
     try {
       if (proxyType === 'socks5') {
-        // Parse SOCKS5 proxy URL
+        // 解析 SOCKS5 代理 URL
         const url = new URL(proxyUrl);
         const socksProxies: SocksProxies = [
           {
@@ -109,10 +109,10 @@ export class ProxyDispatcherManager {
           },
         ];
 
-        // Use fetch-socks to handle SOCKS5 proxy
+        // 使用 fetch-socks 处理 SOCKS5 代理
         return socksDispatcher(socksProxies);
       } else {
-        // undici's ProxyAgent supports http, https
+        // undici 的 ProxyAgent 支持 http, https
         return new ProxyAgent({ uri: proxyUrl });
       }
     } catch (error) {
@@ -124,7 +124,7 @@ export class ProxyDispatcherManager {
   }
 
   /**
-   * Safely destroy dispatcher
+   * 安全销毁 dispatcher
    */
   private static async safeDestroyDispatcher(dispatcher: any): Promise<void> {
     try {

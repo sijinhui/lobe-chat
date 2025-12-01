@@ -1076,7 +1076,7 @@ export const openaiEmbeddingModels: AIEmbeddingModelCard[] = [
   },
 ];
 
-// Text-to-speech models
+// 语音合成模型
 export const openaiTTSModels: AITTSModelCard[] = [
   {
     description: '最新的文本转语音模型，针对实时场景优化速度',
@@ -1111,7 +1111,7 @@ export const openaiTTSModels: AITTSModelCard[] = [
   },
 ];
 
-// Speech recognition models
+// 语音识别模型
 export const openaiSTTModels: AISTTModelCard[] = [
   {
     description: '通用语音识别模型，支持多语言语音识别、语音翻译和语言识别。',
@@ -1163,7 +1163,7 @@ export const openaiSTTModels: AISTTModelCard[] = [
   },
 ];
 
-// Image generation models
+// 图像生成模型
 export const openaiImageModels: AIImageModelCard[] = [
   // https://platform.openai.com/docs/models/gpt-image-1
   {
@@ -1173,13 +1173,31 @@ export const openaiImageModels: AIImageModelCard[] = [
     id: 'gpt-image-1',
     parameters: gptImage1ParamsSchema,
     pricing: {
-      approximatePricePerImage: 0.042,
       units: [
         { name: 'textInput', rate: 5, strategy: 'fixed', unit: 'millionTokens' },
         { name: 'textInput_cacheRead', rate: 1.25, strategy: 'fixed', unit: 'millionTokens' },
         { name: 'imageInput', rate: 10, strategy: 'fixed', unit: 'millionTokens' },
         { name: 'imageInput_cacheRead', rate: 2.5, strategy: 'fixed', unit: 'millionTokens' },
         { name: 'imageOutput', rate: 40, strategy: 'fixed', unit: 'millionTokens' },
+        {
+          lookup: {
+            prices: {
+              high_1024x1024: 0.167,
+              high_1024x1536: 0.25,
+              high_1536x1024: 0.25,
+              low_1024x1024: 0.011,
+              low_1024x1536: 0.016,
+              low_1536x1024: 0.016,
+              medium_1024x1024: 0.042,
+              medium_1024x1536: 0.063,
+              medium_1536x1024: 0.063,
+            },
+            pricingParams: ['quality', 'size'],
+          },
+          name: 'imageGeneration',
+          strategy: 'lookup',
+          unit: 'image',
+        },
       ],
     },
     resolutions: ['1024x1024', '1024x1536', '1536x1024'],
@@ -1192,13 +1210,28 @@ export const openaiImageModels: AIImageModelCard[] = [
     id: 'gpt-image-1-mini',
     parameters: gptImage1ParamsSchema,
     pricing: {
-      approximatePricePerImage: 0.011,
       units: [
         { name: 'textInput', rate: 2, strategy: 'fixed', unit: 'millionTokens' },
         { name: 'textInput_cacheRead', rate: 0.2, strategy: 'fixed', unit: 'millionTokens' },
         { name: 'imageInput', rate: 2.5, strategy: 'fixed', unit: 'millionTokens' },
         { name: 'imageInput_cacheRead', rate: 0.25, strategy: 'fixed', unit: 'millionTokens' },
         { name: 'imageOutput', rate: 8, strategy: 'fixed', unit: 'millionTokens' },
+        {
+          lookup: {
+            prices: {
+              low_1024x1024: 0.005,
+              low_1024x1536: 0.006,
+              low_1536x1024: 0.006,
+              medium_1024x1024: 0.011,
+              medium_1024x1536: 0.015,
+              medium_1536x1024: 0.015,
+            },
+            pricingParams: ['quality', 'size'],
+          },
+          name: 'imageGeneration',
+          strategy: 'lookup',
+          unit: 'image',
+        },
       ],
     },
     releasedAt: '2025-10-06',
@@ -1278,7 +1311,7 @@ export const openaiImageModels: AIImageModelCard[] = [
   },
 ];
 
-// GPT-4o and GPT-4o-mini realtime models
+// GPT-4o 和 GPT-4o-mini 实时模型
 export const openaiRealtimeModels: AIRealtimeModelCard[] = [
   {
     abilities: {

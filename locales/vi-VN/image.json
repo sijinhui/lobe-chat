@@ -37,14 +37,6 @@
         "standard": "Tiêu chuẩn"
       }
     },
-    "resolution": {
-      "label": "Độ phân giải",
-      "options": {
-        "1K": "1K",
-        "2K": "2K",
-        "4K": "4K"
-      }
-    },
     "seed": {
       "label": "Hạt giống",
       "random": "Hạt giống ngẫu nhiên"

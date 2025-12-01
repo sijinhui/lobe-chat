@@ -1,5 +1,5 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix  */
-import { GroundingSearch, ModelReasoning, ToolIntervention } from '@lobechat/types';
+import { GroundingSearch, ModelReasoning } from '@lobechat/types';
 import {
   boolean,
   index,
@@ -11,7 +11,7 @@ import {
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { createInsertSchema } from 'drizzle-zod';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { idGenerator } from '../utils/idGenerator';
 import { timestamps, varchar255 } from './_helpers';
@@ -36,25 +36,25 @@ export const messageGroups = pgTable(
       .$defaultFn(() => idGenerator('messageGroups'))
       .notNull(),
 
-    // Association - only needs topic level
+    // 关联关系 - 只需要 topic 层级
     topicId: text('topic_id').references(() => topics.id, { onDelete: 'cascade' }),
     userId: text('user_id')
       .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
 
-    // Support nested structure
+    // 支持嵌套结构
     // @ts-ignore
     parentGroupId: varchar255('parent_group_id').references(() => messageGroups.id, {
       onDelete: 'cascade',
     }),
 
-    // Associated user message
+    // 关联的用户消息
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     parentMessageId: text('parent_message_id').references(() => messages.id, {
       onDelete: 'cascade',
     }),
 
-    // Metadata
+    // 元数据
     title: varchar255('title'),
     description: text('description'),
 
@@ -62,10 +62,7 @@ export const messageGroups = pgTable(
 
     ...timestamps,
   },
-  (t) => [
-    uniqueIndex('message_groups_client_id_user_id_unique').on(t.clientId, t.userId),
-    index('message_groups_topic_id_idx').on(t.topicId),
-  ],
+  (t) => [uniqueIndex('message_groups_client_id_user_id_unique').on(t.clientId, t.userId)],
 );
 
 export const insertMessageGroupSchema = createInsertSchema(messageGroups);
@@ -83,7 +80,6 @@ export const messages = pgTable(
 
     role: varchar255('role').notNull(),
     content: text('content'),
-    editorData: jsonb('editor_data'),
     reasoning: jsonb('reasoning').$type<ModelReasoning>(),
     search: jsonb('search').$type<GroundingSearch>(),
     metadata: jsonb('metadata'),
@@ -105,9 +101,6 @@ export const messages = pgTable(
     userId: text('user_id')
       .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
-    /**
-     * we might deprecate sessionId in the future
-     */
     sessionId: text('session_id').references(() => sessions.id, { onDelete: 'cascade' }),
     topicId: text('topic_id').references(() => topics.id, { onDelete: 'cascade' }),
     threadId: text('thread_id').references(() => threads.id, { onDelete: 'cascade' }),
@@ -115,7 +108,8 @@ export const messages = pgTable(
     parentId: text('parent_id').references(() => messages.id, { onDelete: 'set null' }),
     quotaId: text('quota_id').references(() => messages.id, { onDelete: 'set null' }),
 
-    agentId: text('agent_id').references(() => agents.id, { onDelete: 'cascade' }),
+    // used for group chat
+    agentId: text('agent_id').references(() => agents.id, { onDelete: 'set null' }),
     groupId: text('group_id').references(() => chatGroups.id, { onDelete: 'set null' }),
     // targetId can be an agent ID, "user", or null - no FK constraint
     targetId: text('target_id'),
@@ -136,7 +130,6 @@ export const messages = pgTable(
     index('messages_user_id_idx').on(table.userId),
     index('messages_session_id_idx').on(table.sessionId),
     index('messages_thread_id_idx').on(table.threadId),
-    index('messages_agent_id_idx').on(table.agentId),
   ],
 );
 
@@ -149,10 +142,10 @@ export const messagePlugins = pgTable(
       .primaryKey(),
 
     toolCallId: text('tool_call_id'),
-    type: text('type').default('default'),
+    type: text('type', {
+      enum: ['default', 'markdown', 'standalone', 'builtin'],
+    }).default('default'),
 
-    // Human intervention fields
-    intervention: jsonb('intervention').$type<ToolIntervention>(),
     apiName: text('api_name'),
     arguments: text('arguments'),
     identifier: text('identifier'),
@@ -170,6 +163,9 @@ export const messagePlugins = pgTable(
     ),
   }),
 );
+
+export type MessagePluginItem = typeof messagePlugins.$inferSelect;
+export const updateMessagePluginSchema = createSelectSchema(messagePlugins);
 
 export const messageTTS = pgTable(
   'message_tts',

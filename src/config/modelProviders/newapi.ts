@@ -13,7 +13,6 @@ const NewAPI: ModelProviderCard = {
     },
     sdkType: 'router',
     showModelFetcher: true,
-    supportResponsesApi: true,
   },
   url: 'https://github.com/Calcium-Ion/new-api',
 };

@@ -65,7 +65,6 @@ const checkAbortSignal = (signal: AbortSignal) => {
 const categorizeError = (
   error: any,
   isAborted: boolean,
-  isEditingImage: boolean,
 ): { errorMessage: string; errorType: AsyncTaskErrorType } => {
   log('🔥🔥🔥 [ASYNC] categorizeError called:', {
     errorMessage: error?.message,
@@ -74,7 +73,6 @@ const categorizeError = (
     errorType: error?.errorType,
     fullError: JSON.stringify(error, null, 2),
     isAborted,
-    isEditingImage,
   });
   // Handle Comfy UI errors
   if (error.errorType === AgentRuntimeErrorType.ComfyUIServiceUnavailable) {
@@ -126,15 +124,6 @@ const categorizeError = (
     return {
       errorMessage: error.error?.message || error.message || AgentRuntimeErrorType.ModelNotFound,
       errorType: AsyncTaskErrorType.ModelNotFound,
-    };
-  }
-
-  if (error.errorType === AgentRuntimeErrorType.ProviderNoImageGenerated) {
-    return {
-      errorMessage: isEditingImage
-        ? 'Provider returned no image (maybe content review). Try a safer source image or milder prompt.'
-        : 'Provider returned no image (maybe content review). Try a milder prompt or another model.',
-      errorType: AsyncTaskErrorType.ServerError,
     };
   }
 
@@ -206,14 +195,11 @@ export const imageRouter = router({
     const abortController = new AbortController();
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
-    const isEditingImage =
-      Boolean((params as any).imageUrl) || Boolean(params.imageUrls && params.imageUrls.length > 0);
-
     try {
       const imageGenerationPromise = async (signal: AbortSignal) => {
         log('Initializing agent runtime for provider: %s', provider);
 
-        const agentRuntime = initModelRuntimeWithUserPayload(provider, ctx.jwtPayload);
+        const agentRuntime = await initModelRuntimeWithUserPayload(provider, ctx.jwtPayload);
 
         // Check if operation has been cancelled
         checkAbortSignal(signal);
@@ -342,11 +328,7 @@ export const imageRouter = router({
       });
 
       // Improved error categorization logic
-      const { errorType, errorMessage } = categorizeError(
-        error,
-        abortController.signal.aborted,
-        isEditingImage,
-      );
+      const { errorType, errorMessage } = categorizeError(error, abortController.signal.aborted);
 
       await ctx.asyncTaskModel.update(taskId, {
         error: new AsyncTaskError(errorType, errorMessage),

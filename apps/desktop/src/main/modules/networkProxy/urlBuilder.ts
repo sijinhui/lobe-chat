@@ -1,11 +1,11 @@
 import { NetworkProxySettings } from '@lobechat/electron-client-ipc';
 
 /**
- * Proxy URL builder
+ * 代理 URL 构建器
  */
 export const ProxyUrlBuilder = {
   /**
-   * Build proxy URL
+   * 构建代理 URL
    */
   build(config: NetworkProxySettings): string {
     const { proxyType, proxyServer, proxyPort, proxyRequireAuth, proxyUsername, proxyPassword } =
@@ -13,7 +13,7 @@ export const ProxyUrlBuilder = {
 
     let proxyUrl = `${proxyType}://${proxyServer}:${proxyPort}`;
 
-    // Add authentication information
+    // 添加认证信息
     if (proxyRequireAuth && proxyUsername && proxyPassword) {
       const encodedUsername = encodeURIComponent(proxyUsername);
       const encodedPassword = encodeURIComponent(proxyPassword);

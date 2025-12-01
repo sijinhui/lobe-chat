@@ -7,8 +7,8 @@ export interface ChatTTS {
 }
 
 export interface ChatMessageExtra {
-  model?: string;
-  provider?: string;
+  fromModel?: string;
+  fromProvider?: string;
   // 翻译
   translate?: ChatTranslate | false | null;
   // TTS

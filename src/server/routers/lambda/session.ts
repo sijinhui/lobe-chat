@@ -97,17 +97,14 @@ export const sessionRouter = router({
     }),
 
   getGroupedSessions: publicProcedure.query(async ({ ctx }): Promise<ChatSessionList> => {
-    const userId = ctx.userId;
-    if (!userId) return { sessionGroups: [], sessions: [] };
+    if (!ctx.userId) return { sessionGroups: [], sessions: [] };
 
     const serverDB = await getServerDB();
-    const sessionModel = new SessionModel(serverDB, userId);
-    const chatGroupModel = new ChatGroupModel(serverDB, userId);
+    const sessionModel = new SessionModel(serverDB, ctx.userId!);
+    const chatGroupModel = new ChatGroupModel(serverDB, ctx.userId!);
 
-    const [{ sessions, sessionGroups }, chatGroups] = await Promise.all([
-      sessionModel.queryWithGroups(),
-      chatGroupModel.queryWithMemberDetails(),
-    ]);
+    const { sessions, sessionGroups } = await sessionModel.queryWithGroups();
+    const chatGroups = await chatGroupModel.queryWithMemberDetails();
 
     const groupSessions: LobeGroupSession[] = chatGroups.map((group) => {
       const { title, description, avatar, backgroundColor, groupId, ...rest } = group;

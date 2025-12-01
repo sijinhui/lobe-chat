@@ -1,4 +1,3 @@
-import { INBOX_SESSION_ID } from '@lobechat/const';
 import {
   ChatFileItem,
   ChatImageItem,
@@ -7,8 +6,8 @@ import {
   ChatTranslate,
   ChatVideoItem,
   CreateMessageParams,
+  CreateMessageResult,
   DBMessageItem,
-  MessagePluginItem,
   ModelRankItem,
   NewMessageQueryParams,
   QueryMessageParams,
@@ -24,6 +23,7 @@ import { merge } from '@/utils/merge';
 import { today } from '@/utils/time';
 
 import {
+  MessagePluginItem,
   chunks,
   documents,
   embeddings,
@@ -54,7 +54,6 @@ export class MessageModel {
   query = async (
     { current = 0, pageSize = 1000, sessionId, topicId, groupId }: QueryMessageParams = {},
     options: {
-      groupAssistantMessages?: boolean;
       postProcessUrl?: (path: string | null, file: { fileType: string }) => Promise<string>;
     } = {},
   ) => {
@@ -97,7 +96,6 @@ export class MessageModel {
           type: messagePlugins.type,
         },
         pluginError: messagePlugins.error,
-        pluginIntervention: messagePlugins.intervention,
         pluginState: messagePlugins.state,
 
         translate: {
@@ -155,7 +153,7 @@ export class MessageModel {
       })),
     );
 
-    // Get associated document content
+    // 获取关联的文档内容
     const fileIds = relatedFileList.map((file) => file.id).filter(Boolean);
 
     let documentsMap: Record<string, string> = {};
@@ -222,12 +220,12 @@ export class MessageModel {
             .filter((relation) => relation.messageId === item.id)
             .map((c) => ({
               ...c,
-              similarity: c.similarity === null ? undefined : Number(c.similarity),
+              similarity: Number(c.similarity) ?? undefined,
             })),
 
           extra: {
-            model: model,
-            provider: provider,
+            fromModel: model,
+            fromProvider: provider,
             translate,
             tts: ttsId
               ? {
@@ -248,15 +246,13 @@ export class MessageModel {
               size: size!,
               url,
             })),
+
           imageList: imageList
             .filter((relation) => relation.messageId === item.id)
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             .map<ChatImageItem>(({ id, url, name }) => ({ alt: name!, id, url })),
+
           meta: {},
-
-          model,
-
-          provider,
           ragQuery: messageQuery?.rewriteQuery,
           ragQueryId: messageQuery?.id,
           ragRawQuery: messageQuery?.userQuery,
@@ -422,7 +418,7 @@ export class MessageModel {
     for (const item of result) {
       if (item?.date) {
         const dateStr = dayjs(item.date as string).format('YYYY-MM-DD');
-        dateCountMap.set(dateStr, item.count);
+        dateCountMap.set(dateStr, Number(item.count) || 0);
       }
     }
 
@@ -459,11 +455,10 @@ export class MessageModel {
 
   create = async (
     {
-      model: fromModel,
-      provider: fromProvider,
+      fromModel,
+      fromProvider,
       files,
       plugin,
-      pluginIntervention,
       pluginState,
       fileChunks,
       ragQueryId,
@@ -498,7 +493,6 @@ export class MessageModel {
           arguments: plugin?.arguments,
           id,
           identifier: plugin?.identifier,
-          intervention: pluginIntervention,
           state: pluginState,
           toolCallId: message.tool_call_id,
           type: plugin?.type,
@@ -528,6 +522,54 @@ export class MessageModel {
     });
   };
 
+  /**
+   * Create a new message and return the complete message list
+   *
+   * This method combines message creation and querying into a single operation,
+   * reducing the need for separate refresh calls and improving performance.
+   *
+   * @param params - Message creation parameters
+   * @param options - Query options for post-processing
+   * @returns Object containing the created message ID and full message list
+   *
+   * @example
+   * const { id, messages } = await messageModel.createNewMessage({
+   *   role: 'assistant',
+   *   content: 'Hello',
+   *   tools: [...],
+   *   sessionId: 'session-1',
+   * });
+   * // messages already contains grouped structure, no need to refresh
+   */
+  createNewMessage = async (
+    params: CreateMessageParams,
+    options: {
+      postProcessUrl?: (path: string | null, file: { fileType: string }) => Promise<string>;
+    } = {},
+  ): Promise<CreateMessageResult> => {
+    // 1. Create the message (reuse existing create method)
+    const item = await this.create(params);
+
+    // 2. Query all messages for this session/topic
+    // query() method internally applies groupAssistantMessages transformation
+    const messages = await this.query(
+      {
+        current: 0,
+        groupId: params.groupId,
+        pageSize: 9999,
+        sessionId: params.sessionId,
+        topicId: params.topicId, // Get all messages
+      },
+      options,
+    );
+
+    // 3. Return the result
+    return {
+      id: item.id,
+      messages,
+    };
+  };
+
   batchCreate = async (newMessages: DBMessageItem[]) => {
     const messagesToInsert = newMessages.map((m) => {
       // TODO: need a better way to handle this
@@ -547,32 +589,27 @@ export class MessageModel {
   };
   // **************** Update *************** //
 
-  update = async (
-    id: string,
-    { imageList, ...message }: Partial<UpdateMessageParams>,
-  ): Promise<{ success: boolean }> => {
-    try {
-      await this.db.transaction(async (trx) => {
-        // 1. insert message files
-        if (imageList && imageList.length > 0) {
-          await trx
-            .insert(messagesFiles)
-            .values(
-              imageList.map((file) => ({ fileId: file.id, messageId: id, userId: this.userId })),
-            );
-        }
-
+  update = async (id: string, { imageList, ...message }: Partial<UpdateMessageParams>) => {
+    return this.db.transaction(async (trx) => {
+      // 1. insert message files
+      if (imageList && imageList.length > 0) {
         await trx
-          .update(messages)
-          .set({ ...message })
-          .where(and(eq(messages.id, id), eq(messages.userId, this.userId)));
-      });
+          .insert(messagesFiles)
+          .values(
+            imageList.map((file) => ({ fileId: file.id, messageId: id, userId: this.userId })),
+          );
+      }
 
-      return { success: true };
-    } catch (error) {
-      console.error('Update message error:', error);
-      return { success: false };
-    }
+      return trx
+        .update(messages)
+        .set({
+          ...message,
+          // TODO: need a better way to handle this
+          // TODO: but I forget why 🤡
+          role: message.role as any,
+        })
+        .where(and(eq(messages.id, id), eq(messages.userId, this.userId)));
+    });
   };
 
   updateMetadata = async (id: string, metadata: Record<string, any>) => {
@@ -588,13 +625,13 @@ export class MessageModel {
       .where(and(eq(messages.userId, this.userId), eq(messages.id, id)));
   };
 
-  updatePluginState = async (id: string, state: Record<string, any>): Promise<void> => {
+  updatePluginState = async (id: string, state: Record<string, any>) => {
     const item = await this.db.query.messagePlugins.findFirst({
       where: eq(messagePlugins.id, id),
     });
     if (!item) throw new Error('Plugin not found');
 
-    await this.db
+    return this.db
       .update(messagePlugins)
       .set({ state: merge(item.state || {}, state) })
       .where(eq(messagePlugins.id, id));
@@ -662,17 +699,17 @@ export class MessageModel {
 
   deleteMessage = async (id: string) => {
     return this.db.transaction(async (tx) => {
-      // 1. Query the complete information of the message to be deleted
+      // 1. 查询要删除的 message 的完整信息
       const message = await tx
         .select()
         .from(messages)
         .where(and(eq(messages.id, id), eq(messages.userId, this.userId)))
         .limit(1);
 
-      // If the message to be deleted is not found, return directly
+      // 如果找不到要删除的 message,直接返回
       if (message.length === 0) return;
 
-      // 2. Check if the message contains tools
+      // 2. 检查 message 是否包含 tools
       const toolCallIds = (message[0].tools as ChatToolPayload[])
         ?.map((tool) => tool.id)
         .filter(Boolean);
@@ -680,7 +717,7 @@ export class MessageModel {
       let relatedMessageIds: string[] = [];
 
       if (toolCallIds?.length > 0) {
-        // 3. If the message contains tools, query all associated message ids
+        // 3. 如果 message 包含 tools,查询出所有相关联的 message id
         const res = await tx
           .select({ id: messagePlugins.id })
           .from(messagePlugins)
@@ -689,10 +726,10 @@ export class MessageModel {
         relatedMessageIds = res.map((row) => row.id);
       }
 
-      // 4. Merge the list of message ids to be deleted
+      // 4. 合并要删除的 message id 列表
       const messageIdsToDelete = [id, ...relatedMessageIds];
 
-      // 5. Delete all related messages
+      // 5. 删除所有相关的 message
       await tx.delete(messages).where(inArray(messages.id, messageIdsToDelete));
     });
   };
@@ -741,11 +778,8 @@ export class MessageModel {
 
   private genId = () => idGenerator('messages', 14);
 
-  private matchSession = (sessionId?: string | null) => {
-    if (sessionId === INBOX_SESSION_ID) return isNull(messages.sessionId);
-
-    return sessionId ? eq(messages.sessionId, sessionId) : isNull(messages.sessionId);
-  };
+  private matchSession = (sessionId?: string | null) =>
+    sessionId ? eq(messages.sessionId, sessionId) : isNull(messages.sessionId);
 
   private matchTopic = (topicId?: string | null) =>
     topicId ? eq(messages.topicId, topicId) : isNull(messages.topicId);

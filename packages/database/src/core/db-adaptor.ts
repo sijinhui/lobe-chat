@@ -5,17 +5,17 @@ import { getPgliteInstance } from './electron';
 import { getDBInstance } from './web-server';
 
 /**
- * Lazy-load database instance
- * Avoid initializing the database every time the module is imported
+ * 懒加载数据库实例
+ * 避免每次模块导入时都初始化数据库
  */
 let cachedDB: LobeChatDatabase | null = null;
 
 export const getServerDB = async (): Promise<LobeChatDatabase> => {
-  // If there's already a cached instance, return it directly
+  // 如果已经有缓存的实例，直接返回
   if (cachedDB) return cachedDB;
 
   try {
-    // Select the appropriate database instance based on the environment
+    // 根据环境选择合适的数据库实例
     cachedDB = isDesktop ? await getPgliteInstance() : getDBInstance();
     return cachedDB;
   } catch (error) {

@@ -2,22 +2,18 @@ import { z } from 'zod';
 
 export const LobeMetaDataSchema = z.object({
   /**
-   * Character avatar
+   * 角色头像
    */
   avatar: z.string().optional(),
   /**
-   *  Background color
+   *  背景色
    */
   backgroundColor: z.string().optional(),
   description: z.string().optional(),
-  /**
-   * Market agent identifier for published agents
-   */
-  marketIdentifier: z.string().optional(),
 
   tags: z.array(z.string()).optional(),
   /**
-   * Name
+   * 名称
    */
   title: z.string().optional(),
 });

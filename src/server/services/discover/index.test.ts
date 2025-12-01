@@ -19,6 +19,9 @@ vi.mock('@/locales/resources', () => ({
   }),
 }));
 
+// Set environment variable for tests
+process.env.MARKET_BASE_URL = 'http://localhost:8787/api';
+
 // Mock constants with inline data
 vi.mock('model-bank', async (importOriginal) => {
   const actual = await importOriginal();
@@ -127,68 +130,6 @@ const mockAssistantList = [
   },
 ];
 
-const mockMarketAssistantList = [
-  {
-    identifier: 'market-assistant-1',
-    name: 'Market Assistant 1',
-    summary: 'First market assistant from new source',
-    author: { name: 'Market Author 1', avatar: 'https://example.com/avatar1.png' },
-    ownerId: 101,
-    category: 'productivity',
-    createdAt: '2024-02-01T00:00:00Z',
-    updatedAt: '2024-02-02T00:00:00Z',
-    avatar: 'https://example.com/avatar1.png',
-    tags: ['market', 'assistant'],
-    status: 'published',
-    tokenUsage: 256,
-    config: {
-      systemRole: 'You are a productive assistant.',
-      knowledgeBases: [{ id: 'kb-1' }],
-      plugins: [{ id: 'plugin-1' }],
-    },
-  },
-  {
-    identifier: 'market-assistant-2',
-    name: 'Market Assistant 2',
-    summary: 'Second market assistant from new source',
-    author: 'Market Author 2',
-    ownerId: 202,
-    category: 'creativity',
-    createdAt: '2024-02-04T00:00:00Z',
-    updatedAt: '2024-02-05T00:00:00Z',
-    avatar: 'https://example.com/avatar2.png',
-    tags: ['market', 'creative'],
-    status: 'published',
-    tokenUsage: 128,
-    config: {
-      systemRole: 'You are a creative assistant.',
-      knowledgeBases: [],
-      plugins: [],
-    },
-  },
-];
-
-const mockMarketAgentDetail = {
-  ...mockMarketAssistantList[0],
-  documentationUrl: 'https://example.com/docs',
-  version: '1.0.0',
-  versions: [
-    {
-      version: '1.0.0',
-      status: 'published',
-      isLatest: true,
-      isValidated: true,
-      createdAt: '2024-02-02T00:00:00Z',
-    },
-  ],
-  examples: [
-    {
-      content: 'Example content',
-      role: 'user',
-    },
-  ],
-};
-
 const mockPluginList = [
   {
     identifier: 'plugin-1',
@@ -241,24 +182,6 @@ describe('DiscoverService', () => {
 
     // Setup MarketSDK mock
     mockMarket = {
-      agents: {
-        getAgentList: vi.fn().mockResolvedValue({
-          items: mockMarketAssistantList,
-          totalCount: mockMarketAssistantList.length,
-          currentPage: 1,
-          pageSize: 20,
-          totalPages: 1,
-        }),
-        getAgentDetail: vi.fn().mockResolvedValue(mockMarketAgentDetail),
-        getCategories: vi.fn().mockResolvedValue([
-          { category: 'productivity', count: 10 },
-          { category: 'creativity', count: 5 },
-        ]),
-        getPublishedIdentifiers: vi.fn().mockResolvedValue([
-          { id: 'market-assistant-1', lastModified: '2024-02-02T00:00:00Z' },
-          { id: 'market-assistant-2', lastModified: '2024-02-05T00:00:00Z' },
-        ]),
-      },
       plugins: {
         getCategories: vi.fn().mockResolvedValue([
           { category: 'tools', count: 5 },
@@ -291,68 +214,10 @@ describe('DiscoverService', () => {
     service.market = mockMarket;
   });
 
-  describe('Assistant Market (new source)', () => {
-    it('getAssistantList should transform market SDK response', async () => {
-      const result = await service.getAssistantList();
-
-      expect(mockMarket.agents.getAgentList).toHaveBeenCalled();
-      expect(result.items[0]).toEqual(
-        expect.objectContaining({
-          identifier: 'market-assistant-1',
-          title: 'Market Assistant 1',
-          author: 'Market Author 1',
-          knowledgeCount: 1,
-          pluginCount: 1,
-        }),
-      );
-    });
-
-    it('getAssistantDetail should fetch from market SDK by default', async () => {
-      const result = await service.getAssistantDetail({
-        identifier: 'market-assistant-1',
-      });
-
-      expect(mockMarket.agents.getAgentDetail).toHaveBeenCalledWith('market-assistant-1', {
-        locale: 'en',
-        version: undefined,
-      });
-      expect(result).toEqual(
-        expect.objectContaining({
-          identifier: 'market-assistant-1',
-          title: 'Market Assistant 1',
-          related: expect.any(Array),
-        }),
-      );
-    });
-
-    it('getAssistantCategories should proxy to market SDK', async () => {
-      const result = await service.getAssistantCategories({ locale: 'en-US', q: 'market' });
-
-      expect(mockMarket.agents.getCategories).toHaveBeenCalledWith({
-        locale: 'en',
-        q: 'market',
-      });
-      expect(result).toEqual([
-        { category: 'productivity', count: 10 },
-        { category: 'creativity', count: 5 },
-      ]);
-    });
-
-    it('getAssistantIdentifiers should read from market SDK', async () => {
-      const result = await service.getAssistantIdentifiers();
-
-      expect(mockMarket.agents.getPublishedIdentifiers).toHaveBeenCalled();
-      expect(result).toEqual([
-        { identifier: 'market-assistant-1', lastModified: '2024-02-02T00:00:00Z' },
-        { identifier: 'market-assistant-2', lastModified: '2024-02-05T00:00:00Z' },
-      ]);
-    });
-  });
-
-  describe('Assistant Market (legacy source)', () => {
+  describe('Assistant Market', () => {
     describe('getAssistantList', () => {
       it('should return formatted assistant list with default parameters', async () => {
-        const result = await service.getAssistantList({ source: 'legacy' });
+        const result = await service.getAssistantList();
 
         expect(result).toEqual({
           currentPage: 1,
@@ -377,10 +242,7 @@ describe('DiscoverService', () => {
       });
 
       it('should filter by category', async () => {
-        const result = await service.getAssistantList({
-          category: 'productivity',
-          source: 'legacy',
-        });
+        const result = await service.getAssistantList({ category: 'productivity' });
 
         expect(result.items).toHaveLength(2);
         expect(result.items.map((item) => item.identifier)).toContain('assistant-1');
@@ -388,7 +250,7 @@ describe('DiscoverService', () => {
       });
 
       it('should filter by search query', async () => {
-        const result = await service.getAssistantList({ q: 'creative', source: 'legacy' });
+        const result = await service.getAssistantList({ q: 'creative' });
 
         expect(result.items).toHaveLength(2);
         expect(result.items.map((item) => item.identifier)).toContain('assistant-2');
@@ -399,7 +261,6 @@ describe('DiscoverService', () => {
         const result = await service.getAssistantList({
           sort: AssistantSorts.CreatedAt,
           order: 'desc',
-          source: 'legacy',
         });
 
         expect(result.items[0].identifier).toBe('assistant-3');
@@ -411,7 +272,6 @@ describe('DiscoverService', () => {
         const result = await service.getAssistantList({
           sort: AssistantSorts.Title,
           order: 'asc',
-          source: 'legacy',
         });
 
         // Note: The service has reversed logic for title sorting
@@ -420,7 +280,7 @@ describe('DiscoverService', () => {
       });
 
       it('should paginate results', async () => {
-        const result = await service.getAssistantList({ page: 1, pageSize: 1, source: 'legacy' });
+        const result = await service.getAssistantList({ page: 1, pageSize: 1 });
 
         expect(result.items).toHaveLength(1);
         expect(result.currentPage).toBe(1);
@@ -433,7 +293,6 @@ describe('DiscoverService', () => {
       it('should return assistant detail with related items', async () => {
         const result = await service.getAssistantDetail({
           identifier: 'assistant-1',
-          source: 'legacy',
         });
 
         expect(result).toEqual(
@@ -452,7 +311,6 @@ describe('DiscoverService', () => {
 
         const result = await service.getAssistantDetail({
           identifier: 'non-existent',
-          source: 'legacy',
         });
 
         expect(result).toBeUndefined();
@@ -461,7 +319,7 @@ describe('DiscoverService', () => {
 
     describe('getAssistantCategories', () => {
       it('should return category counts', async () => {
-        const result = await service.getAssistantCategories({ source: 'legacy' });
+        const result = await service.getAssistantCategories();
 
         expect(result).toEqual([
           { category: 'productivity', count: 2 },
@@ -470,7 +328,7 @@ describe('DiscoverService', () => {
       });
 
       it('should filter categories by search query', async () => {
-        const result = await service.getAssistantCategories({ q: 'creative', source: 'legacy' });
+        const result = await service.getAssistantCategories({ q: 'creative' });
 
         expect(result).toEqual([
           {
@@ -487,7 +345,7 @@ describe('DiscoverService', () => {
 
     describe('getAssistantIdentifiers', () => {
       it('should return list of identifiers with lastModified dates', async () => {
-        const result = await service.getAssistantIdentifiers({ source: 'legacy' });
+        const result = await service.getAssistantIdentifiers();
 
         expect(result).toEqual([
           { identifier: 'assistant-1', lastModified: '2024-01-01T00:00:00Z' },

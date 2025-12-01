@@ -1,5 +1,5 @@
 import type { ThemeMode } from 'antd-style';
-import type { NavigateFunction } from 'react-router-dom';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 import { DatabaseLoadingState, MigrationSQL, MigrationTableItem } from '@/types/clientDB';
 import { LocaleMode } from '@/types/locale';
@@ -9,9 +9,8 @@ import { AsyncLocalStorage } from '@/utils/localStorage';
 export enum SidebarTabKey {
   Chat = 'chat',
   Discover = 'discover',
-  Files = 'knowledge',
+  Files = 'files',
   Image = 'image',
-  Knowledge = 'knowledge',
   Me = 'me',
   Setting = 'settings',
 }
@@ -51,13 +50,10 @@ export enum ProfileTabs {
   Profile = 'profile',
   Security = 'security',
   Stats = 'stats',
-  Usage = 'usage',
 }
 
 export interface SystemStatus {
   chatInputHeight?: number;
-  disabledModelProvidersSortType?: string;
-  disabledModelsSortType?: string;
   expandInputActionbar?: boolean;
   // which sessionGroup should expand
   expandSessionGroupKeys: string[];
@@ -73,7 +69,6 @@ export interface SystemStatus {
    */
   isEnablePglite?: boolean;
   isShowCredit?: boolean;
-  knowledgeBaseModalViewMode?: 'list' | 'masonry';
   language?: LocaleMode;
   /**
    * 记住用户最后选择的图像生成模型
@@ -101,10 +96,6 @@ export interface SystemStatus {
    * theme mode
    */
   themeMode?: ThemeMode;
-  /**
-   * 是否使用短格式显示 token
-   */
-  tokenDisplayFormatShort?: boolean;
   zenMode?: boolean;
 }
 
@@ -125,7 +116,7 @@ export interface GlobalState {
   isMobile?: boolean;
   isStatusInit?: boolean;
   latestVersion?: string;
-  navigate?: NavigateFunction;
+  router?: AppRouterInstance;
   sidebarKey: SidebarTabKey;
   status: SystemStatus;
   statusStorage: AsyncLocalStorage<SystemStatus>;
@@ -133,8 +124,6 @@ export interface GlobalState {
 
 export const INITIAL_STATUS = {
   chatInputHeight: 64,
-  disabledModelProvidersSortType: 'default',
-  disabledModelsSortType: 'default',
   expandInputActionbar: true,
   expandSessionGroupKeys: [SessionDefaultGroup.Pinned, SessionDefaultGroup.Default],
   fileManagerViewMode: 'list' as const,
@@ -144,7 +133,6 @@ export const INITIAL_STATUS = {
   hideThreadLimitAlert: false,
   imagePanelWidth: 320,
   imageTopicPanelWidth: 80,
-  knowledgeBaseModalViewMode: 'list' as const,
   mobileShowTopic: false,
   noWideScreen: true,
   portalWidth: 400,
@@ -158,7 +146,6 @@ export const INITIAL_STATUS = {
   showSystemRole: false,
   systemRoleExpandedMap: {},
   themeMode: 'auto',
-  tokenDisplayFormatShort: true,
   zenMode: false,
 } satisfies SystemStatus;
 

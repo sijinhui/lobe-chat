@@ -48,12 +48,6 @@ export interface UniformSearchResponse {
 }
 
 export interface SearchServiceImpl {
-  crawlPages(
-    params: CrawlMultiPagesQuery,
-    options?: { signal?: AbortSignal },
-  ): Promise<{ results: CrawlUniformResult[] }>;
-  webSearch(
-    params: SearchQuery,
-    options?: { signal?: AbortSignal },
-  ): Promise<UniformSearchResponse>;
+  crawlPages(params: CrawlMultiPagesQuery): Promise<{ results: CrawlUniformResult[] }>;
+  webSearch(params: SearchQuery): Promise<UniformSearchResponse>;
 }

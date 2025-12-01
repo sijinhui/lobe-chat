@@ -11,7 +11,7 @@ describe('featureFlagsSelectors', () => {
       featureFlags: {
         ...mapFeatureFlagsEnvToState(DEFAULT_FEATURE_FLAGS),
         isAgentEditable: false,
-        showProvider: true,
+        showLLM: false,
         showMarket: true,
         showAiImage: true,
       },
@@ -20,7 +20,7 @@ describe('featureFlagsSelectors', () => {
     const result = featureFlagsSelectors(store.getState());
 
     expect(result.isAgentEditable).toBe(false);
-    expect(result.showProvider).toBe(true);
+    expect(result.showLLM).toBe(false);
     expect(result.showMarket).toBe(true);
     expect(result.showAiImage).toBe(true);
   });

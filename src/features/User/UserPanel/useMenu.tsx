@@ -15,10 +15,10 @@ import {
   Mail,
   Settings2,
 } from 'lucide-react';
+import Link from 'next/link';
 import { PropsWithChildren, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flexbox } from 'react-layout-kit';
-import { Link } from 'react-router-dom';
 
 import type { MenuProps } from '@/components/Menu';
 import { enableAuth } from '@/const/auth';
@@ -77,7 +77,7 @@ export const useMenu = () => {
     {
       icon: <Icon icon={CircleUserRound} />,
       key: 'profile',
-      label: <Link to="/profile">{t('userPanel.profile')}</Link>,
+      label: <Link href={'/profile'}>{t('userPanel.profile')}</Link>,
     },
   ];
 
@@ -91,7 +91,7 @@ export const useMenu = () => {
       icon: <Icon icon={Settings2} />,
       key: 'setting',
       label: (
-        <Link to="/settings">
+        <Link href={'/settings'}>
           <NewVersionBadge showBadge={hasNewVersion}>{t('userPanel.setting')}</NewVersionBadge>
         </Link>
       ),
@@ -135,25 +135,15 @@ export const useMenu = () => {
       icon: <Icon icon={Cloudy} />,
       key: 'cloud',
       label: (
-        <a
-          href={`${OFFICIAL_URL}?utm_source=${UTM_SOURCE}`}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
+        <Link href={`${OFFICIAL_URL}?utm_source=${UTM_SOURCE}`} target={'_blank'}>
           {t('userPanel.cloud', { name: LOBE_CHAT_CLOUD })}
-        </a>
+        </Link>
       ),
     },
     {
       icon: <Icon icon={FileClockIcon} />,
       key: 'changelog',
-      label: isDesktop ? (
-        <a href={CHANGELOG} rel="noopener noreferrer" target="_blank">
-          {t('changelog')}
-        </a>
-      ) : (
-        <Link to="/changelog">{t('changelog')}</Link>
-      ),
+      label: <Link href={isDesktop ? CHANGELOG : '/changelog/modal'}>{t('changelog')}</Link>,
     },
     {
       children: [
@@ -161,36 +151,36 @@ export const useMenu = () => {
           icon: <Icon icon={Book} />,
           key: 'docs',
           label: (
-            <a href={DOCUMENTS_REFER_URL} rel="noopener noreferrer" target="_blank">
+            <Link href={DOCUMENTS_REFER_URL} target={'_blank'}>
               {t('userPanel.docs')}
-            </a>
+            </Link>
           ),
         },
         {
           icon: <Icon icon={Feather} />,
           key: 'feedback',
           label: (
-            <a href={GITHUB_ISSUES} rel="noopener noreferrer" target="_blank">
+            <Link href={GITHUB_ISSUES} target={'_blank'}>
               {t('userPanel.feedback')}
-            </a>
+            </Link>
           ),
         },
         {
           icon: <Icon icon={DiscordIcon} />,
           key: 'discord',
           label: (
-            <a href={SOCIAL_URL.discord} rel="noopener noreferrer" target="_blank">
+            <Link href={SOCIAL_URL.discord} target={'_blank'}>
               {t('userPanel.discord')}
-            </a>
+            </Link>
           ),
         },
         {
           icon: <Icon icon={Mail} />,
           key: 'email',
           label: (
-            <a href={mailTo(BRANDING_EMAIL.support)} rel="noopener noreferrer" target="_blank">
+            <Link href={mailTo(BRANDING_EMAIL.support)} target={'_blank'}>
               {t('userPanel.email')}
-            </a>
+            </Link>
           ),
         },
       ],

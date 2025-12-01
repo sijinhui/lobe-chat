@@ -95,8 +95,13 @@ export const fileRouter = router({
           try {
             await pMap(
               requestArray,
-              async (chunks) => {
-                const agentRuntime = initModelRuntimeWithUserPayload(provider, ctx.jwtPayload);
+              async (chunks, index) => {
+                const agentRuntime = await initModelRuntimeWithUserPayload(
+                  provider,
+                  ctx.jwtPayload,
+                );
+
+                console.log(`run embedding task ${index + 1}`);
 
                 const embeddings = await agentRuntime.embeddings({
                   dimensions: 1024,

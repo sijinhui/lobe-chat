@@ -4,9 +4,9 @@ import { setupRouteInterceptors } from './routeInterceptor';
 const setupPreload = () => {
   setupElectronApi();
 
-  // Setup route interception logic
+  // 设置路由拦截逻辑
   window.addEventListener('DOMContentLoaded', () => {
-    // Setup client-side route interceptor
+    // 设置客户端路由拦截器
     setupRouteInterceptors();
   });
 };

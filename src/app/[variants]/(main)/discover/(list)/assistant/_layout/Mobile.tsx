@@ -1,7 +1,7 @@
-import { Outlet } from 'react-router-dom';
+import { PropsWithChildren } from 'react';
 
-const Layout = () => {
-  return <Outlet />;
+const Layout = ({ children }: PropsWithChildren) => {
+  return children;
 };
 
 Layout.displayName = 'MobileDiscoverAssistantsLayout';

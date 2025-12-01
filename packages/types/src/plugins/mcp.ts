@@ -3,7 +3,6 @@ import { z } from 'zod';
 
 import { MCPErrorType } from '@/libs/mcp';
 
-import { McpConnectionType } from '../discover/mcp';
 import { CustomPluginMetadata } from '../tool/plugin';
 
 /* eslint-disable typescript-sort-keys/string-enum */
@@ -21,7 +20,7 @@ export enum MCPInstallStep {
 /* eslint-enable */
 export interface CheckMcpInstallParams {
   /**
-   * Installation details
+   * 安装详情
    */
   installationDetails: {
     packageName?: string;
@@ -29,11 +28,11 @@ export interface CheckMcpInstallParams {
     setupSteps?: string[];
   };
   /**
-   * Installation method
+   * 安装方法
    */
   installationMethod: string;
   /**
-   * System dependencies
+   * 系统依赖项
    */
   systemDependencies?: SystemDependency[];
 }
@@ -41,12 +40,12 @@ export interface CheckMcpInstallParams {
 export interface CheckMcpInstallResult {
   allDependenciesMet?: boolean;
   /**
-   * Check results for all deployment options
+   * 所有部署选项的检查结果
    */
   allOptions?: Array<{
     allDependenciesMet?: boolean;
     /**
-     * Connection information for subsequent connection use
+     * 连接信息，用于后续连接使用
      */
     connection?: {
       args?: string[];
@@ -66,11 +65,11 @@ export interface CheckMcpInstallResult {
     }>;
   }>;
   /**
-   * Configuration schema, elevated to top level for easy access
+   * 配置模式，提到顶层方便访问
    */
   configSchema?: any;
   /**
-   * Connection information for subsequent connection use
+   * 连接信息，用于后续连接使用
    */
   connection?: {
     args?: string[];
@@ -79,28 +78,28 @@ export interface CheckMcpInstallResult {
     url?: string;
   };
   /**
-   * Error information if detection fails
+   * 如果检测失败，提供错误信息
    */
   error?: string;
   /**
-   * Whether this is the recommended option
+   * 是否为推荐选项
    */
   isRecommended?: boolean;
   /**
-   * Whether configuration is needed (e.g. API key, etc.)
+   * 是否需要配置（如 API key 等）
    */
   needsConfig?: boolean;
   /**
-   * Plugin installation detection result
+   * 插件安装检测结果
    */
   packageInstalled?: boolean;
   platform: string;
   /**
-   * Whether the detection result is successful
+   * 检测结果是否成功
    */
   success: boolean;
   /**
-   * System dependency detection results
+   * 系统依赖检测结果
    */
   systemDependencies?: Array<{
     error?: string;
@@ -111,20 +110,18 @@ export interface CheckMcpInstallResult {
   }>;
 }
 
-export type MCPPluginListParams = Pick<PluginQueryParams, 'locale' | 'pageSize' | 'page' | 'q'> & {
-  connectionType?: McpConnectionType;
-};
+export type MCPPluginListParams = Pick<PluginQueryParams, 'locale' | 'pageSize' | 'page' | 'q'>;
 
 export interface MCPErrorInfoMetadata {
   errorLog?: string;
 
   /**
-   * Original error message
+   * 原始错误信息
    */
   originalError?: string;
 
   /**
-   * MCP connection parameters
+   * MCP 连接参数
    */
   params?: {
     args?: string[];
@@ -132,7 +129,7 @@ export interface MCPErrorInfoMetadata {
     type?: string;
   };
   /**
-   * Process-related information
+   * 进程相关信息
    */
   process?: {
     exitCode?: number;
@@ -140,31 +137,31 @@ export interface MCPErrorInfoMetadata {
   };
 
   /**
-   * Step where the error occurred
+   * 错误发生的步骤
    */
   step?: string;
 
   /**
-   * Timestamp
+   * 时间戳
    */
   timestamp?: number;
 }
 /**
- * Structured error information
+ * 结构化的错误信息
  */
 export interface MCPErrorInfo {
   /**
-   * Core error message (user-friendly brief description)
+   * 核心错误信息（用户友好的简短描述）
    */
   message: string;
 
   /**
-   * Structured error metadata
+   * 结构化的错误元数据
    */
   metadata?: MCPErrorInfoMetadata;
 
   /**
-   * Error type
+   * 错误类型
    */
   type: MCPErrorType;
 }
@@ -174,7 +171,7 @@ export interface MCPInstallProgress {
   configSchema?: any;
   // connection info from checkInstallation
   connection?: any;
-  // Structured error information, displayed when installation fails
+  // 结构化的错误信息，当安装失败时显示
   errorInfo?: MCPErrorInfo;
   manifest?: any;
   // LobeChatPluginManifest
@@ -182,12 +179,12 @@ export interface MCPInstallProgress {
   // 0-100
   progress: number;
   step: MCPInstallStep;
-  // System dependency detection results, displayed when dependencies need to be installed
+  // 系统依赖检测结果，当需要安装依赖时显示
   systemDependencies?: Array<{
     error?: string;
     installInstructions?: {
-      current?: string; // Installation command for the current system
-      manual?: string; // Manual installation command
+      current?: string; // 当前系统的安装指令
+      manual?: string; // 手动安装指令
     };
     installed: boolean;
     meetRequirement: boolean;
@@ -206,16 +203,16 @@ export interface McpConnection {
     token?: string;
     type: 'none' | 'bearer' | 'oauth2';
   };
-  // STDIO connection parameters
+  // STDIO 连接参数
   command?: string;
   env?: Record<string, string>;
   headers?: Record<string, string>;
   type: 'http' | 'stdio';
-  // HTTP connection parameters
+  // HTTP 连接参数
   url?: string;
 }
 
-// Test connection parameter type
+// 测试连接参数类型
 export interface McpConnectionParams {
   connection: McpConnection;
   identifier: string;

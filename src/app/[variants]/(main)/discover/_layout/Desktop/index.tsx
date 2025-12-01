@@ -1,17 +1,17 @@
+import { PropsWithChildren } from 'react';
 
 import NProgress from '@/components/NProgress';
 
 import Container from './Container';
-import Header from './Header';  
-import { Outlet } from 'react-router-dom';
+import Header from './Header';
 
-const Layout = () => {
+const Layout = ({ children }: PropsWithChildren) => {
   return (
     <>
       <NProgress />
       <Container>
         <Header />
-        <Outlet />
+        {children}
       </Container>
       {/* ↓ cloud slot ↓ */}
 

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import type { FileParsingTask } from '../asyncTask';
+import { FileParsingTask } from '@/types/asyncTask';
 
 export interface FileUploadState {
   progress: number;

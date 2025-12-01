@@ -16,7 +16,7 @@ const copyUsingFallback = (imageUrl: string) => {
         });
       });
     } catch {
-      // If toBlob or ClipboardItem is not supported, use data URL
+      // 如果 toBlob 或 ClipboardItem 不被支持，使用 data URL
       const dataURL = canvas.toDataURL('image/png');
       const textarea = document.createElement('textarea');
       textarea.value = dataURL;
@@ -44,7 +44,7 @@ const copyUsingModernAPI = async (imageUrl: string) => {
 };
 
 export const copyImageToClipboard = async (imageUrl: string) => {
-  // Check if modern Clipboard API is supported
+  // 检查是否支持现代 Clipboard API
   if (navigator.clipboard && 'write' in navigator.clipboard) {
     await copyUsingModernAPI(imageUrl);
   } else {

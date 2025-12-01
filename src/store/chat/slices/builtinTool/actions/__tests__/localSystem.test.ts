@@ -21,19 +21,13 @@ vi.mock('@/services/electron/localFileService', () => ({
 const mockSet = vi.fn();
 
 const mockStore = {
-  completeOperation: vi.fn(),
-  failOperation: vi.fn(),
   internal_triggerLocalFileToolCalling: vi.fn(),
-  messageOperationMap: {},
-  optimisticUpdateMessageContent: vi.fn(),
-  optimisticUpdateMessagePluginError: vi.fn(),
-  optimisticUpdatePluginArguments: vi.fn(),
-  optimisticUpdatePluginState: vi.fn(),
+  internal_updateMessageContent: vi.fn(),
+  internal_updateMessagePluginError: vi.fn(),
   set: mockSet,
-  startOperation: vi.fn().mockReturnValue({
-    abortController: new AbortController(),
-    operationId: 'test-op-id',
-  }),
+  toggleLocalFileLoading: vi.fn(),
+  updatePluginArguments: vi.fn(),
+  updatePluginState: vi.fn(),
 } as unknown as ChatStore;
 
 const createStore = () => {
@@ -56,18 +50,19 @@ describe('localFileSlice', () => {
 
   describe('internal_triggerLocalFileToolCalling', () => {
     it('should handle successful calling', async () => {
-      const mockContent = 'result content';
+      const mockContent = { foo: 'bar' };
       const mockState = { state: 'test' };
-      const mockService = vi
-        .fn()
-        .mockResolvedValue({ content: mockContent, state: mockState, success: true });
+      const mockService = vi.fn().mockResolvedValue({ content: mockContent, state: mockState });
 
       await store.internal_triggerLocalFileToolCalling('test-id', mockService);
 
-      expect(mockStore.startOperation).toBeCalled();
-      expect(mockStore.completeOperation).toBeCalled();
-      expect(mockStore.optimisticUpdatePluginState).toBeCalled();
-      expect(mockStore.optimisticUpdateMessageContent).toBeCalled();
+      expect(mockStore.toggleLocalFileLoading).toBeCalledWith('test-id', true);
+      expect(mockStore.updatePluginState).toBeCalledWith('test-id', mockState);
+      expect(mockStore.internal_updateMessageContent).toBeCalledWith(
+        'test-id',
+        JSON.stringify(mockContent),
+      );
+      expect(mockStore.toggleLocalFileLoading).toBeCalledWith('test-id', false);
     });
 
     it('should handle error', async () => {
@@ -76,15 +71,11 @@ describe('localFileSlice', () => {
 
       await store.internal_triggerLocalFileToolCalling('test-id', mockService);
 
-      expect(mockStore.optimisticUpdateMessagePluginError).toBeCalledWith(
-        'test-id',
-        {
-          body: mockError,
-          message: 'test error',
-          type: 'PluginServerError',
-        },
-        { operationId: 'test-op-id' },
-      );
+      expect(mockStore.internal_updateMessagePluginError).toBeCalledWith('test-id', {
+        body: mockError,
+        message: 'test error',
+        type: 'PluginServerError',
+      });
     });
   });
 
@@ -197,5 +188,24 @@ describe('localFileSlice', () => {
     });
   });
 
-  // toggleLocalFileLoading is no longer needed as we use operation-based state management
+  describe('toggleLocalFileLoading', () => {
+    it('should toggle loading state', () => {
+      const mockSetFn = vi.fn();
+      const testStore = localSystemSlice(mockSetFn, () => mockStore, {} as any);
+
+      testStore.toggleLocalFileLoading('test-id', true);
+      expect(mockSetFn).toHaveBeenCalledWith(
+        expect.any(Function),
+        false,
+        'toggleLocalFileLoading/start',
+      );
+
+      testStore.toggleLocalFileLoading('test-id', false);
+      expect(mockSetFn).toHaveBeenCalledWith(
+        expect.any(Function),
+        false,
+        'toggleLocalFileLoading/end',
+      );
+    });
+  });
 });
