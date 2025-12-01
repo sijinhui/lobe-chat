@@ -39,16 +39,10 @@ export enum McpNavKey {
   Version = 'version',
 }
 
-export enum McpConnectionType {
-  http = 'http',
-  stdio = 'stdio'
-}
-
 export type DiscoverMcpItem = PluginItem;
 
 export interface McpQueryParams {
   category?: string;
-  connectionType?: McpConnectionType;
   locale?: string;
   order?: 'asc' | 'desc';
   page?: number;

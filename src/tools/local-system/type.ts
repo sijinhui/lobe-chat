@@ -1,4 +1,5 @@
 import {
+  EditLocalFileResult,
   GetCommandOutputResult,
   GlobFilesResult,
   GrepContentResult,
@@ -84,8 +85,6 @@ export interface GlobFilesState {
 
 // Edit State
 export interface EditLocalFileState {
-  diffText?: string;
-  linesAdded?: number;
-  linesDeleted?: number;
-  replacements: number;
+  message: string;
+  result: EditLocalFileResult;
 }

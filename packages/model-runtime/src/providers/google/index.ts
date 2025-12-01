@@ -38,8 +38,6 @@ const modelsWithModalities = new Set([
   'gemini-2.0-flash-preview-image-generation',
   'gemini-2.5-flash-image-preview',
   'gemini-2.5-flash-image',
-  'gemini-3-pro-image-preview',
-  'nano-banana-pro-preview',
 ]);
 
 const modelsDisableInstuction = new Set([
@@ -53,11 +51,6 @@ const modelsDisableInstuction = new Set([
   'gemma-3-12b-it',
   'gemma-3-27b-it',
   'gemma-3n-e4b-it',
-  // ZenMux
-  'google/gemini-2.5-flash-image-free',
-  'google/gemini-2.5-flash-image',
-  'google/gemini-3-pro-image-preview-free',
-  'google/gemini-3-pro-image-preview',
 ]);
 
 const PRO_THINKING_MIN = 128;
@@ -201,7 +194,7 @@ export class LobeGoogleAI implements LobeRuntimeAI {
   async chat(rawPayload: ChatStreamPayload, options?: ChatMethodOptions) {
     try {
       const payload = this.buildPayload(rawPayload);
-      const { model, thinkingBudget, thinkingLevel, imageAspectRatio, imageResolution } = payload;
+      const { model, thinkingBudget } = payload;
 
       // https://ai.google.dev/gemini-api/docs/thinking#set-budget
       const resolvedThinkingBudget = resolveModelThinkingBudget(model, thinkingBudget);
@@ -209,21 +202,12 @@ export class LobeGoogleAI implements LobeRuntimeAI {
       const thinkingConfig: ThinkingConfig = {
         includeThoughts:
           (!!thinkingBudget ||
-            !!thinkingLevel ||
-            (model &&
-              (model.includes('-3-pro-image') ||
-                model.includes('nano-banana-pro') ||
-                model.includes('thinking')))) &&
+            (model && (model.includes('-2.5-') || model.includes('thinking')))) &&
           resolvedThinkingBudget !== 0
             ? true
             : undefined,
         thinkingBudget: resolvedThinkingBudget,
       };
-
-      // Add thinkingLevel for 3.0 models
-      if (model?.toLowerCase().includes('-3-') && thinkingLevel) {
-        (thinkingConfig as any).thinkingLevel = thinkingLevel;
-      }
 
       const contents = await buildGoogleMessages(payload.messages);
 
@@ -242,13 +226,6 @@ export class LobeGoogleAI implements LobeRuntimeAI {
 
       const config: GenerateContentConfig = {
         abortSignal: originalSignal,
-        imageConfig:
-          modelsWithModalities.has(model) && imageAspectRatio
-            ? {
-                aspectRatio: imageAspectRatio,
-                imageSize: imageResolution,
-              }
-            : undefined,
         maxOutputTokens: payload.max_tokens,
         responseModalities: modelsWithModalities.has(model) ? ['Text', 'Image'] : undefined,
         // avoid wide sensitive words
@@ -285,20 +262,18 @@ export class LobeGoogleAI implements LobeRuntimeAI {
 
       const inputStartAt = Date.now();
 
-      const finalPayload = { config, contents, model };
-      const key = this.isVertexAi
-        ? 'DEBUG_VERTEX_AI_CHAT_COMPLETION'
-        : 'DEBUG_GOOGLE_CHAT_COMPLETION';
-
-      if (process.env[key] === '1') {
-        console.log('[requestPayload]');
-        console.log(JSON.stringify(finalPayload), '\n');
-      }
-
-      const geminiStreamResponse = await this.client.models.generateContentStream(finalPayload);
+      const geminiStreamResponse = await this.client.models.generateContentStream({
+        config,
+        contents,
+        model,
+      });
 
       const googleStream = this.createEnhancedStream(geminiStreamResponse, controller.signal);
       const [prod, useForDebug] = googleStream.tee();
+
+      const key = this.isVertexAi
+        ? 'DEBUG_VERTEX_AI_CHAT_COMPLETION'
+        : 'DEBUG_GOOGLE_CHAT_COMPLETION';
 
       if (process.env[key] === '1') {
         debugStream(useForDebug).catch();

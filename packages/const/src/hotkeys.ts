@@ -12,15 +12,9 @@ const combineKeys = (keys: string[]) => keys.join('+');
 
 export type HotkeyRegistration = HotkeyItem[];
 
-// mod is the command key on Mac, alt is the ctrl key on Windows
+// mod 在 Mac 上是 command 键，alt 在 Win 上是 ctrl 键
 export const HOTKEYS_REGISTRATION: HotkeyRegistration = [
   // basic
-  {
-    group: HotkeyGroupEnum.Essential,
-    id: HotkeyEnum.CommandPalette,
-    keys: combineKeys([KeyEnum.Mod, 'j']),
-    scopes: [HotkeyScopeEnum.Global],
-  },
   {
     group: HotkeyGroupEnum.Essential,
     id: HotkeyEnum.Search,
@@ -99,7 +93,7 @@ export const HOTKEYS_REGISTRATION: HotkeyRegistration = [
     group: HotkeyGroupEnum.Conversation,
     id: HotkeyEnum.AddUserMessage,
     keys: combineKeys([KeyEnum.Alt, KeyEnum.Enter]),
-    // Not activated through Scope mode
+    // 不通过 Scope 模式激活
   },
   {
     group: HotkeyGroupEnum.Conversation,
@@ -118,7 +112,7 @@ export const HOTKEYS_REGISTRATION: HotkeyRegistration = [
 
 type DesktopHotkeyRegistration = DesktopHotkeyItem[];
 
-// Desktop hotkey configuration
+// 桌面端快捷键配置
 export const DESKTOP_HOTKEYS_REGISTRATION: DesktopHotkeyRegistration = [
   {
     id: DesktopHotkeyEnum.ShowApp,

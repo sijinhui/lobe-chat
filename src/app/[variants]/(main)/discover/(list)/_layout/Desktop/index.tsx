@@ -1,13 +1,12 @@
+import { PropsWithChildren } from 'react';
 import { Flexbox } from 'react-layout-kit';
 
 import Footer from '@/features/Setting/Footer';
 
-import { Outlet } from 'react-router-dom';
-
 import { MAX_WIDTH, SCROLL_PARENT_ID } from '../../../features/const';
 import Nav from './Nav';
 
-const Layout = () => {
+const Layout = ({ children }: PropsWithChildren) => {
   return (
     <>
       <Nav />
@@ -24,7 +23,7 @@ const Layout = () => {
           style={{ maxWidth: MAX_WIDTH, paddingTop: 64, position: 'relative' }}
           width={'100%'}
         >
-          {<Outlet />}
+          {children}
           <div />
           <Footer />
         </Flexbox>

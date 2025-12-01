@@ -35,16 +35,11 @@ export const setupMockSelectors = (
 /**
  * Setup store state with messages
  */
-export const setupStoreWithMessages = (
-  messages: any[],
-  sessionId = TEST_IDS.SESSION_ID,
-  topicId: string | null | undefined = TEST_IDS.TOPIC_ID,
-) => {
+export const setupStoreWithMessages = (messages: any[], sessionId = TEST_IDS.SESSION_ID) => {
   useChatStore.setState({
     activeId: sessionId,
-    activeTopicId: topicId ?? undefined,
     messagesMap: {
-      [messageMapKey(sessionId, topicId ?? undefined)]: messages,
+      [messageMapKey(sessionId)]: messages,
     },
   });
 };
@@ -64,25 +59,17 @@ export const createMockAbortController = () => {
 export const spyOnMessageService = () => {
   const createMessageSpy = vi
     .spyOn(messageService, 'createMessage')
-    .mockResolvedValue({ id: TEST_IDS.NEW_MESSAGE_ID, messages: [] });
-  const updateMessageSpy = vi
-    .spyOn(messageService, 'updateMessage')
-    .mockResolvedValue({ messages: [], success: true });
-  const updateMessageMetadataSpy = vi
-    .spyOn(messageService, 'updateMessageMetadata')
-    .mockResolvedValue({ messages: [], success: true });
-  const removeMessageSpy = vi
-    .spyOn(messageService, 'removeMessage')
-    .mockResolvedValue(undefined as any);
+    .mockResolvedValue(TEST_IDS.NEW_MESSAGE_ID);
+  const updateMessageSpy = vi.spyOn(messageService, 'updateMessage').mockResolvedValue(undefined);
+  const removeMessageSpy = vi.spyOn(messageService, 'removeMessage').mockResolvedValue(undefined);
   const updateMessageErrorSpy = vi
     .spyOn(messageService, 'updateMessageError')
-    .mockResolvedValue(undefined as any);
+    .mockResolvedValue(undefined);
 
   return {
     createMessageSpy,
     removeMessageSpy,
     updateMessageErrorSpy,
-    updateMessageMetadataSpy,
     updateMessageSpy,
   };
 };
@@ -109,6 +96,8 @@ export const resetTestEnvironment = () => {
     {
       activeId: TEST_IDS.SESSION_ID,
       activeTopicId: TEST_IDS.TOPIC_ID,
+      chatLoadingIds: [],
+      chatLoadingIdsAbortController: undefined,
       messagesMap: {},
       toolCallingStreamIds: {},
     },

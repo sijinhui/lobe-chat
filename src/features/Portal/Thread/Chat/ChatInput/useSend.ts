@@ -17,7 +17,7 @@ export const useSendThreadMessage = () => {
   const canNotSend = useChatStore(threadSelectors.isSendButtonDisabledByMessage);
   const generating = useChatStore((s) => threadSelectors.isThreadAIGenerating(s));
   const stop = useChatStore((s) => s.stopGenerateMessage);
-  const [sendMessage, updateMessageInput] = useChatStore((s) => [
+  const [sendMessage, updateInputMessage] = useChatStore((s) => [
     s.sendThreadMessage,
     s.updateThreadInputMessage,
   ]);
@@ -54,11 +54,11 @@ export const useSendThreadMessage = () => {
 
     if (!shouldContinue) return;
 
-    updateMessageInput(inputMessage);
+    updateInputMessage(inputMessage);
 
     sendMessage({ message: inputMessage, ...params });
 
-    updateMessageInput('');
+    updateInputMessage('');
     threadInputEditor.clearContent();
     threadInputEditor.focus();
   };

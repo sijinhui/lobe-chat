@@ -1,16 +1,16 @@
 const compressImage = ({ img, type = 'image/webp' }: { img: HTMLImageElement; type?: string }) => {
-  // Set maximum width and height
+  // 设置最大宽高
   const maxWidth = 2160;
   const maxHeight = 2160;
   let width = img.width;
   let height = img.height;
 
   if (width > height && width > maxWidth) {
-    // If image width is greater than height and exceeds maximum width limit
+    // 如果图片宽度大于高度且大于最大宽度限制
     width = maxWidth;
     height = Math.round((maxWidth / img.width) * img.height);
   } else if (height > width && height > maxHeight) {
-    // If image height is greater than width and exceeds maximum height limit
+    // 如果图片高度大于宽度且大于最大高度限制
     height = maxHeight;
     width = Math.round((maxHeight / img.height) * img.width);
   }

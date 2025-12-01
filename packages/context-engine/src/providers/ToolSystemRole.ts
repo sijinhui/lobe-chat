@@ -38,7 +38,7 @@ export class ToolSystemRoleProvider extends BaseProvider {
   protected async doProcess(context: PipelineContext): Promise<PipelineContext> {
     const clonedContext = this.cloneContext(context);
 
-    // Check tool-related conditions
+    // 检查工具相关条件
     const toolSystemRole = this.getToolSystemRole();
 
     if (!toolSystemRole) {
@@ -46,10 +46,10 @@ export class ToolSystemRoleProvider extends BaseProvider {
       return this.markAsExecuted(clonedContext);
     }
 
-    // Inject tool system role
+    // 注入工具系统角色
     this.injectToolSystemRole(clonedContext, toolSystemRole);
 
-    // Update metadata
+    // 更新元数据
     clonedContext.metadata.toolSystemRole = {
       contentLength: toolSystemRole.length,
       injected: true,
@@ -67,21 +67,21 @@ export class ToolSystemRoleProvider extends BaseProvider {
   private getToolSystemRole(): string | undefined {
     const { tools, model, provider } = this.config;
 
-    // Check if tools are available
+    // 检查是否有工具
     const hasTools = tools && tools.length > 0;
     if (!hasTools) {
       log('No available tools');
       return undefined;
     }
 
-    // Check if function calling is supported
+    // 检查是否支持函数调用
     const hasFC = this.config.isCanUseFC(model, provider);
     if (!hasFC) {
       log(`Model ${model} (${provider}) does not support function calling`);
       return undefined;
     }
 
-    // Get tool system role
+    // 获取工具系统角色
     const toolSystemRole = this.config.getToolSystemRoles(tools);
     if (!toolSystemRole) {
       log('Failed to get tool system role content');
@@ -98,7 +98,7 @@ export class ToolSystemRoleProvider extends BaseProvider {
     const existingSystemMessage = context.messages.find((msg) => msg.role === 'system');
 
     if (existingSystemMessage) {
-      // Merge to existing system message
+      // 合并到现有系统消息
       existingSystemMessage.content = [existingSystemMessage.content, toolSystemRole]
         .filter(Boolean)
         .join('\n\n');

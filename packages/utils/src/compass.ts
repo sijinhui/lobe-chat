@@ -1,7 +1,7 @@
 import brotliPromise from 'brotli-wasm';
 
 /**
- * @title String Compressor
+ * @title 字符串压缩器
  */
 export class StrCompressor {
   /**
@@ -17,9 +17,9 @@ export class StrCompressor {
   }
 
   /**
-   * @title Compress string
-   * @param str - String to compress
-   * @returns Compressed string
+   * @title 压缩字符串
+   * @param str - 要压缩的字符串
+   * @returns 压缩后的字符串
    */
   compress(str: string): string {
     const input = new TextEncoder().encode(str);
@@ -30,9 +30,9 @@ export class StrCompressor {
   }
 
   /**
-   * @title Decompress string
-   * @param str - String to decompress
-   * @returns Decompressed string
+   * @title 解压缩字符串
+   * @param str - 要解压缩的字符串
+   * @returns 解压缩后的字符串
    */
   decompress(str: string): string {
     const compressedData = this.urlSafeBase64Decode(str);
@@ -43,8 +43,8 @@ export class StrCompressor {
   }
 
   /**
-   * @title Compress string asynchronously
-   * @param str - String to compress
+   * @title 异步压缩字符串
+   * @param str - 要压缩的字符串
    * @returns Promise
    */
   async compressAsync(str: string) {
@@ -58,8 +58,8 @@ export class StrCompressor {
   }
 
   /**
-   * @title Decompress string asynchronously
-   * @param str - String to decompress
+   * @title 异步解压缩字符串
+   * @param str - 要解压缩的字符串
    * @returns Promise
    */
   async decompressAsync(str: string) {

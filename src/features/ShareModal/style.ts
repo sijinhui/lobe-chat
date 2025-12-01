@@ -1,46 +1,36 @@
 import { createStyles } from 'antd-style';
 
-import { WidthMode } from './ShareImage/type';
+export const useContainerStyles = createStyles(({ css, token, stylish, cx, responsive }) => ({
+  preview: cx(
+    stylish.noScrollbar,
+    css`
+      overflow: hidden scroll;
 
-export const useContainerStyles = createStyles(
-  ({ css, token, stylish, cx, responsive }, widthMode?: WidthMode) => {
-    const isNarrow = widthMode === WidthMode.Narrow;
+      width: 100%;
+      max-height: 70dvh;
+      border: 1px solid ${token.colorBorder};
+      border-radius: ${token.borderRadiusLG}px;
 
-    return {
-      preview: cx(
-        stylish.noScrollbar,
-        css`
-          overflow: hidden scroll;
+      background: ${token.colorBgLayout};
 
-          width: 100%;
-          max-width: ${isNarrow ? '480px' : 'none'};
-          max-height: 70dvh;
-          margin: ${isNarrow ? '0 auto' : '0'};
-          border: 1px solid ${token.colorBorder};
-          border-radius: ${token.borderRadiusLG}px;
+      /* stylelint-disable selector-class-pattern */
+      .react-pdf__Document *,
+      .react-pdf__Page * {
+        pointer-events: none;
+      }
+      /* stylelint-enable selector-class-pattern */
 
-          background: ${token.colorBgLayout};
+      ::-webkit-scrollbar {
+        width: 0 !important;
+        height: 0 !important;
+      }
 
-          /* stylelint-disable selector-class-pattern */
-          .react-pdf__Document *,
-          .react-pdf__Page * {
-            pointer-events: none;
-          }
-          /* stylelint-enable selector-class-pattern */
-
-          ::-webkit-scrollbar {
-            width: 0 !important;
-            height: 0 !important;
-          }
-
-          ${responsive.mobile} {
-            max-height: 40dvh;
-          }
-        `,
-      ),
-    };
-  },
-);
+      ${responsive.mobile} {
+        max-height: 40dvh;
+      }
+    `,
+  ),
+}));
 
 export const useStyles = createStyles(({ responsive, token, css }) => ({
   body: css`

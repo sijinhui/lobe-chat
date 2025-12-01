@@ -1,6 +1,6 @@
-import { DiscoverTab } from '@/types/discover';
+import { useQueryState } from 'nuqs';
 
-import { useQueryState } from './useQueryParam';
+import { DiscoverTab } from '@/types/discover';
 
 export const useDiscoverTab = () => {
   const [type] = useQueryState('type', {

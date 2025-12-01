@@ -48,24 +48,22 @@ vi.mock('./useNewVersion', () => ({
   useNewVersion: vi.fn(() => false),
 }));
 
-// Use vi.hoisted to ensure variables exist before vi.mock factory executes
-const { enableAuth, enableClerk } = vi.hoisted(() => ({
-  enableAuth: { value: true },
-  enableClerk: { value: true },
-}));
-
+// 定义一个变量来存储 enableAuth 的值
+let enableAuth = true;
+let enableClerk = true;
+// 模拟 @/const/auth 模块
 vi.mock('@/const/auth', () => ({
   get enableAuth() {
-    return enableAuth.value;
+    return enableAuth;
   },
   get enableClerk() {
-    return enableClerk.value;
+    return enableClerk;
   },
 }));
 
 afterEach(() => {
-  enableAuth.value = true;
-  enableClerk.value = true;
+  enableAuth = true;
+  enableClerk = true;
 });
 
 describe('useMenu', () => {
@@ -73,8 +71,8 @@ describe('useMenu', () => {
     act(() => {
       useUserStore.setState({ isSignedIn: true, enableAuth: () => true });
     });
-    enableAuth.value = true;
-    enableClerk.value = false;
+    enableAuth = true;
+    enableClerk = false;
 
     const { result } = renderHook(() => useMenu(), { wrapper });
 
@@ -92,7 +90,7 @@ describe('useMenu', () => {
     act(() => {
       useUserStore.setState({ isSignedIn: false, enableAuth: () => false });
     });
-    enableAuth.value = false;
+    enableAuth = false;
 
     const { result } = renderHook(() => useMenu(), { wrapper });
 
@@ -110,7 +108,7 @@ describe('useMenu', () => {
     act(() => {
       useUserStore.setState({ isSignedIn: false, enableAuth: () => true });
     });
-    enableAuth.value = true;
+    enableAuth = true;
 
     const { result } = renderHook(() => useMenu(), { wrapper });
 

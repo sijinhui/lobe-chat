@@ -13,19 +13,11 @@ import KnowledgeBaseList from '../../../components/KnowledgeBaseList';
 
 const useStyles = createStyles(({ css, token }) => ({
   header: css`
-    cursor: pointer;
-    border-radius: ${token.borderRadius}px;
-    color: ${token.colorTextSecondary};
-    transition: background-color 0.2s;
-
-    &:hover {
-      background-color: ${token.colorFillTertiary};
-    }
+    color: ${token.colorTextDescription};
   `,
 }));
 
-// TODO: Rename to Collection
-const Collection = () => {
+const KnowledgeBase = () => {
   const { t } = useTranslation('file');
   const { styles } = useStyles();
   const navigate = useNavigate();
@@ -37,20 +29,19 @@ const Collection = () => {
   const handleCreate = () => {
     open({
       onSuccess: (id) => {
-        navigate(`/knowledge/bases/${id}`);
+        navigate(`/bases/${id}`);
       },
     });
   };
 
   return (
-    <Flexbox flex={1} gap={8} paddingInline={8}>
+    <Flexbox flex={1} gap={8}>
       <Flexbox
         align={'center'}
         className={styles.header}
         horizontal
         justify={'space-between'}
-        paddingBlock={6}
-        paddingInline={8}
+        paddingInline={'16px 12px'}
       >
         <Flexbox align={'center'} gap={8} horizontal>
           <ActionIcon
@@ -60,7 +51,7 @@ const Collection = () => {
             }}
             size={'small'}
           />
-          <div style={{ flex: 1, lineHeight: '14px' }}>{t('knowledgeBase.title')}</div>
+          <div style={{ lineHeight: '14px' }}>{t('knowledgeBase.title')}</div>
         </Flexbox>
         <ActionIcon
           icon={PlusIcon}
@@ -70,13 +61,9 @@ const Collection = () => {
         />
       </Flexbox>
 
-      {showList && (
-        <Flexbox flex={1}>
-          <KnowledgeBaseList />
-        </Flexbox>
-      )}
+      {showList && <KnowledgeBaseList />}
     </Flexbox>
   );
 };
 
-export default Collection;
+export default KnowledgeBase;

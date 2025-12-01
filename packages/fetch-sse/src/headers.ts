@@ -1,7 +1,7 @@
 /**
- * Convert HeadersInit to Record<string, string>
- * @param headersInit - Headers initialization object
- * @returns The converted record object
+ * 将 HeadersInit 转换为 Record<string, string>
+ * @param headersInit - Headers 初始化对象
+ * @returns 转换后的记录对象
  */
 // eslint-disable-next-line no-undef
 export const headersToRecord = (headersInit?: HeadersInit): Record<string, string> => {

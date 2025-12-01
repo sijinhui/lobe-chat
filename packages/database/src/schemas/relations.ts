@@ -1,15 +1,16 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix  */
 import { relations } from 'drizzle-orm';
-import { index, pgTable, primaryKey, text, uuid, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, primaryKey, text, uuid, varchar } from 'drizzle-orm/pg-core';
 
 import { createdAt } from './_helpers';
 import { agents, agentsFiles, agentsKnowledgeBases } from './agent';
 import { asyncTasks } from './asyncTask';
 import { chatGroups, chatGroupsAgents } from './chatGroup';
-import { documents, files, knowledgeBases } from './file';
+import { documentChunks, documents } from './document';
+import { files, knowledgeBases } from './file';
 import { generationBatches, generationTopics, generations } from './generation';
 import { messageGroups, messages, messagesFiles } from './message';
-import { chunks, documentChunks, unstructuredChunks } from './rag';
+import { chunks, unstructuredChunks } from './rag';
 import { sessionGroups, sessions } from './session';
 import { threads, topicDocuments, topics } from './topic';
 import { users } from './user';
@@ -27,11 +28,9 @@ export const agentsToSessions = pgTable(
       .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
   },
-  (t) => [
-    primaryKey({ columns: [t.agentId, t.sessionId] }),
-    index('agents_to_sessions_session_id_idx').on(t.sessionId),
-    index('agents_to_sessions_agent_id_idx').on(t.agentId),
-  ],
+  (t) => ({
+    pk: primaryKey({ columns: [t.agentId, t.sessionId] }),
+  }),
 );
 
 export const filesToSessions = pgTable(

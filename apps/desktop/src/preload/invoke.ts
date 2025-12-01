@@ -2,7 +2,7 @@ import { ClientDispatchEventKey, DispatchInvoke } from '@lobechat/electron-clien
 import { ipcRenderer } from 'electron';
 
 /**
- * Client-side method to invoke electron main process
+ * client 端请求 electron main 端方法
  */
 export const invoke: DispatchInvoke = async <T extends ClientDispatchEventKey>(
   event: T,

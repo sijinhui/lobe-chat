@@ -1,5 +1,6 @@
 import { GenerateContentResponse } from '@google/genai';
-import { GroundingSearch } from '@lobechat/types';
+
+import { GroundingSearch } from '@/types/search';
 
 import { nanoid } from '../../utils/uuid';
 import { convertGoogleAIUsage } from '../usageConverters/google-ai';

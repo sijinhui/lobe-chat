@@ -49,11 +49,9 @@ export const convertOpenAIMessages = async (messages: OpenAI.ChatCompletionMessa
       if (msg.tool_call_id !== undefined) result.tool_call_id = msg.tool_call_id;
       if (msg.function_call !== undefined) result.function_call = msg.function_call;
 
-      // it's compatible for DeepSeek & Moonshot
+      // it's compatible for DeepSeek
       if (msg.reasoning_content !== undefined) result.reasoning_content = msg.reasoning_content;
-      // MiniMax uses reasoning_details for historical thinking, so forward it unchanged
-      if (msg.reasoning_details !== undefined) result.reasoning_details = msg.reasoning_details;
-      // TODO：checkout point
+
       return result;
     }),
   )) as OpenAI.ChatCompletionMessageParam[];

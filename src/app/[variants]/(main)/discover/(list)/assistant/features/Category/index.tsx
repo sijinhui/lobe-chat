@@ -16,20 +16,16 @@ import { useCategory } from './useCategory';
 
 const Category = memo(() => {
   const useAssistantCategories = useDiscoverStore((s) => s.useAssistantCategories);
-  const {
-    category = 'all',
-    q,
-    source,
-  } = useQuery() as { category?: AssistantCategory; q?: string; source?: string };
-  const { data: items = [] } = useAssistantCategories({ q, source: source as any });
+  const { category = 'all', q } = useQuery() as { category?: AssistantCategory; q?: string };
+  const { data: items = [] } = useAssistantCategories({ q });
   const navigate = useNavigate();
   const cates = useCategory();
 
   const genUrl = (key: AssistantCategory) =>
     qs.stringifyUrl(
       {
-        query: { category: key === AssistantCategory.All ? null : key, q, source },
-        url: '/discover/assistant',
+        query: { category: key === AssistantCategory.All ? null : key, q },
+        url: '/assistant',
       },
       { skipNull: true },
     );

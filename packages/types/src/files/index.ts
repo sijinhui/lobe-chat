@@ -2,9 +2,7 @@ export enum FilesTabs {
   All = 'all',
   Audios = 'audios',
   Documents = 'documents',
-  Home = 'home',
   Images = 'images',
-  Pages = 'pages',
   Videos = 'videos',
   Websites = 'websites',
 }
@@ -14,7 +12,6 @@ export enum FileSource {
 }
 
 export interface FileItem {
-  content?: string;
   createdAt: Date;
   enabled?: boolean;
   id: string;

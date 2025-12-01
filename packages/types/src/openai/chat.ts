@@ -38,8 +38,8 @@ export type UserMessageContentPart = UserMessageContentPartText | UserMessageCon
 
 export interface OpenAIChatMessage {
   /**
-   * @title Content
-   * @description Message content
+   * @title 内容
+   * @description 消息内容
    */
   content: string | UserMessageContentPart[];
 
@@ -49,8 +49,8 @@ export interface OpenAIChatMessage {
   function_call?: OpenAIFunctionCall;
   name?: string;
   /**
-   * Role
-   * @description Role of the message sender
+   * 角色
+   * @description 消息发送者的角色
    */
   role: LLMRoleType;
   tool_call_id?: string;
@@ -62,36 +62,36 @@ export interface OpenAIChatMessage {
  */
 export interface ChatStreamPayload {
   /**
-   * Whether search is enabled
+   * 是否开启搜索
    */
   enabledSearch?: boolean;
   /**
-   * @title Penalty coefficient in generated text to reduce repetitiveness
+   * @title 控制生成文本中的惩罚系数，用于减少重复性
    * @default 0
    */
   frequency_penalty?: number;
   /**
-   * @title Maximum length of generated text
+   * @title 生成文本的最大长度
    */
   max_tokens?: number;
   /**
-   * @title List of chat messages
+   * @title 聊天信息列表
    */
   messages: OpenAIChatMessage[];
   /**
-   * @title Model name
+   * @title 模型名称
    */
   model: string;
   /**
-   * @title Number of texts to return
+   * @title 返回的文本数量
    */
   n?: number;
   /**
-   * List of enabled plugins
+   * 开启的插件列表
    */
   plugins?: string[];
   /**
-   * @title Penalty coefficient in generated text to reduce topic changes
+   * @title 控制生成文本中的惩罚系数，用于减少主题的变化
    * @default 0
    */
   presence_penalty?: number;
@@ -102,19 +102,19 @@ export interface ChatStreamPayload {
   responseMode?: 'stream' | 'json';
   response_format?: ChatResponseFormat;
   /**
-   * @title Whether to enable streaming requests
+   * @title 是否开启流式请求
    * @default true
    */
   stream?: boolean;
   /**
-   * @title Randomness measure for generated text, used to control creativity and diversity
+   * @title 生成文本的随机度量，用于控制文本的创造性和多样性
    * @default 1
    */
   temperature: number;
   tool_choice?: string;
   tools?: ChatCompletionTool[];
   /**
-   * @title Controls the single token with highest probability in generated text
+   * @title 控制生成文本中最高概率的单个令牌
    * @default 1
    */
   top_p?: number;

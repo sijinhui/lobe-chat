@@ -7,6 +7,7 @@ import { memo } from 'react';
 import { Center } from 'react-layout-kit';
 
 import Avatar from '@/components/Plugins/PluginAvatar';
+import { featureFlagsSelectors, useServerConfigStore } from '@/store/serverConfig';
 import { pluginHelpers, useToolStore } from '@/store/tool';
 import { toolSelectors } from '@/store/tool/selectors';
 
@@ -17,7 +18,8 @@ export interface PluginTagProps {
 }
 
 const PluginTag = memo<PluginTagProps>(({ plugins }) => {
-  const list = useToolStore(toolSelectors.metaList, isEqual);
+  const { showDalle } = useServerConfigStore(featureFlagsSelectors);
+  const list = useToolStore(toolSelectors.metaList(showDalle), isEqual);
 
   const displayPlugin = useToolStore(toolSelectors.getMetaById(plugins[0]), isEqual);
 

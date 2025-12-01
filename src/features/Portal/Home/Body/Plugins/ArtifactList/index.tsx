@@ -8,14 +8,14 @@ import { Center, Flexbox } from 'react-layout-kit';
 import Balancer from 'react-wrap-balancer';
 
 import { useChatStore } from '@/store/chat';
-import { dbMessageSelectors, displayMessageSelectors } from '@/store/chat/selectors';
+import { chatSelectors } from '@/store/chat/selectors';
 
 import ArtifactItem from './Item';
 
 const ArtifactList = () => {
   const { t } = useTranslation('portal');
-  const messages = useChatStore(dbMessageSelectors.dbToolMessages, isEqual);
-  const isCurrentChatLoaded = useChatStore(displayMessageSelectors.isCurrentDisplayChatLoaded);
+  const messages = useChatStore(chatSelectors.currentToolMessages, isEqual);
+  const isCurrentChatLoaded = useChatStore(chatSelectors.isCurrentChatLoaded);
 
   const theme = useTheme();
   return !isCurrentChatLoaded ? (

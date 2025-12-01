@@ -8,24 +8,24 @@ import { createLogger } from '@/utils/logger';
 
 import { ControllerModule, ipcClientEvent } from './index';
 
-// Create logger
+// 创建日志记录器
 const logger = createLogger('controllers:TrayMenuCtr');
 
 export default class TrayMenuCtr extends ControllerModule {
   async toggleMainWindow() {
-    logger.debug('Toggle main window visibility via shortcut');
+    logger.debug('通过快捷键切换主窗口可见性');
     const mainWindow = this.app.browserManager.getMainWindow();
     mainWindow.toggleVisible();
   }
 
   /**
-   * Show tray balloon notification
-   * @param options Balloon options
-   * @returns Operation result
+   * 显示托盘气泡通知
+   * @param options 气泡选项
+   * @returns 操作结果
    */
   @ipcClientEvent('showTrayNotification')
   async showNotification(options: ShowTrayNotificationParams) {
-    logger.debug('Show tray balloon notification');
+    logger.debug('显示托盘气泡通知');
 
     if (process.platform === 'win32') {
       const mainTray = this.app.trayManager.getMainTray();
@@ -42,19 +42,19 @@ export default class TrayMenuCtr extends ControllerModule {
     }
 
     return {
-      error: 'Tray notifications are only supported on Windows platform',
+      error: '托盘通知仅在 Windows 平台支持',
       success: false,
     };
   }
 
   /**
-   * Update tray icon
-   * @param options Icon options
-   * @returns Operation result
+   * 更新托盘图标
+   * @param options 图标选项
+   * @returns 操作结果
    */
   @ipcClientEvent('updateTrayIcon')
   async updateTrayIcon(options: UpdateTrayIconParams) {
-    logger.debug('Update tray icon');
+    logger.debug('更新托盘图标');
 
     if (process.platform === 'win32') {
       const mainTray = this.app.trayManager.getMainTray();
@@ -64,7 +64,7 @@ export default class TrayMenuCtr extends ControllerModule {
           mainTray.updateIcon(options.iconPath);
           return { success: true };
         } catch (error) {
-          logger.error('Failed to update tray icon:', error);
+          logger.error('更新托盘图标失败:', error);
           return {
             error: String(error),
             success: false,
@@ -74,19 +74,19 @@ export default class TrayMenuCtr extends ControllerModule {
     }
 
     return {
-      error: 'Tray functionality is only supported on Windows platform',
+      error: '托盘功能仅在 Windows 平台支持',
       success: false,
     };
   }
 
   /**
-   * Update tray tooltip text
-   * @param options Tooltip text options
-   * @returns Operation result
+   * 更新托盘提示文本
+   * @param options 提示文本选项
+   * @returns 操作结果
    */
   @ipcClientEvent('updateTrayTooltip')
   async updateTrayTooltip(options: UpdateTrayTooltipParams) {
-    logger.debug('Update tray tooltip text');
+    logger.debug('更新托盘提示文本');
 
     if (process.platform === 'win32') {
       const mainTray = this.app.trayManager.getMainTray();
@@ -98,7 +98,7 @@ export default class TrayMenuCtr extends ControllerModule {
     }
 
     return {
-      error: 'Tray functionality is only supported on Windows platform',
+      error: '托盘功能仅在 Windows 平台支持',
       success: false,
     };
   }

@@ -7,11 +7,6 @@ export interface SessionState {
    */
   activeId: string;
   defaultSessions: LobeSessions;
-  /**
-   * @title Whether the agent panel is pinned
-   * @description Controls the agent panel pinning state in the UI layout
-   */
-  isAgentPinned: boolean;
   isSearching: boolean;
   isSessionsFirstFetchFinished: boolean;
   pinnedSessions: LobeSessions;
@@ -27,7 +22,6 @@ export interface SessionState {
 export const initialSessionState: SessionState = {
   activeId: 'inbox',
   defaultSessions: [],
-  isAgentPinned: false,
   isSearching: false,
   isSessionsFirstFetchFinished: false,
   pinnedSessions: [],

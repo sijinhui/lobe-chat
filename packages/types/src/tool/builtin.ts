@@ -115,7 +115,7 @@ export const LobeBuiltinToolSchema = z.object({
   type: z.literal('builtin'),
 });
 
-export interface BuiltinRenderProps<Arguments = any, State = any, Content = any> {
+export interface BuiltinRenderProps<Content = any, Arguments = any, State = any> {
   apiName?: string;
   args: Arguments;
   content: Content;
@@ -125,9 +125,7 @@ export interface BuiltinRenderProps<Arguments = any, State = any, Content = any>
   pluginState?: State;
 }
 
-export type BuiltinRender = <A = any, S = any, C = any>(
-  props: BuiltinRenderProps<A, S, C>,
-) => ReactNode;
+export type BuiltinRender = <T = any>(props: BuiltinRenderProps<T>) => ReactNode;
 
 export interface BuiltinPortalProps<Arguments = Record<string, any>, State = any> {
   apiName?: string;
@@ -139,9 +137,9 @@ export interface BuiltinPortalProps<Arguments = Record<string, any>, State = any
 
 export type BuiltinPortal = <T = any>(props: BuiltinPortalProps<T>) => ReactNode;
 
-export interface BuiltinPlaceholderProps<T extends Record<string, any> = any> {
+export interface BuiltinPlaceholderProps {
   apiName: string;
-  args?: T;
+  args?: Record<string, any>;
   identifier: string;
 }
 
@@ -153,12 +151,3 @@ export interface BuiltinServerRuntimeOutput {
   state?: any;
   success: boolean;
 }
-
-export interface BuiltinInterventionProps<Arguments = any> {
-  apiName?: string;
-  args: Arguments;
-  identifier?: string;
-  messageId: string;
-}
-
-export type BuiltinIntervention = (props: BuiltinInterventionProps) => ReactNode;

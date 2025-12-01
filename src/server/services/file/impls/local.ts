@@ -1,4 +1,3 @@
-import debug from 'debug';
 import { sha256 } from 'js-sha256';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -8,8 +7,6 @@ import { inferContentTypeFromImageUrl } from '@/utils/url';
 
 import { FileServiceImpl } from './type';
 import { extractKeyFromUrlOrReturnOriginal } from './utils';
-
-const log = debug('lobe-file:desktop-local');
 
 /**
  * 桌面应用本地文件服务实现
@@ -205,7 +202,7 @@ export class DesktopLocalFileImpl implements FileServiceImpl {
         throw new Error('Failed to upload file via Electron IPC');
       }
 
-      log('File uploaded successfully: %O', result.metadata);
+      console.log('[DesktopLocalFileImpl] File uploaded successfully:', result.metadata);
       return { key: result.metadata.path };
     } catch (error) {
       console.error('[DesktopLocalFileImpl] Failed to upload media file:', error);

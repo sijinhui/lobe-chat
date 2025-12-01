@@ -6,14 +6,14 @@ import { UserSettings } from './user/settings';
 // ---------- TODO: this file need to be deleted in V2 ---------- //
 
 /**
- * Export type
+ * 导出方式
  * @enum ['agents', 'sessions', 'singleSession', 'settings', 'all']
  * @enumNames ['agents', 'sessions', 'singleSession', 'settings', 'all']
  */
 export type ExportType = 'agents' | 'sessions' | 'singleSession' | 'settings' | 'all';
 
 /**
- * Config model map
+ * 配置模型映射
  */
 export interface ConfigModelMap {
   agents: {
@@ -38,10 +38,10 @@ export interface ConfigModelMap {
   };
 }
 
-// =============   Config Data Structures   ============= //
+// =============   配置数据结构   ============= //
 
 /**
- * Config state: Sessions
+ * 配置状态：会话
  */
 export interface ConfigStateSessions {
   messages: UIChatMessage[];
@@ -51,7 +51,7 @@ export interface ConfigStateSessions {
 }
 
 /**
- * Config state: Single session
+ * 配置状态：单个会话
  */
 export interface ConfigStateSingleSession {
   messages: UIChatMessage[];
@@ -60,7 +60,7 @@ export interface ConfigStateSingleSession {
 }
 
 /**
- * Config state: Agents
+ * 配置状态：角色
  */
 export interface ConfigStateAgents {
   sessionGroups: SessionGroupItem[];
@@ -68,21 +68,21 @@ export interface ConfigStateAgents {
 }
 
 /**
- * Config state: Settings
+ * 配置状态：设置
  */
 export interface ConfigStateSettings {
   settings: UserSettings;
 }
 
 /**
- * Config state: All
+ * 配置状态：全部
  */
 export interface ConfigStateAll extends ConfigStateSessions, ConfigStateSettings {}
 
-// =============   Config File Types   ============= //
+// =============   配置文件类型   ============= //
 
 /**
- * Config file: Settings
+ * 配置文件：设置
  */
 export interface ConfigFileSettings {
   exportType: 'settings';
@@ -91,7 +91,7 @@ export interface ConfigFileSettings {
 }
 
 /**
- * Config file: Sessions
+ * 配置文件：会话
  */
 export interface ConfigFileSessions {
   exportType: 'sessions';
@@ -100,7 +100,7 @@ export interface ConfigFileSessions {
 }
 
 /**
- * Config file: Single session
+ * 配置文件：单个会话
  */
 export interface ConfigFileSingleSession {
   exportType: 'sessions';
@@ -109,7 +109,7 @@ export interface ConfigFileSingleSession {
 }
 
 /**
- * Config file: Agents
+ * 配置文件：角色
  */
 export interface ConfigFileAgents {
   exportType: 'agents';
@@ -118,7 +118,7 @@ export interface ConfigFileAgents {
 }
 
 /**
- * Config file: All
+ * 配置文件：全部
  */
 export interface ConfigFileAll {
   exportType: 'all';
@@ -127,6 +127,6 @@ export interface ConfigFileAll {
 }
 
 /**
- * Config file
+ * 配置文件
  */
 export type ConfigFile = ConfigFileSettings | ConfigFileSessions | ConfigFileAll | ConfigFileAgents;

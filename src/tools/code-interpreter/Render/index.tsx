@@ -17,7 +17,7 @@ import { chatToolSelectors } from '@/store/chat/slices/builtinTool/selectors';
 import ResultFileGallery from './components/ResultFileGallery';
 
 const CodeInterpreter = memo<
-  BuiltinRenderProps<CodeInterpreterParams, CodeInterpreterState, CodeInterpreterResponse>
+  BuiltinRenderProps<CodeInterpreterResponse, CodeInterpreterParams, CodeInterpreterState>
 >(({ content, args, pluginState, messageId, apiName }) => {
   const { t } = useTranslation('tool');
   const theme = useTheme();

@@ -12,7 +12,7 @@ export const parseFilesConfig = (envString: string = ''): SystemEmbeddingConfig 
   if (!envString) return DEFAULT_FILES_CONFIG;
   const config: FilesConfig = {} as any;
 
-  // Handle full-width commas and extra spaces
+  // 处理全角逗号和多余空格
   let envValue = envString.replaceAll('，', ',').trim();
 
   const pairs = envValue.split(',');

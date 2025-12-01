@@ -15,9 +15,9 @@ export interface ServerModelProviderConfig {
   enabledModels?: string[];
   fetchOnClient?: boolean;
   /**
-   * the model lists defined in server
+   * the model cards defined in server
    */
-  serverModelLists?: ChatModelCard[];
+  serverModelCards?: ChatModelCard[];
 }
 
 export type ServerLanguageModel = Partial<Record<GlobalLLMProviderKey, ServerModelProviderConfig>>;
@@ -32,6 +32,10 @@ export interface GlobalServerConfig {
    */
   enabledOAuthSSO?: boolean;
   image?: PartialDeep<UserImageConfig>;
+  /**
+   * @deprecated
+   */
+  languageModel?: ServerLanguageModel;
   oAuthSSOProviders?: string[];
   systemAgent?: PartialDeep<UserSystemAgentConfig>;
   telemetry: {

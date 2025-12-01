@@ -32,7 +32,6 @@ coverage:
       app:
         flags:
           - app
-      threshold: 0.5
     patch: off
 
 

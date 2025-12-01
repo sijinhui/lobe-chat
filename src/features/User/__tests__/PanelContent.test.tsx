@@ -1,6 +1,5 @@
 import { act, render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { useUserStore } from '@/store/user';
 
@@ -67,32 +66,18 @@ vi.mock('@/const/version', () => ({
   isDesktop: false,
 }));
 
-// Use vi.hoisted to ensure variables exist before vi.mock factory executes
-const { enableAuth, enableClerk, enableNextAuth } = vi.hoisted(() => ({
-  enableAuth: { value: true },
-  enableClerk: { value: false },
-  enableNextAuth: { value: false },
-}));
+// 定义一个变量来存储 enableAuth 的值
+let enableAuth = true;
 
+// 模拟 @/const/auth 模块
 vi.mock('@/const/auth', () => ({
   get enableAuth() {
-    return enableAuth.value;
-  },
-  get enableClerk() {
-    return enableClerk.value;
-  },
-  get enableNextAuth() {
-    return enableNextAuth.value;
+    return enableAuth;
   },
 }));
 
 describe('PanelContent', () => {
   const closePopover = vi.fn();
-
-  // Helper function to render component with Router provider
-  const renderWithRouter = (ui: React.ReactElement) => {
-    return render(<MemoryRouter>{ui}</MemoryRouter>);
-  };
 
   describe('enable auth', () => {
     it('should render UserInfo when user is signed in', () => {
@@ -100,7 +85,7 @@ describe('PanelContent', () => {
         useUserStore.setState({ isSignedIn: true });
       });
 
-      renderWithRouter(<PanelContent closePopover={closePopover} />);
+      render(<PanelContent closePopover={closePopover} />);
 
       expect(screen.getByText('Mocked UserInfo')).toBeInTheDocument();
       expect(screen.getByText('Mocked DataStatistics')).toBeInTheDocument();
@@ -112,7 +97,7 @@ describe('PanelContent', () => {
         useUserStore.setState({ isSignedIn: false });
       });
 
-      renderWithRouter(<PanelContent closePopover={closePopover} />);
+      render(<PanelContent closePopover={closePopover} />);
 
       expect(screen.getByText('Mocked SignInBlock')).toBeInTheDocument();
       expect(screen.queryByText('Mocked DataStatistics')).not.toBeInTheDocument();
@@ -124,7 +109,7 @@ describe('PanelContent', () => {
         useUserStore.setState({ isSignedIn: true });
       });
 
-      renderWithRouter(<PanelContent closePopover={closePopover} />);
+      render(<PanelContent closePopover={closePopover} />);
 
       expect(screen.getAllByText('Mocked Menu').length).toBe(2);
     });
@@ -134,7 +119,7 @@ describe('PanelContent', () => {
         useUserStore.setState({ isSignedIn: false });
       });
 
-      renderWithRouter(<PanelContent closePopover={closePopover} />);
+      render(<PanelContent closePopover={closePopover} />);
 
       expect(screen.getByText('Mocked BrandWatermark')).toBeInTheDocument();
     });
@@ -146,7 +131,7 @@ describe('PanelContent', () => {
         useUserStore.setState({ isSignedIn: true });
       });
 
-      renderWithRouter(<PanelContent closePopover={closePopover} />);
+      render(<PanelContent closePopover={closePopover} />);
 
       expect(screen.getByText('Mocked UserInfo')).toBeInTheDocument();
       expect(screen.getByText('Mocked DataStatistics')).toBeInTheDocument();
@@ -154,20 +139,20 @@ describe('PanelContent', () => {
     });
 
     it('should render BrandWatermark when disable auth', () => {
-      enableAuth.value = false;
+      enableAuth = false;
 
       act(() => {
         useUserStore.setState({ isSignedIn: false });
       });
 
-      renderWithRouter(<PanelContent closePopover={closePopover} />);
+      render(<PanelContent closePopover={closePopover} />);
 
       expect(screen.getByText('Mocked BrandWatermark')).toBeInTheDocument();
     });
   });
 
   it('should render Menu with main items', () => {
-    renderWithRouter(<PanelContent closePopover={closePopover} />);
+    render(<PanelContent closePopover={closePopover} />);
 
     expect(screen.getByText('Mocked Menu')).toBeInTheDocument();
   });

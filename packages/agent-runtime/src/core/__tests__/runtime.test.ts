@@ -1,4 +1,3 @@
-import { ChatToolPayload } from '@lobechat/types';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -118,12 +117,13 @@ describe('AgentRuntime', () => {
       const runtime = new AgentRuntime(agent);
       const state = AgentRuntime.createInitialState({ sessionId: 'test-session' });
 
-      const toolCall = {
+      const toolCall: ToolsCalling = {
         id: 'call_123',
-        apiName: 'test_tool',
-        identifier: 'test_tool',
-        arguments: '{"input": "test"}',
-        type: 'default' as const,
+        type: 'function',
+        function: {
+          name: 'test_tool',
+          arguments: '{"input": "test"}',
+        },
       };
 
       const result = await runtime.approveToolCall(state, toolCall);
@@ -288,12 +288,13 @@ describe('AgentRuntime', () => {
         const runtime = new AgentRuntime(agent);
         const state = AgentRuntime.createInitialState({ sessionId: 'test-session' });
 
-        const toolCall = {
+        const toolCall: ToolsCalling = {
           id: 'call_123',
-          apiName: 'calculator',
-          identifier: 'calculator',
-          arguments: '{"expression": "2+2"}',
-          type: 'default' as const,
+          type: 'function',
+          function: {
+            name: 'calculator',
+            arguments: '{"expression": "2+2"}',
+          },
         };
 
         const result = await runtime.approveToolCall(state, toolCall);
@@ -319,12 +320,13 @@ describe('AgentRuntime', () => {
         const runtime = new AgentRuntime(agent);
         const state = AgentRuntime.createInitialState({ sessionId: 'test-session' });
 
-        const toolCall = {
+        const toolCall: ToolsCalling = {
           id: 'call_123',
-          apiName: 'unknown_tool',
-          identifier: 'unknown_tool',
-          arguments: '{}',
-          type: 'default' as const,
+          type: 'function',
+          function: {
+            name: 'unknown_tool',
+            arguments: '{}',
+          },
         };
 
         const result = await runtime.approveToolCall(state, toolCall);
@@ -345,11 +347,9 @@ describe('AgentRuntime', () => {
             type: 'request_human_approve',
             pendingToolsCalling: [
               {
-                apiName: 'test_tool',
-                arguments: '{}',
                 id: 'call_123',
-                identifier: 'test_tool',
-                type: 'default',
+                type: 'function',
+                function: { name: 'test_tool', arguments: '{}' },
               },
             ],
           }),
@@ -360,10 +360,13 @@ describe('AgentRuntime', () => {
 
         const result = await runtime.step(state);
 
-        expect(result.events).toHaveLength(1);
+        expect(result.events).toHaveLength(2);
         expect(result.events[0]).toMatchObject({
           type: 'human_approve_required',
           sessionId: 'test-session',
+        });
+        expect(result.events[1]).toMatchObject({
+          type: 'tool_pending',
         });
 
         expect(result.newState.status).toBe('waiting_for_human');
@@ -947,29 +950,12 @@ describe('AgentRuntime', () => {
             case 'llm_result':
               const llmPayload = context.payload as { result: any; hasToolCalls: boolean };
               if (llmPayload.hasToolCalls) {
-                // Convert OpenAI format tool_calls to ChatToolPayload format
-                const pendingToolsCalling = llmPayload.result.tool_calls.map((tc: any) => ({
-                  apiName: tc.function.name,
-                  arguments: tc.function.arguments,
-                  id: tc.id,
-                  identifier: tc.function.name,
-                  type: 'default' as const,
-                }));
                 return Promise.resolve({
-                  pendingToolsCalling,
                   type: 'request_human_approve',
+                  pendingToolsCalling: llmPayload.result.tool_calls,
                 });
               }
               return Promise.resolve({ type: 'finish', reason: 'completed', reasonDetail: 'Done' });
-            case 'human_approved_tool':
-              const approvedPayload = context.payload as { approvedToolCall: ChatToolPayload };
-              return Promise.resolve({
-                payload: {
-                  parentMessageId: 'user-msg-id',
-                  toolCalling: approvedPayload.approvedToolCall,
-                },
-                type: 'call_tool',
-              });
             case 'tool_result':
               return Promise.resolve({ type: 'call_llm', payload: { messages: state.messages } });
             default:
@@ -1036,14 +1022,7 @@ describe('AgentRuntime', () => {
       expect(result.newState.pendingToolsCalling).toHaveLength(1);
 
       // Step 2: Approve and execute tool call
-      const pendingToolCall = result.newState.pendingToolsCalling![0];
-      const toolCall = {
-        apiName: pendingToolCall.apiName,
-        arguments: pendingToolCall.arguments,
-        id: pendingToolCall.id,
-        identifier: pendingToolCall.identifier,
-        type: 'default' as const,
-      };
+      const toolCall = result.newState.pendingToolsCalling![0];
       result = await runtime.approveToolCall(result.newState, toolCall);
 
       // Should have executed tool
@@ -1142,27 +1121,17 @@ describe('AgentRuntime', () => {
             return [
               {
                 payload: {
-                  parentMessageId: 'user-msg-id',
-                  toolCalling: {
-                    id: 'call_1',
-                    type: 'default' as const,
-                    apiName: 'tool_1',
-                    identifier: 'tool_1',
-                    arguments: '{}',
-                  },
+                  id: 'call_1',
+                  type: 'function' as const,
+                  function: { name: 'tool_1', arguments: '{}' },
                 },
                 type: 'call_tool' as const,
               },
               {
                 payload: {
-                  parentMessageId: 'user-msg-id',
-                  toolCalling: {
-                    id: 'call_2',
-                    type: 'default' as const,
-                    apiName: 'tool_2',
-                    identifier: 'tool_2',
-                    arguments: '{}',
-                  },
+                  id: 'call_2',
+                  type: 'function' as const,
+                  function: { name: 'tool_2', arguments: '{}' },
                 },
                 type: 'call_tool' as const,
               },
@@ -1206,25 +1175,18 @@ describe('AgentRuntime', () => {
             return [
               {
                 payload: {
-                  parentMessageId: 'user-msg-id',
-                  toolCalling: {
-                    id: 'call_safe',
-                    type: 'default' as const,
-                    apiName: 'safe_tool',
-                    identifier: 'safe_tool',
-                    arguments: '{}',
-                  },
+                  id: 'call_safe',
+                  type: 'function' as const,
+                  function: { name: 'safe_tool', arguments: '{}' },
                 },
                 type: 'call_tool' as const,
               },
               {
                 pendingToolsCalling: [
                   {
-                    apiName: 'danger_tool',
-                    arguments: '{}',
                     id: 'call_danger',
-                    identifier: 'danger_tool',
-                    type: 'default' as const,
+                    type: 'function' as const,
+                    function: { name: 'danger_tool', arguments: '{}' },
                   },
                 ],
                 type: 'request_human_approve' as const,
@@ -1252,7 +1214,7 @@ describe('AgentRuntime', () => {
 
       // Should have pending tool calls
       expect(result.newState.pendingToolsCalling).toHaveLength(1);
-      expect(result.newState.pendingToolsCalling![0].apiName).toBe('danger_tool');
+      expect(result.newState.pendingToolsCalling![0].function.name).toBe('danger_tool');
 
       // Should have both tool_result and human_approve_required events
       expect(result.events).toContainEqual(expect.objectContaining({ type: 'tool_result' }));
@@ -1290,25 +1252,18 @@ describe('AgentRuntime', () => {
         async runner(context: AgentRuntimeContext, _state: AgentState) {
           if (context.phase === 'user_input') {
             return {
-              payload: {
-                parentMessageId: 'user-msg-id',
-                toolsCalling: [
-                  {
-                    id: 'call_expensive',
-                    type: 'default' as const,
-                    apiName: 'expensive_tool',
-                    identifier: 'expensive_tool',
-                    arguments: '{}',
-                  },
-                  {
-                    id: 'call_cheap',
-                    type: 'default' as const,
-                    apiName: 'cheap_tool',
-                    identifier: 'cheap_tool',
-                    arguments: '{}',
-                  },
-                ],
-              },
+              payload: [
+                {
+                  id: 'call_expensive',
+                  type: 'function' as const,
+                  function: { name: 'expensive_tool', arguments: '{}' },
+                },
+                {
+                  id: 'call_cheap',
+                  type: 'function' as const,
+                  function: { name: 'cheap_tool', arguments: '{}' },
+                },
+              ],
               type: 'call_tools_batch' as const,
             };
           }
@@ -1425,14 +1380,11 @@ describe('AgentRuntime', () => {
           if (context.phase === 'user_input') {
             return {
               payload: {
-                parentMessageId: 'user-msg-id',
-                toolCalling: {
-                  apiName: 'expensive_tool',
-                  arguments: '{}',
-                  id: 'call_1',
-                  identifier: 'expensive_tool',
-                  type: 'default' as const,
-                },
+                apiName: 'expensive_tool',
+                arguments: '{}',
+                id: 'call_1',
+                identifier: 'expensive_tool',
+                type: 'default' as const,
               },
               type: 'call_tool' as const,
             };
@@ -1506,25 +1458,22 @@ describe('AgentRuntime', () => {
         async runner(context: AgentRuntimeContext, _state: AgentState) {
           if (context.phase === 'user_input') {
             return {
-              payload: {
-                parentMessageId: 'user-msg-id',
-                toolsCalling: [
-                  {
-                    apiName: 'tool_1',
-                    arguments: '{}',
-                    id: 'call_1',
-                    identifier: 'tool_1',
-                    type: 'default' as const,
-                  },
-                  {
-                    apiName: 'tool_2',
-                    arguments: '{}',
-                    id: 'call_2',
-                    identifier: 'tool_2',
-                    type: 'default' as const,
-                  },
-                ],
-              },
+              payload: [
+                {
+                  apiName: 'tool_1',
+                  arguments: '{}',
+                  id: 'call_1',
+                  identifier: 'tool_1',
+                  type: 'default' as const,
+                },
+                {
+                  apiName: 'tool_2',
+                  arguments: '{}',
+                  id: 'call_2',
+                  identifier: 'tool_2',
+                  type: 'default' as const,
+                },
+              ],
               type: 'call_tools_batch' as const,
             };
           }
@@ -1586,25 +1535,22 @@ describe('AgentRuntime', () => {
         async runner(context: AgentRuntimeContext, _state: AgentState) {
           if (context.phase === 'user_input') {
             return {
-              payload: {
-                parentMessageId: 'user-msg-id',
-                toolsCalling: [
-                  {
-                    apiName: 'analytics_tool',
-                    arguments: '{}',
-                    id: 'call_analytics',
-                    identifier: 'analytics_tool',
-                    type: 'default' as const,
-                  },
-                  {
-                    apiName: 'logging_tool',
-                    arguments: '{}',
-                    id: 'call_logging',
-                    identifier: 'logging_tool',
-                    type: 'default' as const,
-                  },
-                ],
-              },
+              payload: [
+                {
+                  apiName: 'analytics_tool',
+                  arguments: '{}',
+                  id: 'call_analytics',
+                  identifier: 'analytics_tool',
+                  type: 'default' as const,
+                },
+                {
+                  apiName: 'logging_tool',
+                  arguments: '{}',
+                  id: 'call_logging',
+                  identifier: 'logging_tool',
+                  type: 'default' as const,
+                },
+              ],
               type: 'call_tools_batch' as const,
             };
           }

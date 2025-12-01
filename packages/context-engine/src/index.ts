@@ -10,7 +10,12 @@ export type { ContextEngineConfig } from './pipeline';
 export { ContextEngine } from './pipeline';
 
 // Context Providers
-export * from './providers';
+export {
+  HistorySummaryProvider,
+  InboxGuideProvider,
+  SystemRoleInjector,
+  ToolSystemRoleProvider,
+} from './providers';
 
 // Processors
 export {

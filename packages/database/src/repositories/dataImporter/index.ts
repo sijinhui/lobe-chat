@@ -1,6 +1,7 @@
-import type { ImportPgDataStructure, ImportResultData, ImporterEntryData } from '@lobechat/types';
 import { and, eq, inArray } from 'drizzle-orm';
 
+import { ImportPgDataStructure } from '@/types/export';
+import { ImportResultData, ImporterEntryData } from '@/types/importer';
 import { uuid } from '@/utils/uuid';
 
 import * as EXPORT_TABLES from '../../schemas';
@@ -17,39 +18,39 @@ interface ImportResult {
 type ConflictStrategy = 'skip' | 'override' | 'merge';
 
 interface TableImportConfig {
-  // Conflict resolution strategy
+  // 冲突处理策略
   conflictStrategy?: ConflictStrategy;
-  // Field processing functions
+  // 字段处理函数
   fieldProcessors?: {
     [field: string]: (value: any) => any;
   };
-  // Whether to use composite key (no separate id field)
+  // 是否使用复合主键（没有单独的id字段）
   isCompositeKey?: boolean;
-  // Whether to preserve original ID
+  // 是否保留原始ID
   preserveId?: boolean;
-  // Relation field definitions
+  // 关系字段定义
   relations?: {
     field: string;
     sourceField?: string;
     sourceTable: string;
   }[];
-  // Self-reference fields
+  // 自引用字段
   selfReferences?: {
     field: string;
     sourceField?: string;
   }[];
-  // Table name
+  // 表名
   table: string;
-  // Unique constraint fields
+  // 唯一约束字段
   uniqueConstraints?: string[];
 }
 
-// Import table configuration
+// 导入表配置
 const IMPORT_TABLE_CONFIG: TableImportConfig[] = [
   {
     conflictStrategy: 'merge',
     preserveId: true,
-    // Special table, ID same as user ID
+    // 特殊表，ID与用户ID相同
     table: 'userSettings',
     uniqueConstraints: ['id'],
   },
@@ -67,7 +68,7 @@ const IMPORT_TABLE_CONFIG: TableImportConfig[] = [
   },
   {
     conflictStrategy: 'skip',
-    preserveId: true, // Need to preserve original ID
+    preserveId: true, // 需要保留原始ID
     relations: [
       {
         field: 'providerId',
@@ -89,7 +90,7 @@ const IMPORT_TABLE_CONFIG: TableImportConfig[] = [
     uniqueConstraints: ['slug'],
   },
   {
-    // Special processing for slug field
+    // 对slug字段进行特殊处理
     fieldProcessors: {
       slug: (value) => `${value}-${uuid().slice(0, 8)}`,
     },
@@ -113,7 +114,7 @@ const IMPORT_TABLE_CONFIG: TableImportConfig[] = [
   },
   {
     conflictStrategy: 'skip',
-    isCompositeKey: true, // Uses composite primary key [agentId, sessionId]
+    isCompositeKey: true, // 使用复合主键 [agentId, sessionId]
     relations: [
       {
         field: 'agentId',
@@ -172,7 +173,7 @@ const IMPORT_TABLE_CONFIG: TableImportConfig[] = [
   },
   {
     conflictStrategy: 'skip',
-    preserveId: true, // Uses message ID as primary key
+    preserveId: true, // 使用消息ID作为主键
     relations: [
       {
         field: 'id',
@@ -182,7 +183,7 @@ const IMPORT_TABLE_CONFIG: TableImportConfig[] = [
     table: 'messagePlugins',
   },
   {
-    isCompositeKey: true, // Uses composite primary key [messageId, chunkId]
+    isCompositeKey: true, // 使用复合主键 [messageId, chunkId]
     relations: [
       {
         field: 'messageId',
@@ -196,7 +197,7 @@ const IMPORT_TABLE_CONFIG: TableImportConfig[] = [
     table: 'messageChunks',
   },
   {
-    isCompositeKey: true, // Uses composite primary key [id, queryId, chunkId]
+    isCompositeKey: true, // 使用复合主键 [id, queryId, chunkId]
     relations: [
       {
         field: 'id',
@@ -228,7 +229,7 @@ const IMPORT_TABLE_CONFIG: TableImportConfig[] = [
   // },
   {
     conflictStrategy: 'skip',
-    preserveId: true, // Uses message ID as primary key
+    preserveId: true, // 使用消息ID作为主键
     relations: [
       {
         field: 'id',
@@ -239,7 +240,7 @@ const IMPORT_TABLE_CONFIG: TableImportConfig[] = [
   },
   // {
   //   conflictStrategy: 'skip',
-  //   preserveId: true, // Uses message ID as primary key
+  //   preserveId: true, // 使用消息ID作为主键
   //   relations: [
   //     {
   //       field: 'id',
@@ -273,7 +274,7 @@ export class DataImporterRepos {
   };
 
   /**
-   * Import PostgreSQL data
+   * 导入PostgreSQL数据
    */
   async importPgData(
     dbData: ImportPgDataStructure,
@@ -282,13 +283,13 @@ export class DataImporterRepos {
     const results: Record<string, ImportResult> = {};
     const { data } = dbData;
 
-    // Initialize ID mapping table and conflict records
+    // 初始化ID映射表和冲突记录
     this.idMaps = {};
     this.conflictRecords = {};
 
     try {
       await this.db.transaction(async (trx) => {
-        // Import tables in configuration order
+        // 按配置顺序导入表
         for (const config of IMPORT_TABLE_CONFIG) {
           const { table: tableName } = config;
 
@@ -299,7 +300,7 @@ export class DataImporterRepos {
             continue;
           }
 
-          // Use unified import method
+          // 使用统一的导入方法
           const result = await this.importTableData(trx, config, tableData, conflictStrategy);
           console.log(`imported table: ${tableName}, records: ${tableData.length}`);
 
@@ -325,11 +326,11 @@ export class DataImporterRepos {
   }
 
   /**
-   * Extract detailed information from error
+   * 从错误中提取详细信息
    */
   private extractErrorDetails(error: any) {
     if (error.code === '23505') {
-      // PostgreSQL unique constraint error code
+      // PostgreSQL 唯一约束错误码
       const match = error.detail?.match(/Key \((.+?)\)=\((.+?)\) already exists/);
       if (match) {
         return {
@@ -344,7 +345,7 @@ export class DataImporterRepos {
   }
 
   /**
-   * Unified table data import function - Handles all types of tables
+   * 统一的表数据导入函数 - 处理所有类型的表
    */
   private async importTableData(
     trx: any,
@@ -368,13 +369,13 @@ export class DataImporterRepos {
     const table = EXPORT_TABLES[tableName];
     const result: ImportResult = { added: 0, errors: 0, skips: 0, updated: 0 };
 
-    // Initialize ID mapping for this table
+    // 初始化该表的ID映射
     if (!this.idMaps[tableName]) {
       this.idMaps[tableName] = {};
     }
 
     try {
-      // 1. Find existing records (based on clientId and userId)
+      // 1. 查找已存在的记录（基于clientId和userId）
       let existingRecords: any[] = [];
 
       if ('clientId' in table && 'userId' in table) {
@@ -387,7 +388,7 @@ export class DataImporterRepos {
         }
       }
 
-      // If need to preserve original ID, also check if ID already exists
+      // 如果需要保留原始ID，还需要检查ID是否已存在
       if (preserveId && !isCompositeKey) {
         const ids = tableData.map((item) => item.id).filter(Boolean);
         if (ids.length > 0) {
@@ -395,7 +396,7 @@ export class DataImporterRepos {
             where: inArray(table.id, ids),
           });
 
-          // Merge into existing records set
+          // 合并到已存在记录集合中
           existingRecords = [
             ...existingRecords,
             ...idExistingRecords.filter(
@@ -407,28 +408,28 @@ export class DataImporterRepos {
 
       result.skips = existingRecords.length;
 
-      // 2. Establish ID mapping for existing records
+      // 2. 为已存在的记录建立ID映射
       for (const record of existingRecords) {
-        // Only non-composite key tables need ID mapping
+        // 只有非复合主键表才需要ID映射
         if (!isCompositeKey) {
           this.idMaps[tableName][record.id] = record.id;
           if (record.clientId) {
             this.idMaps[tableName][record.clientId] = record.id;
           }
 
-          // Any other ID identifiers that may be used in records
+          // 记录中可能使用的任何其他ID标识符
           const originalRecord = tableData.find(
             (item) => item.id === record.id || item.clientId === record.clientId,
           );
 
           if (originalRecord) {
-            // Ensure original record ID also maps to database record ID
+            // 确保原始记录ID也映射到数据库记录ID
             this.idMaps[tableName][originalRecord.id] = record.id;
           }
         }
       }
 
-      // 3. Filter out records that need to be inserted
+      // 3. 筛选出需要插入的记录
       const recordsToInsert = tableData.filter(
         (item) =>
           !existingRecords.some(
@@ -442,22 +443,22 @@ export class DataImporterRepos {
         return result;
       }
 
-      // 4. Prepare import data
+      // 4. 准备导入数据
       const preparedData = recordsToInsert.map((item) => {
         const originalId = item.id;
 
-        // Process date fields
+        // 处理日期字段
         const dateFields: any = {};
         if (item.createdAt) dateFields.createdAt = new Date(item.createdAt);
         if (item.updatedAt) dateFields.updatedAt = new Date(item.updatedAt);
         if (item.accessedAt) dateFields.accessedAt = new Date(item.accessedAt);
 
-        // Create new record object
+        // 创建新记录对象
         let newRecord: any = {};
 
-        // Decide how to process based on whether it's composite key and whether to preserve ID
+        // 根据是否复合主键和是否保留ID决定如何处理
         if (isCompositeKey) {
-          // For composite key tables, don't include id field
+          // 对于复合主键表，不包含id字段
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { id: _, ...rest } = item;
           newRecord = {
@@ -467,7 +468,7 @@ export class DataImporterRepos {
             userId: this.userId,
           };
         } else {
-          // Non-composite key table processing
+          // 非复合主键表处理
           newRecord = {
             ...(preserveId ? item : { ...item, id: undefined }),
             ...dateFields,
@@ -476,19 +477,19 @@ export class DataImporterRepos {
           };
         }
 
-        // Apply field processors
+        // 应用字段处理器
         for (const field in fieldProcessors) {
           if (newRecord[field] !== undefined) {
             newRecord[field] = fieldProcessors[field](newRecord[field]);
           }
         }
 
-        // Special table processing
+        // 特殊表处理
         if (tableName === 'userSettings') {
           newRecord.id = this.userId;
         }
 
-        // Process relation fields (foreign key references)
+        // 处理关系字段（外键引用）
         for (const relation of relations) {
           const { field, sourceTable } = relation;
 
@@ -498,7 +499,7 @@ export class DataImporterRepos {
             if (mappedId) {
               newRecord[field] = mappedId;
             } else {
-              // Cannot find mapping, set to null
+              // 找不到映射，设为null
               console.warn(
                 `Could not find mapped ID for ${field}=${newRecord[field]} in table ${sourceTable}`,
               );
@@ -507,7 +508,7 @@ export class DataImporterRepos {
           }
         }
 
-        // Simplified processing of self-reference fields - directly set to null
+        // 简化处理自引用字段 - 直接设为null
         for (const selfRef of selfReferences) {
           const { field } = selfRef;
           if (newRecord[field] !== undefined) {
@@ -518,15 +519,15 @@ export class DataImporterRepos {
         return { newRecord, originalId };
       });
 
-      // 5. Check unique constraints and apply conflict strategy
+      // 5. 检查唯一约束并应用冲突策略
       for (const record of preparedData) {
         if (isCompositeKey && uniqueConstraints.length > 0) {
-          // For composite key tables, treat all unique constraint fields as a combined condition
+          // 对于复合主键表，将所有唯一约束字段作为一个组合条件
           const whereConditions = uniqueConstraints
             .filter((field) => record.newRecord[field] !== undefined)
             .map((field) => eq(table[field], record.newRecord[field]));
 
-          // Add userId condition (if table has userId field)
+          // 添加userId条件（如果表有userId字段）
           if ('userId' in table) {
             whereConditions.push(eq(table.userId, this.userId));
           }
@@ -537,7 +538,7 @@ export class DataImporterRepos {
             });
 
             if (exists) {
-              // Record conflict
+              // 记录冲突
               if (!this.conflictRecords[tableName]) this.conflictRecords[tableName] = [];
               this.conflictRecords[tableName].push({
                 field: uniqueConstraints.join(','),
@@ -546,13 +547,13 @@ export class DataImporterRepos {
                   .join(','),
               });
 
-              // Apply conflict strategy
+              // 应用冲突策略
               switch (conflictStrategy) {
                 case 'skip': {
                   record.newRecord._skip = true;
                   result.skips++;
 
-                  // Key improvement: establish ID mapping even if skipped
+                  // 关键改进：即使跳过，也建立ID映射关系
                   if (!isCompositeKey) {
                     this.idMaps[tableName][record.originalId] = exists.id;
                     if (record.newRecord.clientId) {
@@ -562,11 +563,11 @@ export class DataImporterRepos {
                   break;
                 }
                 case 'override': {
-                  // No additional operation needed, will be overridden on insert
+                  // 不需要额外操作，插入时会覆盖
                   break;
                 }
                 case 'merge': {
-                  // Merge data
+                  // 合并数据
                   await trx
                     .update(table)
                     .set(record.newRecord)
@@ -582,30 +583,30 @@ export class DataImporterRepos {
             }
           }
         } else {
-          // Process unique constraints
+          // 处理唯一约束
           for (const field of uniqueConstraints) {
             if (!record.newRecord[field]) continue;
 
-            // Check if field value already exists
+            // 检查字段值是否已存在
             const exists = await trx.query[tableName].findFirst({
               where: eq(table[field], record.newRecord[field]),
             });
 
             if (exists) {
-              // Record conflict
+              // 记录冲突
               if (!this.conflictRecords[tableName]) this.conflictRecords[tableName] = [];
               this.conflictRecords[tableName].push({
                 field,
                 value: record.newRecord[field],
               });
 
-              // Apply conflict strategy
+              // 应用冲突策略
               switch (conflictStrategy) {
                 case 'skip': {
                   record.newRecord._skip = true;
                   result.skips++;
 
-                  // Key improvement: establish ID mapping even if skipped
+                  // 关键改进：即使跳过，也建立ID映射关系
                   if (!isCompositeKey) {
                     this.idMaps[tableName][record.originalId] = exists.id;
                     if (record.newRecord.clientId) {
@@ -615,7 +616,7 @@ export class DataImporterRepos {
                   break;
                 }
                 case 'override': {
-                  // Apply field processor
+                  // 应用字段处理器
                   if (field in fieldProcessors) {
                     record.newRecord[field] = fieldProcessors[field](record.newRecord[field]);
                   }
@@ -623,7 +624,7 @@ export class DataImporterRepos {
                 }
 
                 case 'merge': {
-                  // Merge data
+                  // 合并数据
                   await trx
                     .update(table)
                     .set(record.newRecord)
@@ -641,13 +642,13 @@ export class DataImporterRepos {
         }
       }
 
-      // Filter out records marked to be skipped
+      // 过滤掉标记为跳过的记录
       const filteredData = preparedData.filter((record) => !record.newRecord._skip);
 
-      // Clear temporary markers
+      // 清除临时标记
       filteredData.forEach((record) => delete record.newRecord._skip);
 
-      // 6. Batch insert data
+      // 6. 批量插入数据
       const BATCH_SIZE = 100;
 
       for (let i = 0; i < filteredData.length; i += BATCH_SIZE) {
@@ -657,12 +658,12 @@ export class DataImporterRepos {
         const originalIds = batch.map((item) => item.originalId);
 
         try {
-          // Insert and return result
+          // 插入并返回结果
           const insertQuery = trx.insert(table).values(itemsToInsert);
 
           let insertResult;
 
-          // Only non-composite key tables need to return ID
+          // 只对非复合主键表需要返回ID
           if (!isCompositeKey) {
             const res = await insertQuery.returning();
             insertResult = res.map((item: any) => ({
@@ -671,18 +672,18 @@ export class DataImporterRepos {
             }));
           } else {
             await insertQuery;
-            insertResult = itemsToInsert.map(() => ({})); // Create empty result to maintain count
+            insertResult = itemsToInsert.map(() => ({})); // 创建空结果以维持计数
           }
 
           result.added += insertResult.length;
 
-          // Establish ID mapping relationship (only for non-composite key tables)
+          // 建立ID映射关系 (只对非复合主键表)
           if (!isCompositeKey) {
             for (const [j, newRecord] of insertResult.entries()) {
               const originalId = originalIds[j];
               this.idMaps[tableName][originalId] = newRecord.id;
 
-              // Also ensure clientId can map to the correct ID
+              // 同时确保clientId也能映射到正确的ID
               const originalRecord = tableData.find((item) => item.id === originalId);
               if (originalRecord && originalRecord.clientId) {
                 this.idMaps[tableName][originalRecord.clientId] = newRecord.id;
@@ -692,7 +693,7 @@ export class DataImporterRepos {
         } catch (error) {
           console.error(`Error batch inserting ${tableName}:`, error);
 
-          // Handle error and record
+          // 处理错误并记录
           if ((error as any).code === '23505') {
             const match = (error as any).detail?.match(/Key \((.+?)\)=\((.+?)\) already exists/);
             if (match) {

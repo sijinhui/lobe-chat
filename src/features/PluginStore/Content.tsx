@@ -4,6 +4,7 @@ import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flexbox } from 'react-layout-kit';
 
+import { isDesktop } from '@/const/version';
 import { useServerConfigStore } from '@/store/serverConfig';
 import { useToolStore } from '@/store/tool';
 import { PluginStoreTabs } from '@/store/tool/slices/oldStore';
@@ -21,7 +22,7 @@ export const Content = memo(() => {
   const [keywords] = useState<string>();
 
   const options = [
-    { label: t('store.tabs.mcp'), value: PluginStoreTabs.MCP },
+    isDesktop ? { label: t('store.tabs.mcp'), value: PluginStoreTabs.MCP } : undefined,
     { label: t('store.tabs.old'), value: PluginStoreTabs.Plugin },
     { label: t('store.tabs.installed'), value: PluginStoreTabs.Installed },
   ].filter(Boolean) as SegmentedOptions;
@@ -44,7 +45,7 @@ export const Content = memo(() => {
             value={listType}
             variant={'filled'}
           />
-         {mobile ? null : <AddPluginButton />}
+          <AddPluginButton />
         </Flexbox>
         <Search />
       </Flexbox>

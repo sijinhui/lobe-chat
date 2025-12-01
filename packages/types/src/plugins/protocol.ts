@@ -1,21 +1,21 @@
 /**
- * Protocol source type
+ * 协议来源类型
  */
 export enum ProtocolSource {
-  /** Community contribution */
+  /** 社区贡献 */
   COMMUNITY = 'community',
-  /** Developer custom */
+  /** 开发者自定义 */
   DEVELOPER = 'developer',
-  /** GitHub official */
+  /** GitHub 官方 */
   GITHUB_OFFICIAL = 'github_official',
-  /** Official LobeHub marketplace */
+  /** 官方LobeHub市场 */
   OFFICIAL = 'official',
-  /** Third-party marketplace */
+  /** 第三方市场 */
   THIRD_PARTY = 'third_party',
 }
 
 /**
- * MCP Schema - stdio configuration type
+ * MCP Schema - stdio 配置类型
  */
 export interface McpStdioConfig {
   args?: string[];
@@ -25,7 +25,7 @@ export interface McpStdioConfig {
 }
 
 /**
- * MCP Schema - http configuration type
+ * MCP Schema - http 配置类型
  */
 export interface McpHttpConfig {
   headers?: Record<string, string>;
@@ -34,74 +34,74 @@ export interface McpHttpConfig {
 }
 
 /**
- * MCP Schema configuration type
+ * MCP Schema 配置类型
  */
 export type McpConfig = McpStdioConfig | McpHttpConfig;
 
 /**
- * MCP Schema object
- * Conforms to RFC 0001 definition
+ * MCP Schema 对象
+ * 符合 RFC 0001 定义
  */
 export interface McpSchema {
-  /** Plugin author */
+  /** 插件作者 */
   author: string;
-  /** Plugin configuration */
+  /** 插件配置 */
   config: McpConfig;
-  /** Plugin description */
+  /** 插件描述 */
   description: string;
-  /** Plugin homepage */
+  /** 插件主页 */
   homepage?: string;
-  /** Plugin icon */
+  /** 插件图标 */
   icon?: string;
-  /** Plugin unique identifier, must match the id parameter in the URL */
+  /** 插件唯一标识符，必须与URL中的id参数匹配 */
   identifier: string;
-  /** Plugin name */
+  /** 插件名称 */
   name: string;
-  /** Plugin version (semver) */
+  /** 插件版本 (semver) */
   version: string;
 }
 
 /**
- * RFC 0001 protocol parameters
+ * RFC 0001 协议参数
  * lobehub://plugin/install?id=xxx&schema=xxx&marketId=xxx&meta_*=xxx
  */
 export interface McpInstallProtocolParamsRFC {
-  /** Optional UI display metadata, prefixed with meta_ */
+  /** 可选的 UI 显示元数据，以 meta_ 为前缀 */
   [key: `meta_${string}`]: string | undefined;
-  /** Unique identifier of the plugin */
+  /** 插件的唯一标识符 */
   id: string;
-  /** Unique identifier of the Marketplace providing this plugin */
+  /** 提供该插件的 Marketplace 的唯一标识符 */
   marketId?: string;
-  /** Base64URL encoded MCP Schema object */
+  /** Base64URL 编码的 MCP Schema 对象 */
   schema: string;
-  /** Plugin type, fixed as 'mcp' for MCP */
+  /** 插件类型，对于 MCP 固定为 'mcp' */
   type: 'mcp';
 }
 
 /**
- * Protocol URL parsing result
+ * 协议URL解析结果
  */
 export interface ProtocolUrlParsed {
-  /** Action type (e.g.: 'install') */
+  /** 操作类型 (如: 'install') */
   action: 'install' | 'configure' | 'update';
-  /** Parsed parameters */
+  /** 解析后的参数 */
   params: {
     id: string;
     marketId?: string;
     type: string;
   };
-  /** MCP Schema object */
+  /** MCP Schema 对象 */
   schema: McpSchema;
-  /** Protocol source */
+  /** 协议来源 */
   source: ProtocolSource;
-  /** Plugin type (e.g.: 'mcp') */
+  /** 插件类型 (如: 'mcp') */
   type: 'mcp' | 'plugin';
-  /** URL type (e.g.: 'plugin') */
+  /** URL类型 (如: 'plugin') */
   urlType: string;
 }
 
 /**
- * Installation confirmation dialog information
+ * 安装确认弹窗信息
  */
 export interface InstallConfirmationInfo {
   dependencies?: string[];
@@ -125,42 +125,42 @@ export interface InstallConfirmationInfo {
       url?: string;
     };
     type: ProtocolSource;
-    verified: boolean; // Whether it's a verified source
+    verified: boolean; // 是否为验证来源
   };
 }
 
 /**
- * Protocol handler interface
+ * 协议处理器接口
  */
 export interface ProtocolHandler {
   /**
-   * Handle protocol URL
+   * 处理协议URL
    */
   handle(
     parsed: ProtocolUrlParsed,
   ): Promise<{ error?: string; success: boolean; targetWindow?: string }>;
 
   /**
-   * Supported actions
+   * 支持的操作
    */
   readonly supportedActions: string[];
 
   /**
-   * Protocol type
+   * 协议类型
    */
   readonly type: string;
 }
 
 /**
- * Protocol routing configuration
+ * 协议路由配置
  */
 export interface ProtocolRouteConfig {
-  /** Action type */
+  /** 操作类型 */
   action: string;
-  /** Target path (relative to window base path) */
+  /** 目标路径（相对于窗口base路径） */
   targetPath?: string;
-  /** Target window */
+  /** 目标窗口 */
   targetWindow: 'chat' | 'settings';
-  /** Protocol type */
+  /** 协议类型 */
   type: string;
 }

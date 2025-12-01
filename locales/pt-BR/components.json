@@ -106,12 +106,6 @@
     "keyPlaceholder": "Chave",
     "valuePlaceholder": "Valor"
   },
-  "LocalFile": {
-    "action": {
-      "open": "Abrir",
-      "showInFolder": "Mostrar na pasta"
-    }
-  },
   "MaxTokenSlider": {
     "unlimited": "Ilimitado"
   },

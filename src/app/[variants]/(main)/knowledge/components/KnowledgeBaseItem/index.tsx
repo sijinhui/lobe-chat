@@ -16,6 +16,8 @@ const useStyles = createStyles(({ css, token, isDarkMode }) => ({
   `,
   container: css`
     cursor: pointer;
+
+    margin-inline: 8px;
     padding-block: 4px;
     padding-inline: 8px;
     border-radius: ${token.borderRadius}px;
@@ -45,7 +47,7 @@ const KnowledgeBaseItem = memo<KnowledgeBaseItemProps>(({ name, active, id }) =>
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/knowledge/bases/${id}`);
+    navigate(`/bases/${id}`);
   };
 
   return (

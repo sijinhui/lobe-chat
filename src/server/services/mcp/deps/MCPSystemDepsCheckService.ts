@@ -195,13 +195,13 @@ class MCPSystemDepsCheckService {
     // Check if all system dependencies meet requirements
     const allDependenciesMet = systemDependenciesResults.every((dep) => dep.meetRequirement);
 
-    // Check if configuration is required (has mandatory fields)
+    // Check if configuration is required (有必填项)
     const configSchema = option.connection?.configSchema;
     const needsConfig = Boolean(
       configSchema &&
-        // Check if there's a non-empty required array
+        // 检查是否有 required 数组且不为空
         ((Array.isArray(configSchema.required) && configSchema.required.length > 0) ||
-          // Check if any field in properties is marked as required
+          // 检查 properties 中是否有字段标记为 required
           (configSchema.properties &&
             Object.values(configSchema.properties).some((prop: any) => prop.required === true))),
     );

@@ -1,10 +1,10 @@
 import { ChatCitationItem } from '@lobechat/types';
-import { CopyButton, Icon, Markdown, ScrollShadow } from '@lobehub/ui';
+import { ActionIcon, CopyButton, Icon, Markdown, ScrollShadow } from '@lobehub/ui';
 import { createStyles } from 'antd-style';
 import { AnimatePresence, motion } from 'framer-motion';
-import { AtomIcon } from 'lucide-react';
+import { AtomIcon, ChevronDown, ChevronRight } from 'lucide-react';
 import { rgba } from 'polished';
-import { CSSProperties, ReactNode, RefObject, memo, useEffect, useRef, useState } from 'react';
+import { CSSProperties, RefObject, memo, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flexbox } from 'react-layout-kit';
 
@@ -24,10 +24,8 @@ const useStyles = createStyles(({ css, token }) => ({
     color: ${token.colorTextTertiary};
   `,
   header: css`
-    min-height: 32px;
     padding-block: 4px;
     padding-inline: 8px 4px;
-
     transition: background 0.2s ${token.motionEaseOut};
     transition: all 0.2s ${token.motionEaseOut};
 
@@ -76,7 +74,7 @@ const useStyles = createStyles(({ css, token }) => ({
 
 interface ThinkingProps {
   citations?: ChatCitationItem[];
-  content?: string | ReactNode;
+  content?: string;
   duration?: number;
   style?: CSSProperties;
   thinking?: boolean;
@@ -158,7 +156,7 @@ const Thinking = memo<ThinkingProps>((props) => {
           </Flexbox>
         )}
         <Flexbox gap={4} horizontal>
-          {showDetail && content && typeof content === 'string' && (
+          {showDetail && content && (
             <div
               onClick={(event) => {
                 event.stopPropagation();
@@ -167,6 +165,7 @@ const Thinking = memo<ThinkingProps>((props) => {
               <CopyButton content={content} size={'small'} title={t('copy', { ns: 'common' })} />
             </div>
           )}
+          <ActionIcon icon={showDetail ? ChevronDown : ChevronRight} size={'small'} />
         </Flexbox>
       </Flexbox>
       <AnimatePresence initial={false}>

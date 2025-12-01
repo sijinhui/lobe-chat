@@ -15,6 +15,7 @@ import { useClientDataSWR } from '@/libs/swr';
 import { chatService } from '@/services/chat';
 import { messageService } from '@/services/message';
 import { topicService } from '@/services/topic';
+import { CreateTopicParams } from '@/services/topic/type';
 import type { ChatStore } from '@/store/chat';
 import type { ChatStoreState } from '@/store/chat/initialState';
 import { messageMapKey } from '@/store/chat/utils/messageMapKey';
@@ -23,11 +24,11 @@ import { useSessionStore } from '@/store/session';
 import { sessionSelectors } from '@/store/session/selectors';
 import { useUserStore } from '@/store/user';
 import { systemAgentSelectors } from '@/store/user/selectors';
-import { ChatTopic, CreateTopicParams } from '@/types/topic';
+import { ChatTopic } from '@/types/topic';
 import { merge } from '@/utils/merge';
 import { setNamespace } from '@/utils/storeDebug';
 
-import { displayMessageSelectors } from '../message/selectors';
+import { chatSelectors } from '../message/selectors';
 import { ChatTopicDispatch, topicReducer } from './reducer';
 import { topicSelectors } from './selectors';
 
@@ -92,7 +93,7 @@ export const chatTopic: StateCreator<
   createTopic: async (sessionId, groupId) => {
     const { activeId, activeSessionType, internal_createTopic } = get();
 
-    const messages = displayMessageSelectors.activeDisplayMessages(get());
+    const messages = chatSelectors.activeBaseChats(get());
 
     set({ creatingTopic: true }, false, n('creatingTopic/start'));
     const topicId = await internal_createTopic({
@@ -109,7 +110,7 @@ export const chatTopic: StateCreator<
 
   saveToTopic: async (sessionId, groupId) => {
     // if there is no message, stop
-    const messages = displayMessageSelectors.activeDisplayMessages(get());
+    const messages = chatSelectors.activeBaseChats(get());
     if (messages.length === 0) return;
 
     const { activeId, activeSessionType, summaryTopicTitle, internal_createTopic } = get();

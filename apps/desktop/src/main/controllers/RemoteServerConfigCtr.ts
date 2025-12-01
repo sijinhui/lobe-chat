@@ -246,8 +246,8 @@ export default class RemoteServerConfigCtr extends ControllerModule {
   }
 
   /**
-   * Refresh access token
-   * Use stored refresh token to obtain a new access token
+   * 刷新访问令牌
+   * 使用存储的刷新令牌获取新的访问令牌
    * Handles concurrent requests by returning the existing refresh promise if one is in progress.
    */
   async refreshAccessToken(): Promise<{ error?: string; success: boolean }> {
@@ -271,27 +271,27 @@ export default class RemoteServerConfigCtr extends ControllerModule {
    */
   private async performTokenRefresh(): Promise<{ error?: string; success: boolean }> {
     try {
-      // Get configuration information
+      // 获取配置信息
       const config = await this.getRemoteServerConfig();
 
       if (!config.remoteServerUrl || !config.active) {
         logger.warn('Remote server not active or configured, skipping refresh.');
-        return { error: 'Remote server is not active or configured', success: false };
+        return { error: '远程服务器未激活或未配置', success: false };
       }
 
-      // Get refresh token
+      // 获取刷新令牌
       const refreshToken = await this.getRefreshToken();
       if (!refreshToken) {
         logger.error('No refresh token available for refresh operation.');
-        return { error: 'No refresh token available', success: false };
+        return { error: '没有可用的刷新令牌', success: false };
       }
 
-      // Construct refresh request
+      // 构造刷新请求
       const remoteUrl = await this.getRemoteServerUrl(config);
 
       const tokenUrl = new URL('/oidc/token', remoteUrl);
 
-      // Construct request body
+      // 构造请求体
       const body = querystring.stringify({
         client_id: 'lobehub-desktop',
         grant_type: 'refresh_token',
@@ -300,7 +300,7 @@ export default class RemoteServerConfigCtr extends ControllerModule {
 
       logger.debug(`Sending token refresh request to ${tokenUrl.toString()}`);
 
-      // Send request
+      // 发送请求
       const response = await fetch(tokenUrl.toString(), {
         body,
         headers: {
@@ -310,25 +310,25 @@ export default class RemoteServerConfigCtr extends ControllerModule {
       });
 
       if (!response.ok) {
-        // Try to parse error response
+        // 尝试解析错误响应
         const errorData = await response.json().catch(() => ({}));
-        const errorMessage = `Token refresh failed: ${response.status} ${response.statusText} ${
+        const errorMessage = `刷新令牌失败: ${response.status} ${response.statusText} ${
           errorData.error_description || errorData.error || ''
         }`.trim();
         logger.error(errorMessage, errorData);
         return { error: errorMessage, success: false };
       }
 
-      // Parse response
+      // 解析响应
       const data = await response.json();
 
-      // Check if response contains necessary tokens
+      // 检查响应中是否包含必要令牌
       if (!data.access_token || !data.refresh_token) {
         logger.error('Refresh response missing access_token or refresh_token', data);
-        return { error: 'Missing tokens in refresh response', success: false };
+        return { error: '刷新响应中缺少令牌', success: false };
       }
 
-      // Save new tokens
+      // 保存新令牌
       logger.info('Token refresh successful, saving new tokens.');
       await this.saveTokens(data.access_token, data.refresh_token, data.expires_in);
 
@@ -336,7 +336,7 @@ export default class RemoteServerConfigCtr extends ControllerModule {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       logger.error('Exception during token refresh operation:', errorMessage, error);
-      return { error: `Exception occurred during token refresh: ${errorMessage}`, success: false };
+      return { error: `刷新令牌时发生异常: ${errorMessage}`, success: false };
     } finally {
       // Ensure the promise reference is cleared once the operation completes
       logger.debug('Clearing the refresh promise reference.');

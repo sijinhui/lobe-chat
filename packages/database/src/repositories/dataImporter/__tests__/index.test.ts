@@ -1,6 +1,7 @@
-import type { ImportPgDataStructure } from '@lobechat/types';
 import { eq, inArray } from 'drizzle-orm';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { ImportPgDataStructure } from '@/types/export';
 
 import { getTestDB } from '../../../models/__tests__/_util';
 import * as Schema from '../../../schemas';

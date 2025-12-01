@@ -1,6 +1,7 @@
 'use client';
 
-import { useQueryState } from '@/hooks/useQueryParam';
+import { useQueryState } from 'nuqs';
+
 import { useImageStore } from '@/store/image';
 
 import Content from './Content';

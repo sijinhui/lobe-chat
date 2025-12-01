@@ -16,28 +16,17 @@ lobe-chat/
 ├── apps/
 │   └── desktop/
 ├── docs/
-│   ├── changelog/
-│   ├── development/
-│   ├── self-hosting/
-│   └── usage/
 ├── locales/
 │   ├── en-US/
 │   └── zh-CN/
 ├── packages/
-│   ├── agent-runtime/
 │   ├── const/
 │   ├── context-engine/
-│   ├── conversation-flow/
 │   ├── database/
 │   │   ├── src/
 │   │   │   ├── models/
 │   │   │   ├── schemas/
 │   │   │   └── repositories/
-│   ├── electron-client-ipc/
-│   ├── electron-server-ipc/
-│   ├── fetch-sse/
-│   ├── file-loaders/
-│   ├── memory-extract/
 │   ├── model-bank/
 │   │   └── src/
 │   │       └── aiModels/
@@ -45,16 +34,11 @@ lobe-chat/
 │   │   └── src/
 │   │       ├── core/
 │   │       └── providers/
-│   ├── obervability-otel/
-│   ├── prompts/
-│   ├── python-interpreter/
-│   ├── ssrf-safe-fetch/
 │   ├── types/
 │   │   └── src/
 │   │       ├── message/
 │   │       └── user/
-│   ├── utils/
-│   └── web-crawler/
+│   └── utils/
 ├── public/
 ├── scripts/
 ├── src/
@@ -84,9 +68,7 @@ lobe-chat/
 │   │   ├── AuthProvider/
 │   │   └── GlobalProvider/
 │   ├── libs/
-│   │   ├── better-auth/
-│   │   ├── oidc-provider/
-│   │   └── trpc/
+│   │   └── oidc-provider/
 │   ├── locales/
 │   │   └── default/
 │   ├── server/

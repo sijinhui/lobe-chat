@@ -10,7 +10,7 @@ const placeholderVariablesRegex = /{{(.*?)}}/g;
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const VARIABLE_GENERATORS = {
   /**
-   * Time-related template variables
+   * 时间类模板变量
    *
    * | Value | Example |
    * |-------|---------|
@@ -46,12 +46,12 @@ export const VARIABLE_GENERATORS = {
   year: () => new Date().getFullYear().toString(),
 
   /**
-   * User information template variables
+   * 用户信息类模板变量
    *
    * | Value | Example |
    * |-------|---------|
    * | `{{email}}` | demo@lobehub.com |
-   * | `{{nickname}}` | Community User |
+   * | `{{nickname}}` | 社区版用户 |
    * | `{{username}}` | LobeChat |
    *
    */
@@ -63,7 +63,7 @@ export const VARIABLE_GENERATORS = {
     '',
 
   /**
-   * Random value template variables
+   * 随机值类模板变量
    *
    * | Value | Example |
    * |-------|---------|
@@ -87,7 +87,7 @@ export const VARIABLE_GENERATORS = {
   random_digit: () => Math.floor(Math.random() * 10).toString(),
 
   /**
-   * UUID-type template variables
+   * UUID 类模板变量
    *
    * | Value | Example |
    * |-------|---------|
@@ -99,7 +99,7 @@ export const VARIABLE_GENERATORS = {
   uuid_short: () => uuid().split('-')[0],
 
   /**
-   * Platform-related template variables
+   * 平台类模板变量
    *
    * | Value | Example |
    * |-------|---------|
@@ -114,9 +114,9 @@ export const VARIABLE_GENERATORS = {
 } as Record<string, () => string>;
 
 /**
- * Extract all {{variable}} placeholder variable names from text
- * @param text String containing template variables
- * @returns Array of variable names, e.g., ['date', 'nickname']
+ * 从文本中提取所有 {{variable}} 占位符的变量名
+ * @param text 包含模板变量的字符串
+ * @returns 变量名数组，如 ['date', 'nickname']
  */
 const extractPlaceholderVariables = (text: string): string[] => {
   const matches = [...text.matchAll(placeholderVariablesRegex)];
@@ -124,15 +124,15 @@ const extractPlaceholderVariables = (text: string): string[] => {
 };
 
 /**
- * Replace template variables with actual values, supporting recursive parsing of nested variables
- * @param text - Original text containing variables
- * @param depth - Recursion depth, default 1, set higher to support {{date}} within {{text}} etc.
- * @returns Replaced text
+ * 将模板变量替换为实际值，并支持递归解析嵌套变量
+ * @param text - 含变量的原始文本
+ * @param depth - 递归深度，默认 1，设置更高可支持 {{text}} 中的 {{date}} 等
+ * @returns 替换后的文本
  */
 export const parsePlaceholderVariables = (text: string, depth = 2): string => {
   let result = text;
 
-  // Recursive parsing to handle cases where {{text}} contains additional preset variables
+  // 递归解析，用于处理如 {{text}} 存在额外预设变量
   for (let i = 0; i < depth; i++) {
     try {
       const variables = Object.fromEntries(
@@ -154,9 +154,9 @@ export const parsePlaceholderVariables = (text: string, depth = 2): string => {
 };
 
 /**
- * Parse message content, replace placeholder variables
- * @param messages Original message array
- * @returns Processed message array
+ * 解析消息内容，替换占位符变量
+ * @param messages 原始消息数组
+ * @returns 处理后的消息数组
  */
 export const parsePlaceholderVariablesMessages = (messages: any[]): any[] =>
   messages.map((message) => {
@@ -164,12 +164,12 @@ export const parsePlaceholderVariablesMessages = (messages: any[]): any[] =>
 
     const { content } = message;
 
-    // Process string type directly
+    // 字符串类型直接处理
     if (typeof content === 'string') {
       return { ...message, content: parsePlaceholderVariables(content) };
     }
 
-    // Process text elements in array type
+    // 数组类型处理其中的 text 元素
     if (Array.isArray(content)) {
       return {
         ...message,

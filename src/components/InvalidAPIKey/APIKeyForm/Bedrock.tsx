@@ -6,17 +6,22 @@ import { ModelProvider } from 'model-bank';
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { FormAction } from '@/features/ChatList/Error/style';
-import { aiProviderSelectors, useAiInfraStore } from '@/store/aiInfra';
+import { FormAction } from '@/features/Conversation/Error/style';
+import { useUserStore } from '@/store/user';
+import { keyVaultsConfigSelectors } from '@/store/user/selectors';
 
 const BedrockForm = memo<{ description: string }>(({ description }) => {
   const { t } = useTranslation('modelProvider');
   const [showRegion, setShow] = useState(false);
   const [showSessionToken, setShowSessionToken] = useState(false);
 
-  const config = useAiInfraStore(aiProviderSelectors.providerKeyVaults(ModelProvider.Bedrock));
-  const setConfig = useAiInfraStore((s) => s.updateAiProviderConfig);
-  const { accessKeyId, secretAccessKey, sessionToken, region } = config || {};
+  const [accessKeyId, secretAccessKey, sessionToken, region, setConfig] = useUserStore((s) => [
+    keyVaultsConfigSelectors.bedrockConfig(s).accessKeyId,
+    keyVaultsConfigSelectors.bedrockConfig(s).secretAccessKey,
+    keyVaultsConfigSelectors.bedrockConfig(s).sessionToken,
+    keyVaultsConfigSelectors.bedrockConfig(s).region,
+    s.updateKeyVaultConfig,
+  ]);
 
   const theme = useTheme();
   return (
@@ -28,7 +33,7 @@ const BedrockForm = memo<{ description: string }>(({ description }) => {
       <InputPassword
         autoComplete={'new-password'}
         onChange={(e) => {
-          setConfig(ModelProvider.Bedrock, { keyVaults: { accessKeyId: e.target.value } });
+          setConfig(ModelProvider.Bedrock, { accessKeyId: e.target.value });
         }}
         placeholder={'Aws Access Key Id'}
         value={accessKeyId}
@@ -37,7 +42,7 @@ const BedrockForm = memo<{ description: string }>(({ description }) => {
       <InputPassword
         autoComplete={'new-password'}
         onChange={(e) => {
-          setConfig(ModelProvider.Bedrock, { keyVaults: { secretAccessKey: e.target.value } });
+          setConfig(ModelProvider.Bedrock, { secretAccessKey: e.target.value });
         }}
         placeholder={'Aws Secret Access Key'}
         value={secretAccessKey}
@@ -47,7 +52,7 @@ const BedrockForm = memo<{ description: string }>(({ description }) => {
         <InputPassword
           autoComplete={'new-password'}
           onChange={(e) => {
-            setConfig(ModelProvider.Bedrock, { keyVaults: { sessionToken: e.target.value } });
+            setConfig(ModelProvider.Bedrock, { sessionToken: e.target.value });
           }}
           placeholder={'Aws Session Token'}
           value={sessionToken}
@@ -68,7 +73,7 @@ const BedrockForm = memo<{ description: string }>(({ description }) => {
       {showRegion ? (
         <Select
           onChange={(region) => {
-            setConfig('bedrock', { keyVaults: { region } });
+            setConfig('bedrock', { region });
           }}
           options={['us-east-1', 'us-west-2', 'ap-southeast-1', 'eu-central-1'].map((i) => ({
             label: i,

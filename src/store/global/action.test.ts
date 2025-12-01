@@ -266,14 +266,14 @@ describe('createPreferenceSlice', () => {
     it('should switch back to chat', () => {
       const { result } = renderHook(() => useGlobalStore());
       const sessionId = 'session-id';
-      const navigate = vi.fn();
+      const router = { push: vi.fn() } as any;
 
       act(() => {
-        useGlobalStore.setState({ navigate });
+        useGlobalStore.setState({ router });
         result.current.switchBackToChat(sessionId);
       });
 
-      expect(navigate).toHaveBeenCalledWith('/chat?session=session-id');
+      expect(router.push).toHaveBeenCalledWith('/chat?session=session-id');
     });
   });
 

@@ -6,42 +6,42 @@ import {
 
 class DesktopSettingsService {
   /**
-   * Get proxy settings
+   * 获取远程服务器配置
    */
   getProxySettings = async () => {
     return dispatch('getProxySettings');
   };
 
   /**
-   * Set proxy settings
+   * 设置远程服务器配置
    */
   setSettings = async (data: Partial<NetworkProxySettings>) => {
     return dispatch('setProxySettings', data);
   };
 
   /**
-   * Get desktop hotkey configuration
+   * 获取桌面热键配置
    */
   getDesktopHotkeys = async () => {
     return dispatch('getShortcutsConfig');
   };
 
   /**
-   * Update desktop hotkey configuration
+   * 更新桌面热键配置
    */
   updateDesktopHotkey = async (id: string, accelerator: string): Promise<ShortcutUpdateResult> => {
     return dispatch('updateShortcutConfig', { accelerator, id });
   };
 
   /**
-   * Test proxy connection
+   * 测试代理连接
    */
   testProxyConnection = async (url: string) => {
     return dispatch('testProxyConnection', url);
   };
 
   /**
-   * Test specified proxy configuration
+   * 测试指定的代理配置
    */
   testProxyConfig = async (config: NetworkProxySettings, testUrl?: string) => {
     return dispatch('testProxyConfig', { config, testUrl });

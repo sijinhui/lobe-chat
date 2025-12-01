@@ -9,6 +9,7 @@ import { Flexbox } from 'react-layout-kit';
 import { useNavigate } from 'react-router-dom';
 
 import Menu from '@/components/Menu';
+import { withSuspense } from '@/components/withSuspense';
 import { DiscoverTab } from '@/types/discover';
 
 import { useNav } from '../../../features/useNav';
@@ -77,9 +78,9 @@ const Nav = memo(() => {
           items={items}
           onClick={({ key }) => {
             if (key === DiscoverTab.Home) {
-              navigate('/discover');
+              navigate('/');
             } else {
-              navigate(`/discover/${key}`);
+              navigate(`/${key}`);
             }
           }}
           selectable
@@ -90,4 +91,4 @@ const Nav = memo(() => {
   );
 });
 
-export default Nav;
+export default withSuspense(Nav);

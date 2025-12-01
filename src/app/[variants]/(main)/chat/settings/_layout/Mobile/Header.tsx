@@ -3,20 +3,20 @@
 import { ChatHeader } from '@lobehub/ui/mobile';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
+import { useQueryRoute } from '@/hooks/useQueryRoute';
 import { mobileHeaderSticky } from '@/styles/mobileHeader';
 
 import HeaderContent from '../../features/HeaderContent';
 
 const Header = memo(() => {
   const { t } = useTranslation('setting');
-  const navigate = useNavigate();
+  const router = useQueryRoute();
 
   return (
     <ChatHeader
       center={<ChatHeader.Title title={t('header.session')} />}
-      onBackClick={() => navigate(-1)}
+      onBackClick={() => router.push('/chat')}
       right={<HeaderContent />}
       showBackButton
       style={mobileHeaderSticky}

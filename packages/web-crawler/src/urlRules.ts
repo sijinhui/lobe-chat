@@ -1,32 +1,32 @@
 import { CrawlUrlRule } from './type';
 
 export const crawUrlRules: CrawlUrlRule[] = [
-  // Sogou WeChat links, use search1api
+  // 搜狗微信链接，使用 search1api
   {
     impls: ['search1api'],
     urlPattern: 'https://weixin.sogou.com/link(.*)',
   },
-  // Sogou links, use search1api
+  // 搜狗链接，使用 search1api
   {
     impls: ['search1api'],
     urlPattern: 'https://sogou.com/link(.*)',
   },
-  // YouTube links, use search1api, formatted as markdown, can return subtitle content
+  // YouTube 链接，使用 search1api，格式化 markdown，且可以返回字幕内容
   {
     impls: ['search1api'],
     urlPattern: 'https://www.youtube.com/watch(.*)',
   },
-  // Reddit links, use search1api, formatted as markdown, includes title, author, interaction count, specific comment content, etc.
+  // Reddit 链接，使用 search1api，格式化 markdown，包含标题、作者、互动数量、具体评论内容等
   {
     impls: ['search1api'],
     urlPattern: 'https://www.reddit.com/r/(.*)/comments/(.*)',
   },
-  // WeChat official accounts have crawler protection, use search1api first, jina as fallback (currently jina crawling may be blocked)
+  // 微信公众号有爬虫防护，优先使用 search1api，jina 作为兜底（目前 jina 爬取会被风控）
   {
     impls: ['search1api', 'jina'],
     urlPattern: 'https://mp.weixin.qq.com(.*)',
   },
-  // GitHub source code parsing
+  // github 源码解析
   {
     filterOptions: {
       enableReadability: false,
@@ -43,7 +43,7 @@ export const crawUrlRules: CrawlUrlRule[] = [
     // GitHub discussion
     urlPattern: 'https://github.com/(.*)/discussions/(.*)',
   },
-  // All PDFs use jina
+  // 所有 PDF 都用 jina
   {
     impls: ['jina'],
     urlPattern: 'https://(.*).pdf',
@@ -53,7 +53,7 @@ export const crawUrlRules: CrawlUrlRule[] = [
     impls: ['jina'],
     urlPattern: 'https://arxiv.org/pdf/(.*)',
   },
-  // Zhihu has crawler protection, use jina
+  // 知乎有爬虫防护，使用 jina
   {
     impls: ['jina'],
     urlPattern: 'https://zhuanlan.zhihu.com(.*)',
@@ -63,7 +63,7 @@ export const crawUrlRules: CrawlUrlRule[] = [
     urlPattern: 'https://zhihu.com(.*)',
   },
   {
-    // Convert Medium articles to Scribe.rip
+    // Medium 文章转换为 Scribe.rip
     urlPattern: 'https://medium.com/(.*)',
     urlTransform: 'https://scribe.rip/$1',
   },
@@ -74,10 +74,10 @@ export const crawUrlRules: CrawlUrlRule[] = [
     impls: ['jina', 'browserless'],
     urlPattern: 'https://(twitter.com|x.com)/(.*)',
   },
-  // Sports data website rules
+  // 体育数据网站规则
   {
     filterOptions: {
-      // Disable Readability for sports data tables and convert to plain text
+      // 对体育数据表格禁用 Readability 并且转换为纯文本
       enableReadability: false,
       pureText: true,
     },
@@ -94,13 +94,13 @@ export const crawUrlRules: CrawlUrlRule[] = [
     impls: ['jina'],
     urlPattern: 'https://cvpr.thecvf.com(.*)',
   },
-  // Feishu use jina
+  // 飞书用 jina
   // https://github.com/lobehub/lobe-chat/issues/6879
   {
     impls: ['jina'],
     urlPattern: 'https://(.*).feishu.cn/(.*)',
   },
-  // Xiaohongshu has crawler protection, use Search1API or Jina (fallback)
+  // 小红书存在爬虫防护，使用 Search1API 或 Jina (备用)
   {
     impls: ['search1api', 'jina'],
     urlPattern: 'https://(.*).xiaohongshu.com/(.*)',

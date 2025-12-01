@@ -12,9 +12,9 @@ export class OAuthHandoffModel {
   }
 
   /**
-   * Create a new OAuth handoff record
-   * @param params Credential data
-   * @returns Created record
+   * 创建新的认证凭证传递记录
+   * @param params 凭证数据
+   * @returns 创建的记录
    */
   create = async (params: NewOAuthHandoff): Promise<OAuthHandoffItem> => {
     const [result] = await this.db
@@ -27,21 +27,21 @@ export class OAuthHandoffModel {
   };
 
   /**
-   * Fetch and consume OAuth credentials
-   * This method queries the record first, and if found, deletes it immediately to ensure credentials can only be used once
-   * @param id Credential ID
-   * @param client Client type
-   * @returns Credential data, or null if it doesn't exist or has expired
+   * 获取并消费认证凭证
+   * 该方法会先查询记录，如果找到则立即删除，确保凭证只能被使用一次
+   * @param id 凭证ID
+   * @param client 客户端类型
+   * @returns 凭证数据，如果不存在或已过期则返回null
    */
   fetchAndConsume = async (id: string, client: string): Promise<OAuthHandoffItem | null> => {
-    // First find the record while checking if it's expired (5 minute TTL)
+    // 先查找记录，同时检查是否过期 (5分钟TTL)
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
 
     const handoff = await this.db.query.oauthHandoffs.findFirst({
       where: and(
         eq(oauthHandoffs.id, id),
         eq(oauthHandoffs.client, client),
-        // Check if the record was created within the last 5 minutes
+        // 检查记录是否在5分钟内创建
         sql`${oauthHandoffs.createdAt} > ${fiveMinutesAgo}`,
       ),
     });
@@ -50,16 +50,16 @@ export class OAuthHandoffModel {
       return null;
     }
 
-    // Immediately delete the record to ensure one-time use
+    // 立即删除记录以确保一次性使用
     await this.db.delete(oauthHandoffs).where(eq(oauthHandoffs.id, id));
 
     return handoff;
   };
 
   /**
-   * Clean up expired OAuth handoff records
-   * This method should be called periodically (e.g., via a cron job) to clean up expired records
-   * @returns Number of records cleaned up
+   * 清理过期的认证凭证记录
+   * 这个方法应该被定期调用（比如通过 cron job）来清理过期的记录
+   * @returns 清理的记录数量
    */
   cleanupExpired = async (): Promise<number> => {
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
@@ -72,11 +72,11 @@ export class OAuthHandoffModel {
   };
 
   /**
-   * Check if a credential exists (without consuming it)
-   * Primarily used for testing and debugging
-   * @param id Credential ID
-   * @param client Client type
-   * @returns Whether it exists and is not expired
+   * 检查凭证是否存在（不消费）
+   * 主要用于测试和调试
+   * @param id 凭证ID
+   * @param client 客户端类型
+   * @returns 是否存在且未过期
    */
   exists = async (id: string, client: string): Promise<boolean> => {
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);

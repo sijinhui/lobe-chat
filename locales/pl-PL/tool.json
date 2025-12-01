@@ -14,31 +14,9 @@
     "images": "Obrazy:",
     "prompt": "słowo kluczowe"
   },
-  "lobe-knowledge-base": {
-    "readKnowledge": {
-      "meta": {
-        "chars": "Liczba znaków",
-        "lines": "Liczba wierszy"
-      }
-    }
-  },
   "localFiles": {
-    "editFile": {
-      "newString": "Zamień na",
-      "oldString": "Szukany tekst",
-      "replaceAll": "Zamień wszystkie wystąpienia",
-      "replaceFirst": "Zamień tylko pierwsze wystąpienie"
-    },
     "file": "Plik",
     "folder": "Folder",
-    "moveFiles": {
-      "itemsMoved": "Przeniesiono {{count}} elementów:",
-      "itemsMoved_one": "Przeniesiono {{count}} element:",
-      "itemsMoved_other": "Przeniesiono {{count}} elementy:",
-      "itemsToMove": "{{count}} elementów do przeniesienia:",
-      "itemsToMove_one": "{{count}} element do przeniesienia:",
-      "itemsToMove_other": "{{count}} elementy do przeniesienia:"
-    },
     "open": "Otwórz",
     "openFile": "Otwórz plik",
     "openFolder": "Otwórz folder",
@@ -48,12 +26,7 @@
     "readFile": "Odczytaj plik",
     "readFileError": "Błąd odczytu pliku, sprawdź, czy ścieżka do pliku jest poprawna",
     "readFiles": "Odczytaj pliki",
-    "readFilesError": "Błąd odczytu plików, sprawdź, czy ścieżka do plików jest poprawna",
-    "writeFile": {
-      "characters": "Znaki",
-      "preview": "Podgląd treści",
-      "truncated": "Obcięto"
-    }
+    "readFilesError": "Błąd odczytu plików, sprawdź, czy ścieżka do plików jest poprawna"
   },
   "search": {
     "createNewSearch": "Utwórz nową historię wyszukiwania",

@@ -13,13 +13,10 @@ import { aiModelSelectors, useAiInfraStore } from '@/store/aiInfra';
 import ContextCachingSwitch from './ContextCachingSwitch';
 import GPT5ReasoningEffortSlider from './GPT5ReasoningEffortSlider';
 import GPT51ReasoningEffortSlider from './GPT51ReasoningEffortSlider';
-import ImageAspectRatioSelect from './ImageAspectRatioSelect';
-import ImageResolutionSlider from './ImageResolutionSlider';
 import ReasoningEffortSlider from './ReasoningEffortSlider';
 import ReasoningTokenSlider from './ReasoningTokenSlider';
 import TextVerbositySlider from './TextVerbositySlider';
 import ThinkingBudgetSlider from './ThinkingBudgetSlider';
-import ThinkingLevelSlider from './ThinkingLevelSlider';
 import ThinkingSlider from './ThinkingSlider';
 
 const ControlsForm = memo(() => {
@@ -135,17 +132,6 @@ const ControlsForm = memo(() => {
       },
     },
     {
-      children: <GPT51ReasoningEffortSlider />,
-      desc: 'reasoning_effort',
-      label: t('extendParams.reasoningEffort.title'),
-      layout: 'horizontal',
-      minWidth: undefined,
-      name: 'gpt5_1ReasoningEffort',
-      style: {
-        paddingBottom: 0,
-      },
-    },
-    {
       children: <TextVerbositySlider />,
       desc: 'text_verbosity',
       label: t('extendParams.textVerbosity.title'),
@@ -190,38 +176,6 @@ const ControlsForm = memo(() => {
       style: {
         paddingBottom: 0,
       },
-    },
-    {
-      children: <ThinkingLevelSlider />,
-      label: t('extendParams.thinkingLevel.title'),
-      layout: 'horizontal',
-      minWidth: undefined,
-      name: 'thinkingLevel',
-      style: {
-        paddingBottom: 0,
-      },
-    },
-    {
-      children: <ImageAspectRatioSelect />,
-      label: t('extendParams.imageAspectRatio.title'),
-      layout: 'horizontal',
-      minWidth: undefined,
-      name: 'imageAspectRatio',
-      style: {
-        paddingBottom: 0,
-      },
-      tag: 'aspectRatio',
-    },
-    {
-      children: <ImageResolutionSlider />,
-      label: t('extendParams.imageResolution.title'),
-      layout: 'horizontal',
-      minWidth: undefined,
-      name: 'imageResolution',
-      style: {
-        paddingBottom: 0,
-      },
-      tag: 'imageSize',
     },
   ].filter(Boolean) as FormItemProps[];
 

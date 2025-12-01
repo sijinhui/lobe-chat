@@ -1,17 +1,17 @@
-import { Outlet } from 'react-router-dom';
+import { ReactNode } from 'react';
 
 import MobileContentLayout from '@/components/server/MobileNavLayout';
-import { Locales } from '@/locales/resources';
 
 import Hero from '../../features/Hero';
 import Header from './Header';
 
-const Layout = (props: { locale: Locales }) => {
-  const { locale } = props;
+type Props = { children: ReactNode };
+
+const Layout = ({ children }: Props) => {
   return (
     <MobileContentLayout header={<Header />} padding={16}>
       <Hero />
-      <Outlet context={{ locale }} />
+      {children}
     </MobileContentLayout>
   );
 };

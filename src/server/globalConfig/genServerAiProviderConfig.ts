@@ -18,7 +18,7 @@ export const genServerAiProvidersConfig = async (
 ) => {
   const llmConfig = getLLMConfig() as Record<string, any>;
 
-  // Process all providers concurrently
+  // 并发处理所有 providers
   const providerConfigs = await Promise.all(
     Object.values(ModelProvider).map(async (provider) => {
       const providerUpperCase = provider.toUpperCase();
@@ -33,7 +33,7 @@ export const genServerAiProvidersConfig = async (
       const modelString =
         process.env[providerConfig.modelListKey ?? `${providerUpperCase}_MODEL_LIST`];
 
-      // Process extractEnabledModels and transformToAiModelList concurrently
+      // 并发处理 extractEnabledModels 和 transformToAiModelList
       const [enabledModels, serverModelLists] = await Promise.all([
         extractEnabledModels(provider, modelString, providerConfig.withDeploymentName || false),
         transformToAiModelList({
@@ -61,7 +61,7 @@ export const genServerAiProvidersConfig = async (
     }),
   );
 
-  // Convert the results to an object
+  // 将结果转换为对象
   const config = {} as Record<string, ProviderConfig>;
   for (const { provider, config: providerConfig } of providerConfigs) {
     config[provider] = providerConfig;

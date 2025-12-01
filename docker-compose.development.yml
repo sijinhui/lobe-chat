@@ -19,10 +19,6 @@ services:
     extends:
       file: docker-compose/local/docker-compose.yml
       service: postgresql
-  redis:
-    extends:
-      file: docker-compose/local/docker-compose.yml
-      service: redis
   minio:
     extends:
       file: docker-compose/local/docker-compose.yml
@@ -81,8 +77,6 @@ volumes:
   tempo_data:
     driver: local
   prometheus_data:
-    driver: local
-  redis_data:
     driver: local
 
 networks:

@@ -1,3 +1,5 @@
+import { chainLangDetect } from '@lobechat/prompts';
+import { chainTranslate } from '@lobechat/prompts';
 import { act, renderHook } from '@testing-library/react';
 import { Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -7,7 +9,7 @@ import { messageMapKey } from '@/store/chat/utils/messageMapKey';
 
 import { useChatStore } from '../../store';
 
-// Mock messageService and chatService
+// Mock messageService 和 chatService
 vi.mock('@/services/message', () => ({
   messageService: {
     updateMessageTTS: vi.fn(),
@@ -22,20 +24,27 @@ vi.mock('@/services/chat', () => ({
   },
 }));
 
-vi.mock('@/store/user', () => ({
-  useUserStore: {
-    getState: vi.fn(() => ({})),
-  },
+vi.mock('@/chains/langDetect', () => ({
+  chainLangDetect: vi.fn(),
 }));
 
-vi.mock('@/store/user/selectors', () => ({
-  systemAgentSelectors: {
-    translation: vi.fn(() => ({})),
-  },
+vi.mock('@/chains/translate', () => ({
+  chainTranslate: vi.fn(),
+}));
+
+// Mock supportLocales
+vi.mock('@/locales/options', () => ({
+  supportLocales: ['en-US', 'zh-CN'],
 }));
 
 beforeEach(() => {
   vi.clearAllMocks();
+  useChatStore.setState(
+    {
+      // ... 初始状态
+    },
+    false,
+  );
 });
 
 afterEach(() => {
@@ -44,26 +53,26 @@ afterEach(() => {
 
 describe('ChatEnhanceAction', () => {
   describe('translateMessage', () => {
-    it('should translate a message to the target language', async () => {
+    it('should translate a message to the target language and refresh messages', async () => {
+      const { result } = renderHook(() => useChatStore());
       const messageId = 'message-id';
       const targetLang = 'zh-CN';
       const messageContent = 'Hello World';
       const detectedLang = 'en-US';
-      const translatedText = '你好世界';
 
-      // Setup initial state
       act(() => {
         useChatStore.setState({
           activeId: 'session',
-          dbMessagesMap: {
+          messagesMap: {
             [messageMapKey('session')]: [
               {
                 id: messageId,
                 content: messageContent,
                 createdAt: Date.now(),
                 updatedAt: Date.now(),
-                role: 'assistant',
-                sessionId: 'session',
+                role: 'user',
+                sessionId: 'test',
+                topicId: 'test',
                 meta: {},
               },
             ],
@@ -71,24 +80,21 @@ describe('ChatEnhanceAction', () => {
         });
       });
 
-      // First call for language detection
-      (chatService.fetchPresetTaskResult as Mock).mockImplementationOnce(async ({ onFinish }) => {
-        if (onFinish) await onFinish(detectedLang);
+      (chatService.fetchPresetTaskResult as Mock).mockImplementation(({ params }) => {
+        if (params === chainLangDetect(messageContent)) {
+          return Promise.resolve(detectedLang);
+        }
+        if (params === chainTranslate(messageContent, targetLang)) {
+          return Promise.resolve('Hola Mundo');
+        }
+        return Promise.resolve(undefined);
       });
-
-      // Second call for translation
-      (chatService.fetchPresetTaskResult as Mock).mockImplementationOnce(async ({ onFinish }) => {
-        if (onFinish) await onFinish(translatedText);
-      });
-
-      const { result } = renderHook(() => useChatStore());
 
       await act(async () => {
         await result.current.translateMessage(messageId, targetLang);
       });
 
       expect(messageService.updateMessageTranslate).toHaveBeenCalled();
-      expect(chatService.fetchPresetTaskResult).toHaveBeenCalledTimes(2);
     });
   });
 

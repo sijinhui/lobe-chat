@@ -1,10 +1,12 @@
 'use client';
 
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { memo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { Flexbox } from 'react-layout-kit';
 
 import { enableAuth, enableNextAuth } from '@/const/auth';
+import { isDeprecatedEdition } from '@/const/version';
 import DataStatistics from '@/features/User/DataStatistics';
 import UserInfo from '@/features/User/UserInfo';
 import UserLoginOrSignup from '@/features/User/UserLoginOrSignup/Community';
@@ -12,7 +14,7 @@ import { useUserStore } from '@/store/user';
 import { authSelectors } from '@/store/user/selectors';
 
 const UserBanner = memo(() => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const isLoginWithAuth = useUserStore(authSelectors.isLoginWithAuth);
   const [signIn] = useUserStore((s) => [s.openLogin]);
 
@@ -20,12 +22,14 @@ const UserBanner = memo(() => {
     <Flexbox gap={12} paddingBlock={8}>
       {!enableAuth || (enableAuth && isLoginWithAuth) ? (
         <>
-          <Link style={{ color: 'inherit' }} to="/profile">
+          <Link href={'/profile'} style={{ color: 'inherit' }}>
             <UserInfo />
           </Link>
-          <Link style={{ color: 'inherit' }} to="/profile/stats">
-            <DataStatistics paddingInline={12} />
-          </Link>
+          {!isDeprecatedEdition && (
+            <Link href={'/profile/stats'} style={{ color: 'inherit' }}>
+              <DataStatistics paddingInline={12} />
+            </Link>
+          )}
         </>
       ) : (
         <UserLoginOrSignup
@@ -35,7 +39,7 @@ const UserBanner = memo(() => {
               signIn();
               return;
             }
-            navigate('/login');
+            router.push('/login');
           }}
         />
       )}

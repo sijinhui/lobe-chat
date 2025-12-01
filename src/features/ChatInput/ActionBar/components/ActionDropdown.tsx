@@ -30,14 +30,29 @@ export interface ActionDropdownProps extends DropdownProps {
 }
 
 const ActionDropdown = memo<ActionDropdownProps>(
-  ({ menu, maxHeight, minWidth, maxWidth, children, placement = 'top', ...rest }) => {
+  ({
+    menu,
+    maxHeight,
+    minWidth,
+    maxWidth,
+    children,
+    placement = 'top',
+    prefetch = false,
+    destroyOnHidden,
+    forceRender,
+    ...rest
+  }) => {
     const { cx, styles } = useStyles();
     const isMobile = useIsMobile();
+
+    const dropdownForceRender = prefetch ? true : forceRender;
+    const dropdownDestroyOnHidden = prefetch ? false : destroyOnHidden;
 
     return (
       <Dropdown
         arrow={false}
-        destroyOnHidden={false}
+        destroyOnHidden={dropdownDestroyOnHidden}
+        forceRender={dropdownForceRender}
         menu={{
           ...menu,
           className: cx(styles.dropdownMenu, menu.className),

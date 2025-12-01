@@ -29,9 +29,7 @@ vi.mock('@/server/modules/S3');
 vi.mock('@/server/services/user');
 vi.mock('@/server/services/nextAuthUser');
 vi.mock('@/const/auth', () => ({
-  enableBetterAuth: false,
   enableClerk: true,
-  enableNextAuth: false,
 }));
 
 describe('userRouter', () => {

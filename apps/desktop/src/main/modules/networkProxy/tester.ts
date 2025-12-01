@@ -11,7 +11,7 @@ import { ProxyConfigValidator } from './validator';
 const logger = createLogger('modules:networkProxy:tester');
 
 /**
- * Proxy connection test result
+ * 代理连接测试结果
  */
 export interface ProxyTestResult {
   message?: string;
@@ -20,14 +20,14 @@ export interface ProxyTestResult {
 }
 
 /**
- * Proxy connection tester
+ * 代理连接测试器
  */
 export class ProxyConnectionTester {
-  private static readonly DEFAULT_TIMEOUT = 10_000; // 10 seconds timeout
+  private static readonly DEFAULT_TIMEOUT = 10_000; // 10秒超时
   private static readonly DEFAULT_TEST_URL = 'https://www.google.com';
 
   /**
-   * Test proxy connection
+   * 测试代理连接
    */
   static async testConnection(
     url: string = this.DEFAULT_TEST_URL,
@@ -77,13 +77,13 @@ export class ProxyConnectionTester {
   }
 
   /**
-   * Test connection with specified proxy configuration
+   * 测试指定代理配置的连接
    */
   static async testProxyConfig(
     config: NetworkProxySettings,
     testUrl: string = this.DEFAULT_TEST_URL,
   ): Promise<ProxyTestResult> {
-    // Validate configuration
+    // 验证配置
     const validation = ProxyConfigValidator.validate(config);
     if (!validation.isValid) {
       return {
@@ -92,12 +92,12 @@ export class ProxyConnectionTester {
       };
     }
 
-    // If proxy is not enabled, test directly
+    // 如果未启用代理，直接测试
     if (!config.enableProxy) {
       return this.testConnection(testUrl);
     }
 
-    // Create temporary proxy agent for testing
+    // 创建临时代理 agent 进行测试
     try {
       const proxyUrl = ProxyUrlBuilder.build(config);
       logger.debug(`Testing proxy with URL: ${proxyUrl}`);
@@ -108,7 +108,7 @@ export class ProxyConnectionTester {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), this.DEFAULT_TIMEOUT);
 
-      // Temporarily set proxy for testing
+      // 临时设置代理进行测试
       const originalDispatcher = getGlobalDispatcher();
       setGlobalDispatcher(agent);
 
@@ -138,9 +138,9 @@ export class ProxyConnectionTester {
         clearTimeout(timeoutId);
         throw fetchError;
       } finally {
-        // Restore original dispatcher
+        // 恢复原来的 dispatcher
         setGlobalDispatcher(originalDispatcher);
-        // Clean up temporary proxy agent
+        // 清理临时创建的代理 agent
         if (agent && typeof agent.destroy === 'function') {
           try {
             await agent.destroy();

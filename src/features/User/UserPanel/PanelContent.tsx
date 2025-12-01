@@ -1,12 +1,12 @@
-import { enableBetterAuth, enableNextAuth } from '@lobechat/const';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { memo } from 'react';
 import { Flexbox } from 'react-layout-kit';
-import { Link } from 'react-router-dom';
 
 import BrandWatermark from '@/components/BrandWatermark';
 import Menu from '@/components/Menu';
-import { isDesktop } from '@/const/version';
+import { enableAuth, enableNextAuth } from '@/const/auth';
+import { isDeprecatedEdition } from '@/const/version';
 import { useUserStore } from '@/store/user';
 import { authSelectors } from '@/store/user/selectors';
 
@@ -31,21 +31,21 @@ const PanelContent = memo<{ closePopover: () => void }>(({ closePopover }) => {
   const handleSignOut = () => {
     signOut();
     closePopover();
-    // NextAuth and Better Auth handle redirect in their own signOut methods
-    if (enableNextAuth || enableBetterAuth) return;
-    // Clerk uses /login page
+    // NextAuth doesn't need to redirect to login page
+    if (enableNextAuth) return;
     router.push('/login');
   };
 
   return (
     <Flexbox gap={2} style={{ minWidth: 300 }}>
-      {isDesktop || isLoginWithAuth ? (
+      {!enableAuth || (enableAuth && isLoginWithAuth) ? (
         <>
           <UserInfo avatarProps={{ clickable: false }} />
-
-          <Link style={{ color: 'inherit' }} to={'/profile/stats'}>
-            <DataStatistics />
-          </Link>
+          {!isDeprecatedEdition && (
+            <Link href={'/profile/stats'} style={{ color: 'inherit' }}>
+              <DataStatistics />
+            </Link>
+          )}
         </>
       ) : (
         <UserLoginOrSignup onClick={handleSignIn} />

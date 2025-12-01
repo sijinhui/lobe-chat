@@ -1,4 +1,4 @@
-import { GenerateContentResponse, Part } from '@google/genai';
+import { GenerateContentResponse } from '@google/genai';
 import { GroundingSearch } from '@lobechat/types';
 
 import { ChatStreamCallbacks } from '../../../types';
@@ -7,7 +7,6 @@ import { convertGoogleAIUsage } from '../../usageConverters/google-ai';
 import {
   ChatPayloadForTransformStream,
   StreamContext,
-  StreamPartChunkData,
   StreamProtocolChunk,
   StreamToolCallChunkData,
   createCallbacksTransformer,
@@ -75,27 +74,19 @@ const transformGoogleGenerativeAIStream = (
     }
   }
 
-  // Parse function calls from candidate.content.parts
-  const functionCalls =
-    candidate?.content?.parts
-      ?.filter((part: any) => part.functionCall)
-      .map((part: Part) => ({
-        ...part.functionCall,
-        thoughtSignature: part.thoughtSignature,
-      })) || [];
+  const functionCalls = chunk.functionCalls;
 
-  if (functionCalls.length > 0) {
+  if (functionCalls) {
     return [
       {
         data: functionCalls.map(
-          (value, index: number): StreamToolCallChunkData => ({
+          (value, index): StreamToolCallChunkData => ({
             function: {
               arguments: JSON.stringify(value.args),
               name: value.name,
             },
             id: generateToolCallId(index, value.name),
             index: index,
-            thoughtSignature: value.thoughtSignature,
             type: 'function',
           }),
         ),
@@ -106,130 +97,15 @@ const transformGoogleGenerativeAIStream = (
     ];
   }
 
-  // Parse text from candidate.content.parts
-  // Filter out thought content (thought: true) only, keep thoughtSignature as it's just metadata
-  const text =
-    candidate?.content?.parts
-      ?.filter((part: any) => part.text && !part.thought)
-      .map((part: any) => part.text)
-      .join('') || '';
+  const text = chunk.text;
 
   if (candidate) {
-    // Check if this response contains reasoning or multimodal content
-    const parts = candidate.content?.parts || [];
-    const hasReasoningParts = parts.some((p: any) => p.thought === true);
-    const hasImageParts = parts.some((p: any) => p.inlineData);
-    const hasThoughtSignature = parts.some((p: any) => p.thoughtSignature);
-    const hasThoughtsInMetadata = (usageMetadata as any)?.thoughtsTokenCount > 0;
-
-    // Check model version to determine if new format should be used
-    const modelVersion = (chunk as any).modelVersion || '';
-    const isGemini25Plus = modelVersion.includes('gemini-2.5') || modelVersion.includes('gemini-3');
-    const isGemini3Model =
-      modelVersion.includes('gemini-3') || modelVersion.includes('image-preview');
-
-    // Check if this is the old single-image scenario (single image part with finishReason)
-    // This should use the legacy base64_image event format (only for gemini-2.0 and earlier)
-    const isSingleImageWithFinish =
-      parts.length === 1 &&
-      hasImageParts &&
-      !hasReasoningParts &&
-      candidate.finishReason &&
-      !isGemini25Plus;
-
-    // Check if this has grounding metadata (should use legacy text + grounding events)
-    const hasGroundingMetadata = !!candidate.groundingMetadata?.groundingChunks;
-
-    // Use content_part/reasoning_part events when:
-    // 1. There are reasoning parts in current chunk (thought: true)
-    // 2. There are multiple parts with images (multimodal content)
-    // 3. There are thoughtSignature in parts (reasoning metadata attached to content)
-    // 4. There is thoughtsTokenCount in metadata (indicates response contains reasoning)
-    // 5. This is Gemini 3 model with image generation (always use new format for consistency)
-    // BUT NOT for:
-    // - The legacy single-image scenario
-    // - Grounding metadata scenario (uses legacy text + grounding events)
-    const shouldUseMultimodalProcessing =
-      (hasReasoningParts ||
-        (hasImageParts && parts.length > 1) ||
-        hasThoughtSignature ||
-        hasThoughtsInMetadata ||
-        isGemini3Model) &&
-      !isSingleImageWithFinish &&
-      !hasGroundingMetadata;
-
-    // Process multimodal parts (text and images in reasoning or content)
-    if (
-      shouldUseMultimodalProcessing &&
-      Array.isArray(candidate.content?.parts) &&
-      candidate.content.parts.length > 0
-    ) {
-      const results: StreamProtocolChunk[] = [];
-
+    // 首先检查是否为 reasoning 内容 (thought: true)
+    if (Array.isArray(candidate.content?.parts) && candidate.content.parts.length > 0) {
       for (const part of candidate.content.parts) {
-        // 1. Reasoning text part
         if (part && part.text && part.thought === true) {
-          results.push({
-            data: {
-              content: part.text,
-              inReasoning: true,
-              partType: 'text',
-              thoughtSignature: part.thoughtSignature,
-            } as StreamPartChunkData,
-            id: context.id,
-            type: 'reasoning_part',
-          });
+          return { data: part.text, id: context.id, type: 'reasoning' };
         }
-
-        // 2. Reasoning image part
-        else if (part && part.inlineData && part.thought === true) {
-          results.push({
-            data: {
-              content: part.inlineData.data,
-              inReasoning: true,
-              mimeType: part.inlineData.mimeType,
-              partType: 'image',
-              thoughtSignature: part.thoughtSignature,
-            } as StreamPartChunkData,
-            id: context.id,
-            type: 'reasoning_part',
-          });
-        }
-
-        // 3. Content text part
-        else if (part && part.text && !part.thought) {
-          results.push({
-            data: {
-              content: part.text,
-              partType: 'text',
-              thoughtSignature: part.thoughtSignature,
-            } as StreamPartChunkData,
-            id: context.id,
-            type: 'content_part',
-          });
-        }
-
-        // 4. Content image part
-        else if (part && part.inlineData && !part.thought) {
-          results.push({
-            data: {
-              content: part.inlineData.data,
-              mimeType: part.inlineData.mimeType,
-              partType: 'image',
-              thoughtSignature: part.thoughtSignature,
-            } as StreamPartChunkData,
-            id: context.id,
-            type: 'content_part',
-          });
-        }
-      }
-
-      // If we found multimodal parts, return them with usage chunks
-      if (results.length > 0) {
-        if (candidate.finishReason && usageMetadata) {
-          results.push(...usageChunks);
-        }
-        return results;
       }
     }
 
@@ -258,8 +134,7 @@ const transformGoogleGenerativeAIStream = (
 
     // Check for image data before handling finishReason
     if (Array.isArray(candidate.content?.parts) && candidate.content.parts.length > 0) {
-      // Filter out reasoning content and get first non-reasoning part
-      const part = candidate.content.parts.find((p: any) => !p.thought);
+      const part = candidate.content.parts[0];
 
       if (part && part.inlineData && part.inlineData.data && part.inlineData.mimeType) {
         const imageChunk = {
@@ -293,11 +168,7 @@ const transformGoogleGenerativeAIStream = (
           ...usageChunks,
         ].filter(Boolean) as StreamProtocolChunk[];
       }
-      // 当有 finishReason 但没有 text 内容时,发送一个空的 text 块以停止加载动画
-      return [
-        { data: '', id: context?.id, type: 'text' },
-        { data: candidate.finishReason, id: context?.id, type: 'stop' },
-      ];
+      return { data: candidate.finishReason, id: context?.id, type: 'stop' };
     }
 
     if (!!text?.trim()) return { data: text, id: context?.id, type: 'text' };

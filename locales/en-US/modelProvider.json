@@ -199,12 +199,6 @@
     "all": "All",
     "list": {
       "disabled": "Disabled",
-      "disabledActions": {
-        "sort": "Sort By",
-        "sortAlphabetical": "Sort Alphabetically",
-        "sortAlphabeticalDesc": "Sort by Reverse Alphabetical Order",
-        "sortDefault": "Default Sort"
-      },
       "enabled": "Enabled"
     },
     "notFound": "No search results found",
@@ -295,7 +289,7 @@
       },
       "helpDoc": "Configuration Guide",
       "responsesApi": {
-        "desc": "Uses OpenAI's next-generation request format specification to unlock advanced features like chain-of-thought (supported by OpenAI models only)",
+        "desc": "Utilizes OpenAI's next-generation request format specification to unlock advanced features like chain of thought",
         "title": "Use Responses API Specification"
       },
       "waitingForMore": "More models are currently <1>planned for integration</1>, please stay tuned"
@@ -397,13 +391,7 @@
       "addNew": "Add Model",
       "disabled": "Disabled",
       "disabledActions": {
-        "showMore": "Show All",
-        "sort": "Sort By",
-        "sortAlphabetical": "Sort Alphabetically",
-        "sortAlphabeticalDesc": "Sort by Reverse Alphabetical Order",
-        "sortDefault": "Default Sort",
-        "sortReleasedAt": "Sort by Earliest Release Date",
-        "sortReleasedAtDesc": "Sort by Latest Release Date"
+        "showMore": "Show All"
       },
       "empty": {
         "desc": "Please create a custom model or pull a model to get started.",

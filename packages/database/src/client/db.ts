@@ -1,13 +1,13 @@
-import {
-  type ClientDBLoadingProgress,
-  DatabaseLoadingState,
-  type MigrationSQL,
-  type MigrationTableItem,
-} from '@lobechat/types';
 import { sql } from 'drizzle-orm';
 import { PgliteDatabase, drizzle } from 'drizzle-orm/pglite';
 import { Md5 } from 'ts-md5';
 
+import {
+  ClientDBLoadingProgress,
+  DatabaseLoadingState,
+  MigrationSQL,
+  MigrationTableItem,
+} from '@/types/clientDB';
 import { sleep } from '@/utils/sleep';
 
 import migrations from '../core/migrations.json';
@@ -38,7 +38,7 @@ export class DatabaseManager {
   private callbacks?: DatabaseLoadingCallbacks;
   private isLocalDBSchemaSynced = false;
 
-  // CDN configuration
+  // CDN 配置
   private static WASM_CDN_URL =
     'https://registry.npmmirror.com/@electric-sql/pglite/0.2.17/files/dist/postgres.wasm';
 
@@ -57,7 +57,7 @@ export class DatabaseManager {
     return DatabaseManager.instance;
   }
 
-  // Load and compile WASM module
+  // 加载并编译 WASM 模块
   private async loadWasmModule(): Promise<WebAssembly.Module> {
     const start = Date.now();
     this.callbacks?.onStateChange?.(DatabaseLoadingState.LoadingWasm);
@@ -72,7 +72,7 @@ export class DatabaseManager {
     let receivedLength = 0;
     const chunks: Uint8Array[] = [];
 
-    // Read data stream
+    // 读取数据流
     // eslint-disable-next-line no-constant-condition
     while (true) {
       const { done, value } = await reader.read();
@@ -82,7 +82,7 @@ export class DatabaseManager {
       chunks.push(value);
       receivedLength += value.length;
 
-      // Calculate and report progress
+      // 计算并报告进度
       const progress = Math.min(Math.round((receivedLength / contentLength) * 100), 100);
       this.callbacks?.onProgress?.({
         phase: 'wasm',
@@ -90,7 +90,7 @@ export class DatabaseManager {
       });
     }
 
-    // Merge data chunks
+    // 合并数据块
     const wasmBytes = new Uint8Array(receivedLength);
     let position = 0;
     for (const chunk of chunks) {
@@ -104,7 +104,7 @@ export class DatabaseManager {
       progress: 100,
     });
 
-    // Compile WASM module
+    // 编译 WASM 模块
     return WebAssembly.compile(wasmBytes);
   }
 
@@ -114,7 +114,7 @@ export class DatabaseManager {
     return await res.blob();
   };
 
-  // Asynchronously load PGlite related dependencies
+  // 异步加载 PGlite 相关依赖
   private async loadDependencies() {
     const start = Date.now();
     this.callbacks?.onStateChange?.(DatabaseLoadingState.LoadingDependencies);
@@ -135,7 +135,7 @@ export class DatabaseManager {
         const result = await importPromise;
         loaded += 1;
 
-        // Calculate loading progress
+        // 计算加载进度
         this.callbacks?.onProgress?.({
           phase: 'dependencies',
           progress: Math.min(Math.round((loaded / imports.length) * 100), 100),
@@ -156,7 +156,7 @@ export class DatabaseManager {
     return { IdbFs, MemoryFS, PGlite, fsBundle, vector };
   }
 
-  // Database migration method
+  // 数据库迁移方法
   private async migrate(skipMultiRun = false): Promise<DrizzleInstance> {
     if (this.isLocalDBSchemaSynced && skipMultiRun) return this.db;
 
@@ -169,17 +169,17 @@ export class DatabaseManager {
         try {
           const drizzleMigration = new DrizzleMigrationModel(this.db as any);
 
-          // Check if tables exist in database
+          // 检查数据库中是否存在表
           const tableCount = await drizzleMigration.getTableCounts();
 
-          // If table count > 0, consider database properly initialized
+          // 如果表数量大于0，则认为数据库已正确初始化
           if (tableCount > 0) {
             this.isLocalDBSchemaSynced = true;
             return this.db;
           }
         } catch (error) {
           console.warn('Error checking table existence, proceeding with migration', error);
-          // If query fails, continue migration to ensure safety
+          // 如果查询失败，继续执行迁移以确保安全
         }
       }
     }
@@ -207,7 +207,7 @@ export class DatabaseManager {
     return this.db;
   }
 
-  // Initialize database
+  // 初始化数据库
   async initialize(callbacks?: DatabaseLoadingCallbacks): Promise<DrizzleInstance> {
     if (this.initPromise) return this.initPromise;
 
@@ -218,13 +218,13 @@ export class DatabaseManager {
         if (this.dbInstance) return this.dbInstance;
 
         const time = Date.now();
-        // Initialize database
+        // 初始化数据库
         this.callbacks?.onStateChange?.(DatabaseLoadingState.Initializing);
 
-        // Load dependencies
+        // 加载依赖
         const { fsBundle, PGlite, MemoryFS, IdbFs, vector } = await this.loadDependencies();
 
-        // Load and compile WASM module
+        // 加载并编译 WASM 模块
         const wasmModule = await this.loadWasmModule();
 
         const { initPgliteWorker } = await import('./pglite');
@@ -267,10 +267,10 @@ export class DatabaseManager {
         this.callbacks?.onStateChange?.(DatabaseLoadingState.Error);
         const error = e as Error;
 
-        // Query migration table data
+        // 查询迁移表数据
         let migrationsTableData: MigrationTableItem[] = [];
         try {
-          // Attempt to query migration table
+          // 尝试查询迁移表
           const drizzleMigration = new DrizzleMigrationModel(this.db as any);
           migrationsTableData = await drizzleMigration.getMigrationList();
         } catch (queryError) {
@@ -295,7 +295,7 @@ export class DatabaseManager {
     return this.initPromise;
   }
 
-  // Get database instance
+  // 获取数据库实例
   get db(): DrizzleInstance {
     if (!this.dbInstance) {
       throw new Error('Database not initialized. Please call initialize() first.');
@@ -303,7 +303,7 @@ export class DatabaseManager {
     return this.dbInstance;
   }
 
-  // Create proxy object
+  // 创建代理对象
   createProxy(): DrizzleInstance {
     return new Proxy({} as DrizzleInstance, {
       get: (target, prop) => {
@@ -313,7 +313,7 @@ export class DatabaseManager {
   }
 
   async resetDatabase(): Promise<void> {
-    // 1. Close existing PGlite connection (if exists)
+    // 1. 关闭现有的 PGlite 连接（如果存在）
     if (this.dbInstance) {
       try {
         // @ts-ignore
@@ -321,31 +321,31 @@ export class DatabaseManager {
         console.log('PGlite instance closed successfully.');
       } catch (e) {
         console.error('Error closing PGlite instance:', e);
-        // Even if closing fails, continue with deletion attempt; IndexedDB onblocked or onerror will handle subsequent issues
+        // 即使关闭失败，也尝试继续删除，IndexedDB 的 onblocked 或 onerror 会处理后续问题
       }
     }
 
-    // 2. Reset database instance and initialization state
+    // 2. 重置数据库实例和初始化状态
     this.dbInstance = null;
     this.initPromise = null;
-    this.isLocalDBSchemaSynced = false; // Reset sync state
+    this.isLocalDBSchemaSynced = false; // 重置同步状态
 
-    // 3. Delete IndexedDB database
+    // 3. 删除 IndexedDB 数据库
     return new Promise<void>((resolve, reject) => {
-      // Check if IndexedDB is available
+      // 检查 IndexedDB 是否可用
       if (typeof indexedDB === 'undefined') {
         console.warn('IndexedDB is not available, cannot delete database');
-        resolve(); // Cannot delete in this environment, resolve directly
+        resolve(); // 在此环境下无法删除，直接解决
         return;
       }
 
-      const dbName = `/pglite/${DB_NAME}`; // Path used by PGlite IdbFs
+      const dbName = `/pglite/${DB_NAME}`; // PGlite IdbFs 使用的路径
       const request = indexedDB.deleteDatabase(dbName);
 
       request.onsuccess = () => {
         console.log(`✅ Database '${dbName}' reset successfully`);
 
-        // Clear locally stored schema hash
+        // 清除本地存储的模式哈希
         if (typeof localStorage !== 'undefined') {
           localStorage.removeItem(pgliteSchemaHashCache);
         }
@@ -365,7 +365,7 @@ export class DatabaseManager {
       };
 
       request.onblocked = (event) => {
-        // This event is triggered when other open connections block database deletion
+        // 当其他打开的连接阻止数据库删除时，会触发此事件
         console.warn(
           `Deletion of database '${dbName}' is blocked. This usually means other connections (e.g., in other tabs) are still open. Event:`,
           event,
@@ -380,13 +380,13 @@ export class DatabaseManager {
   }
 }
 
-// Export singleton
+// 导出单例
 const dbManager = DatabaseManager.getInstance();
 
-// Keep original clientDB export unchanged
+// 保持原有的 clientDB 导出不变
 export const clientDB = dbManager.createProxy();
 
-// Export initialization method for application startup
+// 导出初始化方法，供应用启动时使用
 export const initializeDB = (callbacks?: DatabaseLoadingCallbacks) =>
   dbManager.initialize(callbacks);
 

@@ -1,11 +1,12 @@
-import type {
+import { sql } from 'drizzle-orm';
+import pMap from 'p-map';
+
+import {
   FilterCondition,
   PaginationParams,
   TableBasicInfo,
   TableColumnInfo,
-} from '@lobechat/types';
-import { sql } from 'drizzle-orm';
-import pMap from 'p-map';
+} from '@/types/tableViewer';
 
 import { LobeChatDatabase } from '../../type';
 

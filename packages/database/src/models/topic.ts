@@ -72,7 +72,7 @@ export class TopicModel {
 
     const keywordLowerCase = keyword.toLowerCase();
 
-    // Query topics matching by title
+    // 查询标题匹配的主题
     const topicsByTitle = await this.db.query.topics.findMany({
       orderBy: [desc(topics.updatedAt)],
       where: and(
@@ -82,7 +82,7 @@ export class TopicModel {
       ),
     });
 
-    // Query topic IDs matching by message content
+    // 查询消息内容匹配的主题ID
     const topicIdsByMessages = await this.db
       .select({ topicId: messages.topicId })
       .from(messages)
@@ -96,19 +96,19 @@ export class TopicModel {
         ),
       )
       .groupBy(messages.topicId);
-    // If no topics found by message content, return topics matching by title
+    // 如果没有通过消息内容找到主题，直接返回标题匹配的主题
     if (topicIdsByMessages.length === 0) {
       return topicsByTitle;
     }
 
-    // Query topics found by message content
+    // 查询通过消息内容找到的主题
     const topicIds = topicIdsByMessages.map((t) => t.topicId);
     const topicsByMessages = await this.db.query.topics.findMany({
       orderBy: [desc(topics.updatedAt)],
       where: and(eq(topics.userId, this.userId), inArray(topics.id, topicIds)),
     });
 
-    // Merge results and deduplicate
+    // 合并结果并去重
     const allTopics = [...topicsByTitle];
     const existingIds = new Set(topicsByTitle.map((t) => t.id));
 
@@ -118,7 +118,7 @@ export class TopicModel {
       }
     }
 
-    // Sort by update time
+    // 按更新时间排序
     return allTopics.sort(
       (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
     );
@@ -199,9 +199,9 @@ export class TopicModel {
   };
 
   batchCreate = async (topicParams: (CreateTopicParams & { id?: string })[]) => {
-    // Start a transaction
+    // 开始一个事务
     return this.db.transaction(async (tx) => {
-      // Batch insert new topics into the topics table
+      // 在 topics 表中批量插入新的 topics
       const createdTopics = await tx
         .insert(topics)
         .values(
@@ -216,7 +216,7 @@ export class TopicModel {
         )
         .returning();
 
-      // For each newly created topic, update the topicId of associated messages
+      // 对每个新创建的 topic,更新关联的 messages 的 topicId
       await Promise.all(
         createdTopics.map(async (topic, index) => {
           const messageIds = topicParams[index].messages;
@@ -255,7 +255,7 @@ export class TopicModel {
         })
         .returning();
 
-      // Find messages associated with the original topic
+      // 查找与原始 topic 关联的 messages
       const originalMessages = await tx
         .select()
         .from(messages)

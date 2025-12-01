@@ -31,15 +31,7 @@ const useStyles = createStyles(({ css, prefixCls }) => {
 const CategoryMenu = memo<MenuProps>(({ style, ...rest }) => {
   const { styles } = useStyles();
 
-  return (
-    <Menu
-      className={styles.menu}
-      data-testid="category-menu"
-      mode="inline"
-      style={style}
-      {...rest}
-    />
-  );
+  return <Menu className={styles.menu} mode="inline" style={style} {...rest} />;
 });
 
 export default CategoryMenu;

@@ -41,7 +41,7 @@ const Pagination = memo<PaginationProps>(({ tab, currentPage, total, pageSize })
   const handlePageChange = (newPage: number) => {
     const searchParams = new URLSearchParams(location.search);
     searchParams.set('page', String(newPage));
-    navigate(`/discover/${tab}?${searchParams.toString()}`);
+    navigate(`/${tab}?${searchParams.toString()}`);
 
     const scrollableElement = document?.querySelector(`#${SCROLL_PARENT_ID}`);
     if (!scrollableElement) return;
@@ -52,7 +52,6 @@ const Pagination = memo<PaginationProps>(({ tab, currentPage, total, pageSize })
     <Page
       className={styles.page}
       current={page ? Number(page) : currentPage}
-      data-testid="pagination"
       onChange={handlePageChange}
       pageSize={pageSize}
       showSizeChanger={false}

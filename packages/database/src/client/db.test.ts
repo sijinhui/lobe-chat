@@ -1,5 +1,6 @@
-import { ClientDBLoadingProgress, DatabaseLoadingState } from '@lobechat/types';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { ClientDBLoadingProgress, DatabaseLoadingState } from '@/types/clientDB';
 
 import { DatabaseManager } from './db';
 

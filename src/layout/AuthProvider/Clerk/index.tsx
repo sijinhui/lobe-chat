@@ -4,10 +4,13 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { PropsWithChildren, memo, useEffect, useMemo, useState, useTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { featureFlagsSelectors, useServerConfigStore } from '@/store/serverConfig';
+
 import UserUpdater from './UserUpdater';
 import { useAppearance } from './useAppearance';
 
 const Clerk = memo(({ children }: PropsWithChildren) => {
+  const { enableClerkSignUp } = useServerConfigStore(featureFlagsSelectors);
   const appearance = useAppearance();
   const {
     i18n: { language, getResourceBundle },
@@ -38,12 +41,23 @@ const Clerk = memo(({ children }: PropsWithChildren) => {
     return origins.length ? origins : undefined;
   }, []);
 
+  const updatedAppearance = useMemo(
+    () => ({
+      ...appearance,
+      elements: {
+        ...appearance.elements,
+        ...(!enableClerkSignUp ? { footerAction: { display: 'none' } } : {}),
+      },
+    }),
+    [appearance, enableClerkSignUp],
+  );
+
   return (
     <ClerkProvider
       allowedRedirectOrigins={allowedRedirectOrigins}
-      appearance={appearance}
+      appearance={updatedAppearance}
       localization={localization}
-      signUpUrl="/signup"
+      signUpUrl={!enableClerkSignUp ? '/login' : '/signup'} // Redirect sign-up to sign-in if disabled
     >
       {children}
       <UserUpdater />

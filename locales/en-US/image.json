@@ -37,14 +37,6 @@
         "standard": "Standard"
       }
     },
-    "resolution": {
-      "label": "Resolution",
-      "options": {
-        "1K": "1K",
-        "2K": "2K",
-        "4K": "4K"
-      }
-    },
     "seed": {
       "label": "Seed",
       "random": "Random Seed"

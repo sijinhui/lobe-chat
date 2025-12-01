@@ -9,7 +9,6 @@ export interface SendNewMessage {
   content: string;
   // if message has attached with files, then add files to message and the agent
   files?: string[];
-  parentId?: string;
 }
 
 export interface SendMessageServerParams {
@@ -42,7 +41,6 @@ export const AiSendMessageServerSchema = z.object({
   newUserMessage: z.object({
     content: z.string(),
     files: z.array(z.string()).optional(),
-    parentId: z.string().optional(),
   }),
   sessionId: z.string().optional(),
   threadId: z.string().optional(),

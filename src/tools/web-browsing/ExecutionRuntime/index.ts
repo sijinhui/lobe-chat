@@ -17,12 +17,9 @@ export class WebBrowsingExecutionRuntime {
     this.searchService = options.searchService;
   }
 
-  async search(
-    args: SearchQuery,
-    options?: { signal?: AbortSignal },
-  ): Promise<BuiltinServerRuntimeOutput> {
+  async search(args: SearchQuery): Promise<BuiltinServerRuntimeOutput> {
     try {
-      const data = await this.searchService.webSearch(args as SearchQuery, options);
+      const data = await this.searchService.webSearch(args as SearchQuery);
 
       // add LIMITED_COUNT search results to message content
       const searchContent: SearchContent[] = data.results

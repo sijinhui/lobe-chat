@@ -1,15 +1,15 @@
-import type {
-  AiProviderDetailItem,
-  AiProviderListItem,
-  AiProviderRuntimeConfig,
-  CreateAiProviderParams,
-  UpdateAiProviderConfigParams,
-} from '@lobechat/types';
 import { and, asc, desc, eq } from 'drizzle-orm';
 import { isEmpty } from 'lodash-es';
 import { ModelProvider } from 'model-bank';
 
 import { DEFAULT_MODEL_PROVIDER_LIST } from '@/config/modelProviders';
+import {
+  AiProviderDetailItem,
+  AiProviderListItem,
+  AiProviderRuntimeConfig,
+  CreateAiProviderParams,
+  UpdateAiProviderConfigParams,
+} from '@/types/aiProvider';
 import { merge } from '@/utils/merge';
 
 import { AiProviderSelectItem, aiModels, aiProviders } from '../schemas';
