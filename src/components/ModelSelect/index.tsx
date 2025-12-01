@@ -22,6 +22,8 @@ import { Flexbox } from 'react-layout-kit';
 import { AiProviderSourceType } from '@/types/aiProvider';
 import { formatTokenNumber } from '@/utils/format';
 
+import NewModelBadge from './NewModelBadge';
+
 export const TAG_CLASSNAME = 'lobe-model-info-tags';
 
 const useStyles = createStyles(({ css, token }) => ({
@@ -229,6 +231,7 @@ const HighlightBrackets = ({ text }: { text: string }) => {
 
 export const ModelItemRender = memo<ModelItemRenderProps>(({ showInfoTag = true, ...model }) => {
   const { mobile } = useResponsive();
+
   return (
     <Flexbox
       align={'center'}
@@ -252,6 +255,7 @@ export const ModelItemRender = memo<ModelItemRenderProps>(({ showInfoTag = true,
         <Text style={mobile ? { maxWidth: '60vw', overflowX: 'auto', whiteSpace: 'nowrap' } : {}}>
           <HighlightBrackets text={model.displayName || model.id} />
         </Text>
+        <NewModelBadge releasedAt={model.releasedAt} />
       </Flexbox>
       {showInfoTag && <ModelInfoTags {...model} />}
     </Flexbox>
