@@ -31,9 +31,59 @@
 
 <sup>Released on **2025-11-02**</sup>
 
+#### 💄 Styles
+
+- **misc**: Update i18n.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### Styles
+
+- **misc**: Update i18n, closes [#9958](https://github.com/lobehub/lobe-chat/issues/9958) ([f49996c](https://github.com/lobehub/lobe-chat/commit/f49996c))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+## [Version 2.0.0-next.7](https://github.com/lobehub/lobe-chat/compare/v2.0.0-next.6...v2.0.0-next.7)
+
+<sup>Released on **2025-11-01**</sup>
+
+#### ✨ Features
+
+- **misc**: Upgrade to Next 16.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's improved
+
+- **misc**: Upgrade to Next 16, closes [#9851](https://github.com/lobehub/lobe-chat/issues/9851) ([abb71ec](https://github.com/lobehub/lobe-chat/commit/abb71ec))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+## [Version 2.0.0-next.6](https://github.com/lobehub/lobe-chat/compare/v2.0.0-next.5...v2.0.0-next.6)
+
+<sup>Released on **2025-10-31**</sup>
+
 #### 🐛 Bug Fixes
 
-- **misc**: OIDC error when connecting to self-host instance.
+- **AssistantStore**: Add missing identifier parameter.
 
 <br/>
 
@@ -42,9 +92,211 @@
 
 #### What's fixed
 
-- **misc**: OIDC error when connecting to self-host instance, closes [#9916](https://github.com/lobehub/lobe-chat/issues/9916) ([2e2b9c4](https://github.com/lobehub/lobe-chat/commit/2e2b9c4))
+- **AssistantStore**: Add missing identifier parameter, closes [#9948](https://github.com/lobehub/lobe-chat/issues/9948) ([2e40855](https://github.com/lobehub/lobe-chat/commit/2e40855))
 
 </details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+## [Version 2.0.0-next.5](https://github.com/lobehub/lobe-chat/compare/v2.0.0-next.4...v2.0.0-next.5)
+
+<sup>Released on **2025-10-31**</sup>
+
+#### ♻ Code Refactoring
+
+- **misc**: Migrating Firecrawl to v2.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### Code refactoring
+
+- **misc**: Migrating Firecrawl to v2, closes [#9850](https://github.com/lobehub/lobe-chat/issues/9850) ([efb4c22](https://github.com/lobehub/lobe-chat/commit/efb4c22))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+## [Version 2.0.0-next.4](https://github.com/lobehub/lobe-chat/compare/v2.0.0-next.3...v2.0.0-next.4)
+
+<sup>Released on **2025-10-31**</sup>
+
+#### ♻ Code Refactoring
+
+- **misc**: Remove azure-ad auth provider.
+
+#### 💄 Styles
+
+- **misc**: Update i18n.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### Code refactoring
+
+- **misc**: Remove azure-ad auth provider, closes [#9942](https://github.com/lobehub/lobe-chat/issues/9942) ([103c4d7](https://github.com/lobehub/lobe-chat/commit/103c4d7))
+
+#### Styles
+
+- **misc**: Update i18n, closes [#9944](https://github.com/lobehub/lobe-chat/issues/9944) ([3a6468f](https://github.com/lobehub/lobe-chat/commit/3a6468f))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+## [Version 2.0.0-next.3](https://github.com/lobehub/lobe-chat/compare/v2.0.0-next.2...v2.0.0-next.3)
+
+<sup>Released on **2025-10-30**</sup>
+
+#### ♻ Code Refactoring
+
+- **misc**: Remove llm page.
+
+#### 💄 Styles
+
+- **misc**: Add new bedrock model support, add pricing info for Azure GPT-5 series models.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### Code refactoring
+
+- **misc**: Remove llm page, closes [#9940](https://github.com/lobehub/lobe-chat/issues/9940) ([6ec01a3](https://github.com/lobehub/lobe-chat/commit/6ec01a3))
+
+#### Styles
+
+- **misc**: Add new bedrock model support, closes [#9826](https://github.com/lobehub/lobe-chat/issues/9826) ([1b8a981](https://github.com/lobehub/lobe-chat/commit/1b8a981))
+- **misc**: Add pricing info for Azure GPT-5 series models, closes [#9833](https://github.com/lobehub/lobe-chat/issues/9833) ([39a80c5](https://github.com/lobehub/lobe-chat/commit/39a80c5))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+## [Version 2.0.0-next.2](https://github.com/lobehub/lobe-chat/compare/v2.0.0-next.1...v2.0.0-next.2)
+
+<sup>Released on **2025-10-30**</sup>
+
+#### 🐛 Bug Fixes
+
+- **misc**: Hide marketplace link from Plugin List when market disabled, OIDC error when connecting to self-host instance, only include input_fidelity parameter for gpt-image-1..
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's fixed
+
+- **misc**: Hide marketplace link from Plugin List when market disabled, closes [#9929](https://github.com/lobehub/lobe-chat/issues/9929) ([e303979](https://github.com/lobehub/lobe-chat/commit/e303979))
+- **misc**: OIDC error when connecting to self-host instance, closes [#9916](https://github.com/lobehub/lobe-chat/issues/9916) ([7a2ca19](https://github.com/lobehub/lobe-chat/commit/7a2ca19))
+- **misc**: Only include input_fidelity parameter for gpt-image-1., closes [#9920](https://github.com/lobehub/lobe-chat/issues/9920) ([65dbc63](https://github.com/lobehub/lobe-chat/commit/65dbc63))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+## [Version 2.0.0-next.1](https://github.com/lobehub/lobe-chat/compare/v1.143.0-next.2...v2.0.0-next.1)
+
+<sup>Released on **2025-10-30**</sup>
+
+#### ✨ Features
+
+- **misc**: 2.0 next baseline.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's improved
+
+- **misc**: 2.0 next baseline ([8c57dfd](https://github.com/lobehub/lobe-chat/commit/8c57dfd))
+
+</details>
+
+#### 💥 BREAKING CHANGES
+
+- **misc**: starting V2
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+## [Version 1.143.0-next.2](https://github.com/lobehub/lobe-chat/compare/v1.143.0-next.1...v1.143.0-next.2)
+
+<sup>Released on **2025-10-30**</sup>
+
+#### ✨ Features
+
+- **misc**: 2.0 next init.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's improved
+
+- **misc**: 2.0 next init ([26daac5](https://github.com/lobehub/lobe-chat/commit/26daac5))
+
+</details>
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+## [Version 1.143.0-next.1](https://github.com/lobehub/lobe-chat/compare/v1.142.8...v1.143.0-next.1)
+
+<sup>Released on **2025-10-30**</sup>
+
+#### ✨ Features
+
+- **misc**: Try 2.0 next.
+
+<br/>
+
+<details>
+<summary><kbd>Improvements and Fixes</kbd></summary>
+
+#### What's improved
+
+- **misc**: Try 2.0 next ([e0af4e6](https://github.com/lobehub/lobe-chat/commit/e0af4e6))
+
+</details>
+
+#### 💥 BREAKING CHANGES
+
+- **misc**: starting V2
 
 <div align="right">
 
@@ -13203,7 +13455,7 @@
 
 #### 🐛 Bug Fixes
 
-- **misc**: Set max\_completion\_tokens to undefined for Azure OpenAI.
+- **misc**: Set max_completion_tokens to undefined for Azure OpenAI.
 
 <br/>
 
@@ -13212,7 +13464,7 @@
 
 #### What's fixed
 
-- **misc**: Set max\_completion\_tokens to undefined for Azure OpenAI, closes [#7114](https://github.com/lobehub/lobe-chat/issues/7114) ([30b66b9](https://github.com/lobehub/lobe-chat/commit/30b66b9))
+- **misc**: Set max_completion_tokens to undefined for Azure OpenAI, closes [#7114](https://github.com/lobehub/lobe-chat/issues/7114) ([30b66b9](https://github.com/lobehub/lobe-chat/commit/30b66b9))
 
 </details>
 
@@ -15834,7 +16086,7 @@
 
 #### 🐛 Bug Fixes
 
-- **misc**: Match o1 series models more robust in Azure OpenAI provider, set max\_completion\_tokens to null for Azure OpenAI.
+- **misc**: Match o1 series models more robust in Azure OpenAI provider, set max_completion_tokens to null for Azure OpenAI.
 
 <br/>
 
@@ -15844,7 +16096,7 @@
 #### What's fixed
 
 - **misc**: Match o1 series models more robust in Azure OpenAI provider, closes [#6193](https://github.com/lobehub/lobe-chat/issues/6193) ([f444e66](https://github.com/lobehub/lobe-chat/commit/f444e66))
-- **misc**: Set max\_completion\_tokens to null for Azure OpenAI, closes [#6198](https://github.com/lobehub/lobe-chat/issues/6198) ([e9e8da4](https://github.com/lobehub/lobe-chat/commit/e9e8da4))
+- **misc**: Set max_completion_tokens to null for Azure OpenAI, closes [#6198](https://github.com/lobehub/lobe-chat/issues/6198) ([e9e8da4](https://github.com/lobehub/lobe-chat/commit/e9e8da4))
 
 </details>
 
@@ -19760,7 +20012,7 @@
 
 #### 🐛 Bug Fixes
 
-- **misc**: Fix custom max\_token not saved from customModelCards.
+- **misc**: Fix custom max_token not saved from customModelCards.
 
 <br/>
 
@@ -19769,7 +20021,7 @@
 
 #### What's fixed
 
-- **misc**: Fix custom max\_token not saved from customModelCards, closes [#5226](https://github.com/lobehub/lobe-chat/issues/5226) ([ab6d17c](https://github.com/lobehub/lobe-chat/commit/ab6d17c))
+- **misc**: Fix custom max_token not saved from customModelCards, closes [#5226](https://github.com/lobehub/lobe-chat/issues/5226) ([ab6d17c](https://github.com/lobehub/lobe-chat/commit/ab6d17c))
 
 </details>
 
@@ -22302,7 +22554,7 @@
 
 #### ♻ Code Refactoring
 
-- **misc**: `genServerLLMConfig` function, get \*\_MODEL\_LIST from env.
+- **misc**: `genServerLLMConfig` function, get \*\_MODEL_LIST from env.
 
 <br/>
 
@@ -22311,7 +22563,7 @@
 
 #### Code refactoring
 
-- **misc**: `genServerLLMConfig` function, get \*\_MODEL\_LIST from env, closes [#4694](https://github.com/lobehub/lobe-chat/issues/4694) ([d84f369](https://github.com/lobehub/lobe-chat/commit/d84f369))
+- **misc**: `genServerLLMConfig` function, get \*\_MODEL_LIST from env, closes [#4694](https://github.com/lobehub/lobe-chat/issues/4694) ([d84f369](https://github.com/lobehub/lobe-chat/commit/d84f369))
 
 </details>
 
@@ -23027,7 +23279,7 @@
 
 #### 🐛 Bug Fixes
 
-- **misc**: Fix duplicate key value violates unique constraint "slug\_user\_id\_unique" when create inbox session.
+- **misc**: Fix duplicate key value violates unique constraint "slug_user_id_unique" when create inbox session.
 
 <br/>
 
@@ -23036,7 +23288,7 @@
 
 #### What's fixed
 
-- **misc**: Fix duplicate key value violates unique constraint "slug\_user\_id\_unique" when create inbox session, closes [#4596](https://github.com/lobehub/lobe-chat/issues/4596) ([c5af96e](https://github.com/lobehub/lobe-chat/commit/c5af96e))
+- **misc**: Fix duplicate key value violates unique constraint "slug_user_id_unique" when create inbox session, closes [#4596](https://github.com/lobehub/lobe-chat/issues/4596) ([c5af96e](https://github.com/lobehub/lobe-chat/commit/c5af96e))
 
 </details>
 
@@ -30576,7 +30828,7 @@
 
 #### 🐛 Bug Fixes
 
-- **misc**: -check\_updates cannot be set by FEATURE\_FLAGS.
+- **misc**: -check_updates cannot be set by FEATURE_FLAGS.
 
 <br/>
 
@@ -30585,7 +30837,7 @@
 
 #### What's fixed
 
-- **misc**: -check\_updates cannot be set by FEATURE\_FLAGS, closes [#3038](https://github.com/lobehub/lobe-chat/issues/3038) ([bdadfee](https://github.com/lobehub/lobe-chat/commit/bdadfee))
+- **misc**: -check_updates cannot be set by FEATURE_FLAGS, closes [#3038](https://github.com/lobehub/lobe-chat/issues/3038) ([bdadfee](https://github.com/lobehub/lobe-chat/commit/bdadfee))
 
 </details>
 

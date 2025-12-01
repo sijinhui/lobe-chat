@@ -14,7 +14,7 @@ import { enableAuth } from '@/const/auth';
 import { DEFAULT_AGENT_CONFIG } from '@/const/settings';
 import { isDesktop } from '@/const/version';
 import { getSearchConfig } from '@/helpers/getSearchConfig';
-import { createChatToolsEngine, createToolsEngine } from '@/helpers/toolEngineering';
+import { createAgentToolsEngine, createToolsEngine } from '@/helpers/toolEngineering';
 import { getAgentStoreState } from '@/store/agent';
 import { agentChatConfigSelectors, agentSelectors } from '@/store/agent/selectors';
 import { aiModelSelectors, aiProviderSelectors, getAiInfraStoreState } from '@/store/aiInfra';
@@ -52,12 +52,12 @@ interface FetchAITaskResultParams extends FetchSSEOptions {
   abortController?: AbortController;
   onError?: (e: Error, rawError?: any) => void;
   /**
-   * 加载状态变化处理函数
-   * @param loading - 是否处于加载状态
+   * Loading state change handler function
+   * @param loading - Whether in loading state
    */
   onLoadingChange?: (loading: boolean) => void;
   /**
-   * 请求对象
+   * Request object
    */
   params: ChatStreamInputParams;
   trace?: TracePayload;
@@ -66,7 +66,6 @@ interface FetchAITaskResultParams extends FetchSSEOptions {
 interface CreateAssistantMessageStream extends FetchSSEOptions {
   abortController?: AbortController;
   historySummary?: string;
-  isWelcomeQuestion?: boolean;
   params: GetChatCompletionPayload;
   trace?: TracePayload;
 }
@@ -91,7 +90,7 @@ class ChatService {
 
     const pluginIds = [...(enabledPlugins || [])];
 
-    const toolsEngine = createChatToolsEngine({
+    const toolsEngine = createAgentToolsEngine({
       model: payload.model,
       provider: payload.provider!,
     });
@@ -113,9 +112,7 @@ class ChatService {
       enableHistoryCount: agentChatConfigSelectors.enableHistoryCount(agentStoreState),
       // include user messages
       historyCount: agentChatConfigSelectors.historyCount(agentStoreState) + 2,
-      historySummary: options?.historySummary,
       inputTemplate: chatConfig.inputTemplate,
-      isWelcomeQuestion: options?.isWelcomeQuestion,
       messages,
       model: payload.model,
       provider: payload.provider!,
@@ -199,8 +196,20 @@ class ChatService {
         extendParams.thinkingBudget = chatConfig.thinkingBudget;
       }
 
+      if (modelExtendParams!.includes('thinkingLevel') && chatConfig.thinkingLevel) {
+        extendParams.thinkingLevel = chatConfig.thinkingLevel;
+      }
+
       if (modelExtendParams!.includes('urlContext') && chatConfig.urlContext) {
         extendParams.urlContext = chatConfig.urlContext;
+      }
+
+      if (modelExtendParams!.includes('imageAspectRatio') && chatConfig.imageAspectRatio) {
+        extendParams.imageAspectRatio = chatConfig.imageAspectRatio;
+      }
+
+      if (modelExtendParams!.includes('imageResolution') && chatConfig.imageResolution) {
+        extendParams.imageResolution = chatConfig.imageResolution;
       }
     }
 
@@ -224,12 +233,10 @@ class ChatService {
     onErrorHandle,
     onFinish,
     trace,
-    isWelcomeQuestion,
     historySummary,
   }: CreateAssistantMessageStream) => {
     await this.createAssistantMessage(params, {
       historySummary,
-      isWelcomeQuestion,
       onAbort,
       onErrorHandle,
       onFinish,
@@ -260,11 +267,14 @@ class ChatService {
       model = findDeploymentName(model, provider);
     }
 
-    const apiMode = aiProviderSelectors.isProviderEnableResponseApi(provider)(
-      getAiInfraStoreState(),
-    )
+    // When user explicitly disables Responses API, set apiMode to 'chatCompletion'
+    // This ensures the user's preference takes priority over provider's useResponseModels config
+    // When user enables Responses API, set to 'responses' to force use Responses API
+    const apiMode: 'responses' | 'chatCompletion' = aiProviderSelectors.isProviderEnableResponseApi(
+      provider,
+    )(getAiInfraStoreState())
       ? 'responses'
-      : undefined;
+      : 'chatCompletion';
 
     // Get the chat config to check streaming preference
     const chatConfig = agentChatConfigSelectors.currentChatConfig(getAgentStoreState());
@@ -411,7 +421,7 @@ class ChatService {
     onLoadingChange?.(true);
 
     try {
-      const oaiMessages = await contextEngineering({
+      const llmMessages = await contextEngineering({
         messages: params.messages as any,
         model: params.model!,
         provider: params.provider!,
@@ -428,7 +438,7 @@ class ChatService {
       // remove plugins
       delete params.plugins;
       await this.getChatCompletion(
-        { ...params, messages: oaiMessages, tools },
+        { ...params, messages: llmMessages, tools },
         {
           onErrorHandle: (error) => {
             errorHandle(new Error(error.message), error);

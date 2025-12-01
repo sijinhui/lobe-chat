@@ -9,7 +9,7 @@ import { SWRConfiguration } from 'swr';
 import { useAgentStore } from '@/store/agent';
 import { agentSelectors } from '@/store/agent/slices/chat';
 import { useChatStore } from '@/store/chat';
-import { chatSelectors } from '@/store/chat/selectors';
+import { operationSelectors } from '@/store/chat/selectors';
 import { useGlobalStore } from '@/store/global';
 import { globalGeneralSelectors } from '@/store/global/selectors';
 import { useUserStore } from '@/store/user';
@@ -42,9 +42,9 @@ const BrowserSTT = memo<{ mobile?: boolean }>(({ mobile }) => {
   const [error, setError] = useState<ChatMessageError>();
   const { t } = useTranslation('chat');
 
-  const [loading, updateInputMessage] = useChatStore((s) => [
-    chatSelectors.isAIGenerating(s),
-    s.updateInputMessage,
+  const [loading, updateMessageInput] = useChatStore((s) => [
+    operationSelectors.isAgentRuntimeRunning(s),
+    s.updateMessageInput,
   ]);
 
   const setDefaultError = useCallback(
@@ -76,7 +76,7 @@ const BrowserSTT = memo<{ mobile?: boolean }>(({ mobile }) => {
     },
     onTextChange: (text) => {
       if (loading) stop();
-      if (text) updateInputMessage(text);
+      if (text) updateMessageInput(text);
     },
   });
 

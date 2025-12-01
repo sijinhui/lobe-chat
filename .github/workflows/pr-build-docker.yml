@@ -1,0 +1,123 @@
+name: Publish Database Docker Image
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '.github'
+  workflow_dispatch:
+  release:
+    types: [published]
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY_IMAGE: registry.cn-hangzhou.aliyuncs.com/sijinhui/lobe-chat-database
+
+jobs:
+  push_to_registry:
+    name: Push Docker image (${{ matrix.env_name }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - env_name: 'Production'
+            secret_env_key: 'DOCKER_ENV'
+            use_date_tag: true
+            use_latest_tag: true
+            use_test_tag: false
+          - env_name: 'Test'
+            secret_env_key: 'DOCKER_ENV_TEST'
+            use_date_tag: false
+            use_latest_tag: false
+            use_test_tag: true
+    outputs:
+      is_production: ${{ matrix.env_name == 'Production' }}
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Prepare environment
+        run: |
+          if [ "${{ matrix.secret_env_key }}" == "DOCKER_ENV" ]; then
+            echo "${{ secrets.DOCKER_ENV }}" > .env
+          else
+            echo "${{ secrets.DOCKER_ENV_TEST }}" > .env
+          fi
+
+      - name: Get current date
+        if: matrix.use_date_tag == true
+        run: echo "DATE_TAG=$(date +'%Y%m%d')" >> $GITHUB_ENV
+
+      - name: Prepare tags
+        id: prepare_tags
+        run: |
+          TAGS=""
+          if [ "${{ matrix.use_date_tag }}" == "true" ]; then
+            TAGS="${TAGS}type=raw,value=${{ env.DATE_TAG }}\n"
+          fi
+          if [ "${{ matrix.use_latest_tag }}" == "true" ]; then
+            TAGS="${TAGS}type=raw,value=latest\n"
+          fi
+          if [ "${{ matrix.use_test_tag }}" == "true" ]; then
+            TAGS="${TAGS}type=raw,value=test\n"
+          fi
+          TAGS="${TAGS}type=ref,event=tag"
+          echo "tags<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$TAGS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+          tags: ${{ steps.prepare_tags.outputs.tags }}
+
+      - name: Docker login
+        uses: docker/login-action@v3
+        with:
+          registry: registry.cn-hangzhou.aliyuncs.com
+          username: ${{ secrets.ALY_HUB_USERNAME }}
+          password: ${{ secrets.ALY_HUB_PASSWORD }}
+
+      - name: Get commit SHA
+        if: github.ref == 'refs/heads/main'
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Build and export
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64
+          context: .
+          file: ./Dockerfile.database
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            SHA=${{ steps.vars.outputs.sha_short }}
+          outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push=true
+          tags: ${{ steps.meta.outputs.tags }}
+          provenance: false
+
+  trigger_to_deploy:
+    needs: [push_to_registry]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    steps:
+      - name: Trigger Another Workflow on Success
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run deploy-to-production.yml --repo sijinhui/lobe-chat --ref main
