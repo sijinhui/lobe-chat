@@ -24,9 +24,6 @@ jobs:
   push_to_registry:
     name: Push Docker image (${{ matrix.env_name }})
     runs-on: ubuntu-latest
-    if: |
-      (matrix.env_name != 'Next' && github.ref == 'refs/heads/main') ||
-      (matrix.env_name == 'Next' && github.ref == 'refs/heads/next')
     strategy:
       matrix:
         include:
@@ -36,31 +33,30 @@ jobs:
             use_latest_tag: true
             use_test_tag: false
             use_next_tag: false
-          - env_name: 'Test'
-            secret_env_key: 'DOCKER_ENV_TEST'
-            use_date_tag: false
-            use_latest_tag: false
-            use_test_tag: true
-            use_next_tag: false
+            branch: 'refs/heads/main'
           - env_name: 'Next'
             secret_env_key: 'DOCKER_ENV'
             use_date_tag: false
             use_latest_tag: false
             use_test_tag: false
             use_next_tag: true
+            branch: 'refs/heads/next'
     outputs:
       is_production: ${{ matrix.env_name == 'Production' }}
 
     steps:
       - name: Check out the repo
+        if: github.ref == matrix.branch
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Set up Docker Buildx
+        if: github.ref == matrix.branch
         uses: docker/setup-buildx-action@v3
 
       - name: Prepare environment
+        if: github.ref == matrix.branch
         run: |
           if [ "${{ matrix.secret_env_key }}" == "DOCKER_ENV" ]; then
             echo "${{ secrets.DOCKER_ENV }}" > .env
@@ -69,10 +65,11 @@ jobs:
           fi
 
       - name: Get current date
-        if: matrix.use_date_tag == true
+        if: github.ref == matrix.branch && matrix.use_date_tag == true
         run: echo "DATE_TAG=$(date +'%Y%m%d')" >> $GITHUB_ENV
 
       - name: Prepare tags
+        if: github.ref == matrix.branch
         id: prepare_tags
         run: |
           TAGS=""
@@ -94,6 +91,7 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Extract metadata
+        if: github.ref == matrix.branch
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -101,6 +99,7 @@ jobs:
           tags: ${{ steps.prepare_tags.outputs.tags }}
 
       - name: Docker login
+        if: github.ref == matrix.branch
         uses: docker/login-action@v3
         with:
           registry: registry.cn-hangzhou.aliyuncs.com
@@ -108,11 +107,12 @@ jobs:
           password: ${{ secrets.ALY_HUB_PASSWORD }}
 
       - name: Get commit SHA
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/next'
+        if: github.ref == matrix.branch
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Build and export
+        if: github.ref == matrix.branch
         id: build
         uses: docker/build-push-action@v6
         with:
