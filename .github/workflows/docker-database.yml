@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - main
+      - next
     paths-ignore:
       - '.github'
   workflow_dispatch:
@@ -23,15 +24,22 @@ jobs:
   push_to_registry:
     name: Push Docker image (${{ matrix.env_name }})
     runs-on: ubuntu-latest
+    if: |
+      (github.ref == 'refs/heads/main' && matrix.env_name == 'Production') ||
+      (github.ref == 'refs/heads/next' && matrix.env_name == 'Test') ||
+      (github.event_name == 'release' && matrix.env_name == 'Production') ||
+      github.event_name == 'workflow_dispatch'
     strategy:
       matrix:
         include:
           - env_name: 'Production'
+            branch: 'main'
             secret_env_key: 'DOCKER_ENV'
             use_date_tag: true
             use_latest_tag: true
             use_test_tag: false
           - env_name: 'Test'
+            branch: 'next'
             secret_env_key: 'DOCKER_ENV_TEST'
             use_date_tag: false
             use_latest_tag: false
