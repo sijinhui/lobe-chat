@@ -18,9 +18,9 @@ describe('PluginStore', () => {
     expect(url).toBe(`${baseURL}/index.en-US.json`);
   });
 
-  it('should return the base URL if the provided language is not supported', () => {
+  it('should return the URL with the provided language', () => {
     const pluginStore = new PluginStore();
-    const url = pluginStore.getPluginIndexUrl('fr-FR');
-    expect(url).toBe(`${baseURL}/index.fr-FR.json`);
+    const url = pluginStore.getPluginIndexUrl('zh-TW');
+    expect(url).toBe(`${baseURL}/index.zh-TW.json`);
   });
 });
