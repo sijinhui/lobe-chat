@@ -26,6 +26,10 @@ export interface ChatModelCard {
    */
   files?: boolean;
   /**
+   * whether model is free to use
+   */
+  free?: boolean;
+  /**
    * whether model supports function call
    */
   functionCall?: boolean;

@@ -79,6 +79,10 @@ export const parseModelString = (modelString: string = '', withDeploymentName = 
             model.functionCall = true;
             break;
           }
+          case 'free': {
+            model.free = true;
+            break;
+          }
           case 'file': {
             model.files = true;
             break;

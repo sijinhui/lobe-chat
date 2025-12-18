@@ -95,6 +95,10 @@ export const parseModelString = async (
             model.abilities!.files = true;
             break;
           }
+          case 'free': {
+            model.abilities!.free = true;
+            break;
+          }
           case 'hot': {
             model.abilities!.hot = true;
             break;

@@ -113,6 +113,7 @@
     "featureTag": {
       "custom": "Custom model, by default, supports both function calls and visual recognition. Please verify the availability of the above capabilities based on actual situations.",
       "file": "This model supports file upload for reading and recognition.",
+      "free": "This model is free to use.",
       "functionCall": "This model supports function calls.",
       "hot": "This model is currently the hottest one available.",
       "imageOutput": "This model supports image generation.",

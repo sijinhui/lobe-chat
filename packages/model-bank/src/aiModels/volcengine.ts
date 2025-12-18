@@ -64,7 +64,6 @@ const doubaoChatModels: AIChatModelCard[] = [
   {
     abilities: {
       functionCall: true,
-      hot: true,
     },
     config: {
       deploymentName: 'kimi-k2-250905',
@@ -88,7 +87,6 @@ const doubaoChatModels: AIChatModelCard[] = [
   {
     abilities: {
       functionCall: true,
-      hot: true,
       reasoning: true,
       vision: true,
     },

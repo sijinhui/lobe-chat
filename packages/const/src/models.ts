@@ -5,14 +5,14 @@ export const systemToUserModels = new Set([
   'o1-mini-2024-09-12',
 ]);
 
-// TODO: 临时写法，后续要重构成 model card 展示配置
+// TODO: temporary implementation, needs to be refactored into model card display configuration
 export const disableStreamModels = new Set([
   'o1',
   'o1-2024-12-17',
   'o1-pro',
   'o1-pro-2025-03-19',
   /*
-  官网显示不支持，但是实际试下来支持 Streaming，暂时注释掉
+  Official documentation shows no support, but actual testing shows Streaming is supported, temporarily commented out
   'o3-pro',
   'o3-pro-2025-06-10',
   */
@@ -46,6 +46,7 @@ export const responsesAPIModels = new Set([
  * models support context caching
  */
 export const contextCachingModels = new Set([
+  'claude-opus-4-5-20251101',
   'claude-haiku-4-5-20251001',
   'claude-sonnet-4-5-latest',
   'claude-sonnet-4-5-20250929',
@@ -61,9 +62,17 @@ export const contextCachingModels = new Set([
   'claude-3-5-sonnet-20240620',
   'claude-3-5-haiku-latest',
   'claude-3-5-haiku-20241022',
+  // Bedrock model IDs
+  'us.anthropic.claude-sonnet-4-5-20250929-v1:0',
+  'anthropic.claude-sonnet-4-5-20250929-v1:0',
+  'us.anthropic.claude-haiku-4-5-20251001-v1:0',
+  'anthropic.claude-haiku-4-5-20251001-v1:0',
+  'global.anthropic.claude-opus-4-5-20251101-v1:0',
+  'anthropic.claude-opus-4-5-20251101-v1:0',
 ]);
 
 export const thinkingWithToolClaudeModels = new Set([
+  'claude-opus-4-5-20251101',
   'claude-opus-4-latest',
   'claude-opus-4-20250514',
   'claude-sonnet-4-latest',
@@ -74,4 +83,11 @@ export const thinkingWithToolClaudeModels = new Set([
   'anthropic/claude-sonnet-4.5',
   'claude-3-7-sonnet-latest',
   'claude-3-7-sonnet-20250219',
+  // Bedrock model IDs
+  'us.anthropic.claude-sonnet-4-5-20250929-v1:0',
+  'anthropic.claude-sonnet-4-5-20250929-v1:0',
+  'us.anthropic.claude-haiku-4-5-20251001-v1:0',
+  'anthropic.claude-haiku-4-5-20251001-v1:0',
+  'global.anthropic.claude-opus-4-5-20251101-v1:0',
+  'anthropic.claude-opus-4-5-20251101-v1:0',
 ]);
