@@ -187,7 +187,7 @@
     "@trpc/client": "^11.6.0",
     "@trpc/next": "^11.6.0",
     "@trpc/react-query": "^11.6.0",
-    "@trpc/server": "^11.6.0",
+    "@trpc/server": "11.8.0",
     "@vercel/analytics": "^1.5.0",
     "@vercel/edge-config": "^1.4.0",
     "@vercel/functions": "^3.1.3",

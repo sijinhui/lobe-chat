@@ -12,9 +12,9 @@ interface DoubaoSpeechPayload {
 }
 
 interface AppConfig {
-  appid: string;
+  // appid: string;
   cluster: string;
-  token: string;
+  // token: string;
 }
 
 interface AudioConfig {
@@ -40,44 +40,38 @@ interface UserConfig {
 
 export const POST = async (req: Request) => {
   const payload = (await req.json());
-
   const doubaoPayload: DoubaoSpeechPayload = {
     app: {
-      appid: process.env.DOUBAO_VOICE_TTS_APPID ?? "",
       cluster: "volcano_tts",
-      token: "access_token",
     },
     audio: {
       encoding: "wav",
-      pitch_ratio: 1,
       speed_ratio: 1,
-      voice_type: payload.options.voice,
-      volume_ratio: 1,
+      voice_type: payload.options.model,
     },
     request: {
-      frontend_type: "unitTson",
       operation: "query",
       reqid: uuid(),
       text: payload.input,
-      text_type: "plain",
-      with_frontend: 1,
     },
     user: {
-      uid: "1",
+      uid: "豆包语音",
     }
   }
-  const access_token = process.env.DOUBAO_VOICE_TTS_ACCESS_TOKEN ?? ""
+  const api_key = process.env.DOUBAO_VOICE_TTS_API_KEY ?? ""
 
   const resp = await fetch("https://openspeech.bytedance.com/api/v1/tts", {
     body: JSON.stringify(doubaoPayload),
     headers: {
-      "Authorization": "Bearer;" + access_token,
-      "Content-Type": "application/json"
+      // "Authorization": "Bearer;" + access_token,
+      "Content-Type": "application/json",
+      "x-api-key": api_key,
     },
     method: "POST",
   })
 
   const result = await resp.json();
+  console.log(result.message);
   const base64Data = result.data.replace(/^data:audio\/\w+;base64,/, '');
   const binaryString = atob(base64Data);
   const arrayBuffer = new Uint8Array(binaryString.length);
