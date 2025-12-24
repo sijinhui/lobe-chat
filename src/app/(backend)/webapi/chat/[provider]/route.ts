@@ -38,6 +38,9 @@ export const POST = checkAuth(async (req: Request, { params, jwtPayload, createR
     }
 
     return await modelRuntime.chat(data, {
+      requestHeaders: {
+        'X-User-Id': jwtPayload.userId,
+      },
       user: jwtPayload.userId,
       ...traceOptions,
       signal: req.signal,
