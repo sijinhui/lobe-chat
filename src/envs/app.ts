@@ -57,6 +57,9 @@ export const getAppConfig = () => {
       SSRF_ALLOW_PRIVATE_IP_ADDRESS: z.boolean().optional(),
       SSRF_ALLOW_IP_ADDRESS_LIST: z.string().optional(),
       MARKET_BASE_URL: z.string().optional(),
+
+      LOGIN_ANNOUNCEMENT_TEXT: z.string().optional(),
+      LOGIN_ANNOUNCEMENT_LINK: z.string().optional(),
     },
     runtimeEnv: {
       // Sentry
@@ -90,6 +93,9 @@ export const getAppConfig = () => {
       SSRF_ALLOW_PRIVATE_IP_ADDRESS: process.env.SSRF_ALLOW_PRIVATE_IP_ADDRESS === '1',
       SSRF_ALLOW_IP_ADDRESS_LIST: process.env.SSRF_ALLOW_IP_ADDRESS_LIST,
       MARKET_BASE_URL: process.env.MARKET_BASE_URL,
+
+      LOGIN_ANNOUNCEMENT_TEXT: process.env.LOGIN_ANNOUNCEMENT_TEXT,
+      LOGIN_ANNOUNCEMENT_LINK: process.env.LOGIN_ANNOUNCEMENT_LINK,
     },
   });
 };

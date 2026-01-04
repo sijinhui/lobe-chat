@@ -4,6 +4,7 @@ import StructuredData from '@/components/StructuredData';
 import { serverFeatureFlags } from '@/config/featureFlags';
 import { BRANDING_NAME } from '@/const/branding';
 import { isDesktop } from '@/const/version';
+import { appEnv } from '@/envs/app';
 import { ldModule } from '@/server/ld';
 import { metadataModule } from '@/server/metadata';
 import { translation } from '@/server/translation';
@@ -12,6 +13,7 @@ import { RouteVariants } from '@/utils/server/routeVariants';
 
 import PageTitle from '../features/PageTitle';
 import Changelog from './features/ChangelogModal';
+import LoginAnnouncement from './features/LoginAnnouncement';
 import TelemetryNotification from './features/TelemetryNotification';
 
 export const generateMetadata = async (props: DynamicLayoutProps) => {
@@ -34,10 +36,18 @@ const Page = async (props: DynamicLayoutProps) => {
     url: '/chat',
   });
 
+  // 获取登录公告配置
+  const announcementText = appEnv.LOGIN_ANNOUNCEMENT_TEXT;
+  const announcementLink = appEnv.LOGIN_ANNOUNCEMENT_LINK;
+
   return (
     <>
       <StructuredData ld={ld} />
       <PageTitle />
+      <LoginAnnouncement
+        announcementLink={announcementLink}
+        announcementText={announcementText}
+      />
       <TelemetryNotification mobile={isMobile} />
       {!isDesktop && showChangelog && !hideDocs && !isMobile && (
         <Suspense>
