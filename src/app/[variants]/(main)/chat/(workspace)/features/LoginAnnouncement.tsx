@@ -61,7 +61,7 @@ const LoginAnnouncement = memo<LoginAnnouncementProps>(({ announcementText, anno
       notification.info({
         description: (
           <div>
-            {announcementText}
+            <span dangerouslySetInnerHTML={{ __html: announcementText }} />
             {announcementLink && (
               <>
                 {' '}
