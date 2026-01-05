@@ -39,7 +39,7 @@ const Page = async (props: DynamicLayoutProps) => {
   // 获取登录公告配置
   const announcementText = appEnv.LOGIN_ANNOUNCEMENT_TEXT;
   const announcementLink = appEnv.LOGIN_ANNOUNCEMENT_LINK;
-  console.log('debug：公告1：', announcementText)
+
   return (
     <>
       <StructuredData ld={ld} />
