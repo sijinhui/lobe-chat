@@ -51,10 +51,13 @@ const LoginAnnouncement = memo<LoginAnnouncementProps>(({ announcementText, anno
 
     // 获取并验证上次显示公告时的计数器值
     const rawLastShownCounter = localStorage.getItem(LAST_SHOWN_COUNTER_KEY);
-    const lastShownCounter = validateAndResetCounter(LAST_SHOWN_COUNTER_KEY, rawLastShownCounter);
 
-    // 如果计数器值不一致，说明用户又访问了登录页，需要显示公告
-    if (currentCounter !== lastShownCounter) {
+    // 如果 localStorage 中没有这个 key，说明是系统更新后首次访问，需要显示公告
+    const shouldShowAnnouncement = rawLastShownCounter === null
+      ? true  // 没有 key，首次访问，显示公告
+      : currentCounter !== validateAndResetCounter(LAST_SHOWN_COUNTER_KEY, rawLastShownCounter);  // 有 key，比较计数器值
+
+    if (shouldShowAnnouncement) {
       // 更新上次显示公告时的计数器值
       localStorage.setItem(LAST_SHOWN_COUNTER_KEY, currentCounter);
       // 显示公告
