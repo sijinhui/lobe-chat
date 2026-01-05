@@ -39,21 +39,20 @@ interface LoginAnnouncementProps {
 
 const LoginAnnouncement = memo<LoginAnnouncementProps>(({ announcementText, announcementLink }) => {
   useEffect(() => {
-    console.log('debug: 公告2')
     // 如果没有公告内容，不显示
     if (!announcementText) return;
 
     // 获取并验证当前登录计数器值
     const rawCurrentCounter = localStorage.getItem(LOGIN_COUNTER_KEY);
     const currentCounter = validateAndResetCounter(LOGIN_COUNTER_KEY, rawCurrentCounter);
-    console.log('debug：计数器1：', rawCurrentCounter, currentCounter)
+
     // 如果计数器为 '0'，说明用户从未访问过登录页（或被重置），不显示
     if (currentCounter === '0') return;
 
     // 获取并验证上次显示公告时的计数器值
     const rawLastShownCounter = localStorage.getItem(LAST_SHOWN_COUNTER_KEY);
     const lastShownCounter = validateAndResetCounter(LAST_SHOWN_COUNTER_KEY, rawLastShownCounter);
-    console.log('debug：计数器2：', rawLastShownCounter, lastShownCounter)
+
     // 如果计数器值不一致，说明用户又访问了登录页，需要显示公告
     if (currentCounter !== lastShownCounter) {
       // 更新上次显示公告时的计数器值
