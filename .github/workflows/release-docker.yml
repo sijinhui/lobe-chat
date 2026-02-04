@@ -6,13 +6,16 @@ on:
   workflow_dispatch:
   release:
     types: [published]
+  push:
+    branches:
+      - main
 
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: false
 
-env:
-  REGISTRY_IMAGE: registry.cn-hangzhou.aliyuncs.com/sijinhui/lobe-chat-database
+# env:
+#   REGISTRY_IMAGE: registry.cn-hangzhou.aliyuncs.com/sijinhui/lobe-chat-database
 
 jobs:
   build:
@@ -31,6 +34,10 @@ jobs:
         run: |
           platform=${{ matrix.platform }}
           echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+          
+          # Convert repository name to lowercase for Docker image name
+          REPO_NAME_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          echo "REGISTRY_IMAGE=ghcr.io/$REPO_NAME_LOWER" >> $GITHUB_ENV
 
       - name: Checkout base
         uses: actions/checkout@v6
@@ -56,9 +63,9 @@ jobs:
       - name: Docker login
         uses: docker/login-action@v3
         with:
-          registry: registry.cn-hangzhou.aliyuncs.com
-          username: ${{ secrets.ALY_HUB_USERNAME }}
-          password: ${{ secrets.ALY_HUB_PASSWORD }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get commit SHA
         if: github.ref == 'refs/heads/main'
@@ -124,9 +131,9 @@ jobs:
       - name: Docker login
         uses: docker/login-action@v3
         with:
-          registry: registry.cn-hangzhou.aliyuncs.com
-          username: ${{ secrets.ALY_HUB_USERNAME }}
-          password: ${{ secrets.ALY_HUB_PASSWORD }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create manifest list and push
         working-directory: /tmp/digests
