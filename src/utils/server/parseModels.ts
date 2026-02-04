@@ -67,8 +67,14 @@ export const parseModelString = async (
     }
 
     if (capabilities.length > 0) {
-      const [maxTokenStr, ...capabilityList] = capabilities[0].replace('>', '').split(':');
-      model.contextWindowTokens = parseInt(maxTokenStr, 10) || undefined;
+      const tempCapabilities = capabilities[0].replace('>', '').split(':');
+      let capabilityList: string[] = tempCapabilities;
+      const [first] = tempCapabilities;
+
+      if (!isNaN(parseInt(first, 10))) {
+        capabilityList = tempCapabilities.slice(1);
+        model.contextWindowTokens = parseInt(first, 10) || undefined;
+      }
 
       for (const capability of capabilityList) {
         switch (capability) {
@@ -86,6 +92,14 @@ export const parseModelString = async (
           }
           case 'file': {
             model.abilities!.files = true;
+            break;
+          }
+          case 'free': {
+            model.abilities!.free = true;
+            break;
+          }
+          case 'hot': {
+            model.abilities!.hot = true;
             break;
           }
           case 'video': {

@@ -31,9 +31,17 @@ export interface ModelAbilities {
    */
   files?: boolean;
   /**
+   * whether model is free to use
+   */
+  free?: boolean;
+  /**
    * whether model supports function call
    */
   functionCall?: boolean;
+  /**
+   * whether model is hot/recommended
+   */
+  hot?: boolean;
   /**
    * whether model supports image output
    */
@@ -62,7 +70,9 @@ export interface ModelAbilities {
 
 const AiModelAbilitiesSchema = z.object({
   // files: z.boolean().optional(),
+  free: z.boolean().optional(),
   functionCall: z.boolean().optional(),
+  hot: z.boolean().optional(),
   imageOutput: z.boolean().optional(),
   reasoning: z.boolean().optional(),
   search: z.boolean().optional(),

@@ -97,7 +97,9 @@ export default {
   'ModelSelect.featureTag.custom':
     'Custom model, by default, supports both function calls and visual recognition. Please verify the availability of the above capabilities based on actual situations.',
   'ModelSelect.featureTag.file': 'This model supports file upload for reading and recognition.',
+  'ModelSelect.featureTag.free': '该模型可免费使用',
   'ModelSelect.featureTag.functionCall': 'This model supports function calls.',
+  'ModelSelect.featureTag.hot': '该模型为热门推荐',
   'ModelSelect.featureTag.imageOutput': 'This model supports image generation.',
   'ModelSelect.featureTag.reasoning': 'This model supports deep thinking.',
   'ModelSelect.featureTag.search': 'This model supports online search.',
