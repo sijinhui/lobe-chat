@@ -95,7 +95,7 @@ RUN set -e && \
 COPY . .
 
 # run build standalone for docker version
-RUN npm run build:docker
+RUN npm run build:docker && rm -f /app/.env
 
 # Prepare desktop export assets for Electron packaging (if generated)
 RUN set -e && \
@@ -136,7 +136,8 @@ COPY --from=builder /app/scripts/_shared /app/scripts/_shared
 RUN set -e && \
     addgroup -S -g 1001 nodejs && \
     adduser -D -G nodejs -H -S -h /app -u 1001 nextjs && \
-    chown -R nextjs:nodejs /app /etc/proxychains4.conf
+    chown -R nextjs:nodejs /app /etc/proxychains4.conf && \
+    rm -f /app/.env
 
 ## Production image, copy all the files and run next
 FROM scratch
