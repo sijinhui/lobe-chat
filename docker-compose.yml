@@ -1,32 +1,32 @@
 version: '3.8'
 
 services:
-#  lobe-chat:
-#    image: registry-vpc.cn-hangzhou.aliyuncs.com/sijinhui/lobe-chat-database
-#    restart: always
-#    build:
-#      context: .
-#      dockerfile: Dockerfile.database
-#    #      args:
-#    #        USE_CN_MIRROR: true
-#    platform: linux/amd64
-#    extra_hosts:
-#      - "one-hub.xiaosi.cc:172.25.114.28"
-#    #    networks:
-#    #      - lobe-chat
-#    network_mode: host
-#    #    ports:
-#    #      - "23210:3210"
-#    environment:
-#      - PORT=23210
-#    env_file:
-#      - .env
-#    healthcheck:
-#      test: ["CMD-SHELL", "nc -z localhost 23210 || exit 1"]
-#      interval: 5s
-#      timeout: 2s
-#      start_period: 3s
-#      retries: 3
+  lobehub:
+    image: hub.xiaosi.cc/ghcr.io/sijinhui/lobehub
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    #      args:
+    #        USE_CN_MIRROR: true
+    platform: linux/amd64
+    extra_hosts:
+      - "one-hub.xiaosi.cc:172.25.114.28"
+    #    networks:
+    #      - lobe-chat
+    network_mode: host
+    #    ports:
+    #      - "23210:3210"
+    environment:
+      - PORT=23210
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 23210 || exit 1"]
+      interval: 5s
+      timeout: 2s
+      start_period: 3s
+      retries: 3
 #    labels:
 #      - "traefik.enable=true"
 #      - "traefik.tcp.routers.lobe-tcp.rule=HostSNI(`*`)"
@@ -56,25 +56,25 @@ services:
 #    volumes:
 #      - /var/run/docker.sock:/var/run/docker.sock
 
-  postgresql:
-    image: pgvector/pgvector:pg17
-    container_name: lobe-postgres
-    ports:
-      - '5432:5432'
-    volumes:
-      - 'postgresql_data:/var/lib/postgresql/data'
-    environment:
-      - 'POSTGRES_DB=${LOBE_DB_NAME}'
-      - 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}'
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres']
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    restart: always
+#  postgresql:
+#    image: pgvector/pgvector:pg17
+#    container_name: lobe-postgres
+#    ports:
+#      - '5432:5432'
+#    volumes:
+#      - 'postgresql_data:/var/lib/postgresql/data'
+#    environment:
+#      - 'POSTGRES_DB=${LOBE_DB_NAME}'
+#      - 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}'
+#    healthcheck:
+#      test: ['CMD-SHELL', 'pg_isready -U postgres']
+#      interval: 5s
+#      timeout: 5s
+#      retries: 5
+#    restart: always
+#
+#volumes:
+#  postgresql_data: {}
 
-volumes:
-  postgresql_data: {}
-
-networks:
-  lobe-chat: {}
+#networks:
+#  lobe-chat: {}
