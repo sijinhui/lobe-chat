@@ -105,6 +105,12 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Prepare
+        run: |
+          # Convert repository name to lowercase for Docker image name
+          REPO_NAME_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          echo "REGISTRY_IMAGE=ghcr.io/$REPO_NAME_LOWER" >> $GITHUB_ENV
+
       - name: Checkout base
         uses: actions/checkout@v6
         with:
