@@ -30,20 +30,20 @@ import { parseSSOProviders } from '@/libs/better-auth/utils/server';
 import { EmailService } from '@/server/services/email';
 import { UserService } from '@/server/services/user';
 
-// Configure HTTP proxy for OAuth provider requests in development (e.g., Google token exchange)
+// Configure HTTP proxy for OAuth provider requests (e.g., Google token exchange)
 // Node.js native fetch doesn't respect system proxy settings
 // Ref: https://github.com/better-auth/better-auth/issues/7396
-if (process.env.NODE_ENV === 'development') {
-  const proxyUrl =
-    process.env.HTTPS_PROXY ||
-    process.env.https_proxy ||
-    process.env.HTTP_PROXY ||
-    process.env.http_proxy;
+const proxyUrl =
+  process.env.OAUTH_PROXY_URL ||
+  process.env.HTTPS_PROXY ||
+  process.env.https_proxy ||
+  process.env.HTTP_PROXY ||
+  process.env.http_proxy;
 
-  if (proxyUrl) {
-    const proxyAgent = new ProxyAgent(proxyUrl);
-    setGlobalDispatcher(proxyAgent);
-  }
+if (proxyUrl) {
+  const proxyAgent = new ProxyAgent(proxyUrl);
+  setGlobalDispatcher(proxyAgent);
+  console.log('[Better-Auth] Using HTTP proxy for OAuth:', proxyUrl);
 }
 
 // Email verification link expiration time (in seconds)
