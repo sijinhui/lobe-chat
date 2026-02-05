@@ -126,8 +126,6 @@ export const useSignIn = () => {
           message.error(t('betterAuth.errors.usernameNotRegistered'));
           return;
         }
-
-        // Redirect to signup page (plugin will handle blocking if disabled)
         const callbackUrl = searchParams.get('callbackUrl') || '/';
         router.push(
           `/signup?email=${encodeURIComponent(targetEmail)}&callbackUrl=${encodeURIComponent(callbackUrl)}`,
