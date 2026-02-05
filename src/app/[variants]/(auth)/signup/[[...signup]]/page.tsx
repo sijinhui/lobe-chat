@@ -20,7 +20,7 @@ export const generateMetadata = async (props: DynamicLayoutProps) => {
 };
 
 const Page = () => {
-  if (authEnv.AUTH_DISABLE_EMAIL_PASSWORD) {
+  if (authEnv.AUTH_DISABLE_SIGNUP || authEnv.AUTH_DISABLE_EMAIL_PASSWORD) {
     redirect('/signin');
   }
 

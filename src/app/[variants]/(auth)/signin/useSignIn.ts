@@ -33,6 +33,7 @@ export const useSignIn = () => {
   const searchParams = useSearchParams();
   const enableMagicLink = useServerConfigStore(serverConfigSelectors.enableMagicLink);
   const disableEmailPassword = useServerConfigStore(serverConfigSelectors.disableEmailPassword);
+  const disableSignup = useServerConfigStore(serverConfigSelectors.disableSignup);
   const [form] = Form.useForm<SignInFormValues>();
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState<string | null>(null);
@@ -126,6 +127,13 @@ export const useSignIn = () => {
           message.error(t('betterAuth.errors.usernameNotRegistered'));
           return;
         }
+
+        // Check if signup is disabled via AUTH_DISABLE_SIGNUP
+        if (disableSignup) {
+          message.error(t('betterAuth.errors.emailNotRegistered'));
+          return;
+        }
+
         const callbackUrl = searchParams.get('callbackUrl') || '/';
         router.push(
           `/signup?email=${encodeURIComponent(targetEmail)}&callbackUrl=${encodeURIComponent(callbackUrl)}`,
