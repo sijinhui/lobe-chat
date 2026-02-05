@@ -23,6 +23,7 @@ import {
   getVerificationEmailTemplate,
   getVerificationOTPEmailTemplate,
 } from '@/libs/better-auth/email-templates';
+import { disableSignup } from '@/libs/better-auth/plugins/disable-signup';
 import { emailWhitelist } from '@/libs/better-auth/plugins/email-whitelist';
 import { initBetterAuthSSOProviders } from '@/libs/better-auth/sso';
 import { createSecondaryStorage, getTrustedOrigins } from '@/libs/better-auth/utils/config';
@@ -107,7 +108,6 @@ export function defineConfig(customOptions: CustomBetterAuthOptions) {
 
     emailAndPassword: {
       autoSignIn: true,
-      disableSignUp: authEnv.AUTH_DISABLE_SIGNUP || authEnv.AUTH_DISABLE_EMAIL_PASSWORD,
       enabled: !authEnv.AUTH_DISABLE_EMAIL_PASSWORD,
       maxPasswordLength: 64,
       minPasswordLength: 8,
@@ -242,6 +242,7 @@ export function defineConfig(customOptions: CustomBetterAuthOptions) {
     plugins: [
       ...customOptions.plugins,
       emailWhitelist(),
+      disableSignup(),
       expo(),
       emailHarmony({ allowNormalizedSignin: false, validator: customEmailValidator }),
       admin(),
