@@ -15,6 +15,7 @@ declare global {
       AUTH_ALLOWED_EMAILS?: string;
       AUTH_DISABLE_EMAIL_PASSWORD?: string;
       AUTH_DISABLE_SIGNUP?: string;
+      OAUTH_PROXY_URL?: string;
 
       // ===== Auth Provider Credentials ===== //
       AUTH_GOOGLE_ID?: string;
@@ -118,6 +119,7 @@ export const getAuthConfig = () => {
       AUTH_ALLOWED_EMAILS: z.string().optional(),
       AUTH_DISABLE_EMAIL_PASSWORD: z.boolean().optional().default(false),
       AUTH_DISABLE_SIGNUP: z.boolean().optional().default(false),
+      OAUTH_PROXY_URL: z.string().optional(),
 
       AUTH_GOOGLE_ID: z.string().optional(),
       AUTH_GOOGLE_SECRET: z.string().optional(),
@@ -209,6 +211,7 @@ export const getAuthConfig = () => {
       AUTH_ALLOWED_EMAILS: process.env.AUTH_ALLOWED_EMAILS,
       AUTH_DISABLE_EMAIL_PASSWORD: process.env.AUTH_DISABLE_EMAIL_PASSWORD === '1',
       AUTH_DISABLE_SIGNUP: process.env.AUTH_DISABLE_SIGNUP === '1',
+      OAUTH_PROXY_URL: process.env.OAUTH_PROXY_URL,
 
       // Cognito provider specific env vars
       AUTH_COGNITO_DOMAIN: process.env.AUTH_COGNITO_DOMAIN,
