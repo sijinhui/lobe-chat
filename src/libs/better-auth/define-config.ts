@@ -34,7 +34,7 @@ import { UserService } from '@/server/services/user';
 // Node.js native fetch doesn't respect system proxy settings
 // Ref: https://github.com/better-auth/better-auth/issues/7396
 const proxyUrl =
-  process.env.OAUTH_PROXY_URL ||
+  authEnv.OAUTH_PROXY_URL ||
   process.env.HTTPS_PROXY ||
   process.env.https_proxy ||
   process.env.HTTP_PROXY ||
