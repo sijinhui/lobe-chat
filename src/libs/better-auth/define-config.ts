@@ -59,7 +59,7 @@ if (proxyUrl) {
       this.#directAgent = new Agent();
     }
 
-    dispatch(options: Dispatcher.DispatchOptions, handler: Dispatcher.DispatchHandlers): boolean {
+    dispatch(options: Dispatcher.DispatchOptions, handler: Dispatcher.DispatchHandler): boolean {
       const url = new URL(options.origin as string);
       const shouldUseProxy = PROXY_REQUIRED_DOMAINS.some(
         (domain) => url.hostname === domain || url.hostname.endsWith(`.${domain}`),
