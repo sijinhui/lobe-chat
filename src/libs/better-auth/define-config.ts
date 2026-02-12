@@ -13,7 +13,7 @@ import { admin, emailOTP, genericOAuth, magicLink } from 'better-auth/plugins';
 import { type BetterAuthPlugin } from 'better-auth/types';
 import { emailHarmony } from 'better-auth-harmony';
 import { validateEmail } from 'better-auth-harmony/email';
-import { ProxyAgent, setGlobalDispatcher } from 'undici';
+import { Agent, type Dispatcher, ProxyAgent, setGlobalDispatcher } from 'undici';
 
 import { businessEmailValidator } from '@/business/server/better-auth';
 import { appEnv } from '@/envs/app';
@@ -35,17 +35,50 @@ import { UserService } from '@/server/services/user';
 // Configure HTTP proxy for OAuth provider requests (e.g., Google token exchange)
 // Node.js native fetch doesn't respect system proxy settings
 // Ref: https://github.com/better-auth/better-auth/issues/7396
-const proxyUrl =
-  authEnv.OAUTH_PROXY_URL ||
-  process.env.HTTPS_PROXY ||
-  process.env.https_proxy ||
-  process.env.HTTP_PROXY ||
-  process.env.http_proxy;
+const proxyUrl = authEnv.OAUTH_PROXY_URL;
+
+// Domains that require proxy (typically blocked in certain regions)
+const PROXY_REQUIRED_DOMAINS = [
+  'accounts.google.com',
+  'oauth2.googleapis.com',
+  'www.googleapis.com',
+  'openidconnect.googleapis.com',
+  'github.com',
+  'api.github.com',
+];
 
 if (proxyUrl) {
-  const proxyAgent = new ProxyAgent(proxyUrl);
-  setGlobalDispatcher(proxyAgent);
-  console.log('[Better-Auth] Using HTTP proxy for OAuth:', proxyUrl);
+  // Create a selective dispatcher that only uses proxy for specific domains
+  class SelectiveProxyDispatcher extends Agent {
+    #proxyAgent: ProxyAgent;
+    #directAgent: Agent;
+
+    constructor(proxyUrl: string) {
+      super();
+      this.#proxyAgent = new ProxyAgent(proxyUrl);
+      this.#directAgent = new Agent();
+    }
+
+    dispatch(options: Dispatcher.DispatchOptions, handler: Dispatcher.DispatchHandlers): boolean {
+      const url = new URL(options.origin as string);
+      const shouldUseProxy = PROXY_REQUIRED_DOMAINS.some(
+        (domain) => url.hostname === domain || url.hostname.endsWith(`.${domain}`),
+      );
+
+      if (shouldUseProxy) {
+        return this.#proxyAgent.dispatch(options, handler);
+      }
+
+      return this.#directAgent.dispatch(options, handler);
+    }
+  }
+
+  const selectiveDispatcher = new SelectiveProxyDispatcher(proxyUrl);
+  setGlobalDispatcher(selectiveDispatcher);
+  console.log(
+    '[Better-Auth] Configured selective HTTP proxy for domains:',
+    PROXY_REQUIRED_DOMAINS.join(', '),
+  );
 }
 
 // Email verification link expiration time (in seconds)
