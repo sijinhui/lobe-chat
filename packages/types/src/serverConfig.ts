@@ -1,9 +1,9 @@
 import type { PartialDeep } from 'type-fest';
 
-import { IFeatureFlagsState } from '@/config/featureFlags';
+import type { IFeatureFlagsState } from '@/config/featureFlags';
 
-import { ChatModelCard } from './llm';
-import {
+import type { ChatModelCard } from './llm';
+import type {
   GlobalLLMProviderKey,
   UserDefaultAgent,
   UserImageConfig,
@@ -52,16 +52,16 @@ export interface GlobalServerConfig {
   disableEmailPassword?: boolean;
   disableSignup?: boolean;
   enableBusinessFeatures?: boolean;
+  /**
+   * @deprecated
+   */
+  enabledOAuthSSO?: boolean;
   enableEmailVerification?: boolean;
   enableKlavis?: boolean;
   enableLobehubSkill?: boolean;
   enableMagicLink?: boolean;
   enableMarketTrustedClient?: boolean;
   enableUploadFileToServer?: boolean;
-  /**
-   * @deprecated
-   */
-  enabledOAuthSSO?: boolean;
   image?: PartialDeep<UserImageConfig>;
   memory?: GlobalMemoryConfig;
   oAuthSSOProviders?: string[];
