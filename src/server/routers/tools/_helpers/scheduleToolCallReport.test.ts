@@ -6,8 +6,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DiscoverService } from '@/server/services/discover';
 
 import {
-  scheduleToolCallReport,
   type ScheduleToolCallReportParams,
+  scheduleToolCallReport,
 } from './scheduleToolCallReport';
 
 // Mock Next.js after() function

@@ -11,8 +11,8 @@ import {
   Form,
   Icon,
   Skeleton,
-  stopPropagation,
   Tooltip,
+  stopPropagation,
 } from '@lobehub/ui';
 import { useDebounceFn } from 'ahooks';
 import { Form as AntdForm, Switch } from 'antd';

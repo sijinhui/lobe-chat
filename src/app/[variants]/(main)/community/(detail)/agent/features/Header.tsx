@@ -15,9 +15,9 @@ import {
 import { App } from 'antd';
 import { createStaticStyles, cssVar, useResponsive } from 'antd-style';
 import {
+  BookTextIcon,
   BookmarkCheckIcon,
   BookmarkIcon,
-  BookTextIcon,
   CoinsIcon,
   DotIcon,
   GitBranchIcon,
@@ -33,8 +33,8 @@ import { useMarketAuth } from '@/layout/AuthProvider/MarketAuth';
 import { socialService } from '@/services/social';
 import { formatIntergerNumber } from '@/utils/format';
 
-import PublishedTime from '../../../../../../../components/PublishedTime';
 import { useCategory } from '../../../(list)/agent/features/Category/useCategory';
+import PublishedTime from '../../../../../../../components/PublishedTime';
 import AgentForkTag from './AgentForkTag';
 import { useDetailContext } from './DetailProvider';
 
@@ -123,7 +123,7 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
 
   return (
     <Flexbox gap={12}>
-      <Flexbox horizontal align={'flex-start'} gap={16} width={'100%'}>
+      <Flexbox align={'flex-start'} gap={16} horizontal width={'100%'}>
         <Avatar avatar={avatar} shape={'square'} size={mobile ? 48 : 64} />
         <Flexbox
           flex={1}
@@ -133,9 +133,9 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
           }}
         >
           <Flexbox
-            horizontal
             align={'center'}
             gap={8}
+            horizontal
             justify={'space-between'}
             style={{
               overflow: 'hidden',
@@ -143,18 +143,18 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
             }}
           >
             <Flexbox
-              horizontal
               align={'center'}
               flex={1}
               gap={12}
+              horizontal
               style={{
                 overflow: 'hidden',
                 position: 'relative',
               }}
             >
               <Text
-                ellipsis
                 as={'h1'}
+                ellipsis
                 style={{ fontSize: mobile ? 18 : 24, margin: 0 }}
                 title={identifier}
               >
@@ -165,12 +165,12 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
               <ActionIcon
                 icon={isFavorited ? BookmarkCheckIcon : BookmarkIcon}
                 loading={favoriteLoading}
-                variant={isFavorited ? 'outlined' : undefined}
                 onClick={handleFavoriteClick}
+                variant={isFavorited ? 'outlined' : undefined}
               />
             </Tooltip>
           </Flexbox>
-          <Flexbox horizontal align={'center'} gap={8} wrap={'wrap'}>
+          <Flexbox align={'center'} gap={8} horizontal wrap={'wrap'}>
             {author && userName ? (
               <Link style={{ color: 'inherit' }} to={urlJoin('/community/user', userName)}>
                 {author}
@@ -195,9 +195,9 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
       </Flexbox>
       <TooltipGroup>
         <Flexbox
-          horizontal
           align={'center'}
           gap={mobile ? 12 : 24}
+          horizontal
           style={{
             color: cssVar.colorTextSecondary,
           }}
@@ -208,7 +208,7 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
               styles={{ root: { pointerEvents: 'none' } }}
               title={t('assistants.tokenUsage')}
             >
-              <Flexbox horizontal align={'center'} gap={6}>
+              <Flexbox align={'center'} gap={6} horizontal>
                 <Icon icon={CoinsIcon} />
                 {formatIntergerNumber(tokenUsage)}
               </Flexbox>
@@ -219,7 +219,7 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
               styles={{ root: { pointerEvents: 'none' } }}
               title={t('assistants.withPlugin')}
             >
-              <Flexbox horizontal align={'center'} gap={6}>
+              <Flexbox align={'center'} gap={6} horizontal>
                 <Icon fill={cssVar.colorTextSecondary} icon={MCP} />
                 {pluginCount}
               </Flexbox>
@@ -230,7 +230,7 @@ const Header = memo<{ mobile?: boolean }>(({ mobile: isMobile }) => {
               styles={{ root: { pointerEvents: 'none' } }}
               title={t('assistants.withKnowledge')}
             >
-              <Flexbox horizontal align={'center'} gap={6}>
+              <Flexbox align={'center'} gap={6} horizontal>
                 <Icon icon={BookTextIcon} />
                 {knowledgeCount}
               </Flexbox>

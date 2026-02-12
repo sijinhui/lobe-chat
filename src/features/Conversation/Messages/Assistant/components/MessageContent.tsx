@@ -85,8 +85,8 @@ const MessageContent = memo<UIChatMessage>(
           <ReactionDisplay
             isActive={isActive}
             messageId={id}
-            reactions={reactions}
             onReactionClick={handleReactionClick}
+            reactions={reactions}
           />
         )}
       </Flexbox>

@@ -6,10 +6,8 @@ import { Avatar, Flexbox, Icon, Tag, Text, Tooltip } from '@lobehub/ui';
 import { createStaticStyles, useResponsive } from 'antd-style';
 import {
   AtomIcon,
-  Gift,
   Infinity,
   LucideEye,
-  LucideFlame,
   LucideGlobe,
   LucideImage,
   LucidePaperclip,
@@ -66,15 +64,7 @@ interface ModelInfoTagsProps extends ModelAbilities {
 
 interface FeatureTagsProps extends Pick<
   ModelAbilities,
-  | 'files'
-  | 'imageOutput'
-  | 'vision'
-  | 'video'
-  | 'functionCall'
-  | 'reasoning'
-  | 'search'
-  | 'hot'
-  | 'free'
+  'files' | 'imageOutput' | 'vision' | 'video' | 'functionCall' | 'reasoning' | 'search'
 > {
   placement: 'top' | 'right';
   tagClassName: string;
@@ -110,9 +100,7 @@ const FeatureTagItem = memo<FeatureTagItemProps>(
 const FeatureTags = memo<FeatureTagsProps>(
   ({
     files,
-    free,
     functionCall,
-    hot,
     imageOutput,
     placement,
     reasoning,
@@ -125,22 +113,6 @@ const FeatureTags = memo<FeatureTagsProps>(
 
     return (
       <>
-        <FeatureTagItem
-          className={tagClassName}
-          color={'error'}
-          enabled={hot}
-          icon={LucideFlame}
-          placement={placement}
-          title={t('ModelSelect.featureTag.hot')}
-        />
-        <FeatureTagItem
-          className={tagClassName}
-          color={'gold'}
-          enabled={free}
-          icon={Gift}
-          placement={placement}
-          title={t('ModelSelect.featureTag.free')}
-        />
         <FeatureTagItem
           className={tagClassName}
           color={'success'}
@@ -247,9 +219,7 @@ export const ModelInfoTags = memo<ModelInfoTagsProps>(
       >
         <FeatureTags
           files={model.files}
-          free={model.free}
           functionCall={model.functionCall}
-          hot={model.hot}
           imageOutput={model.imageOutput}
           placement={placement}
           reasoning={model.reasoning}
@@ -282,9 +252,7 @@ export const ModelItemRender = memo<ModelItemRenderProps>(
     abilities,
     contextWindowTokens,
     files,
-    free,
     functionCall,
-    hot,
     imageOutput,
     newBadgeLabel,
     reasoning,
@@ -339,9 +307,7 @@ export const ModelItemRender = memo<ModelItemRenderProps>(
           <ModelInfoTags
             contextWindowTokens={contextWindowTokens}
             files={files ?? abilities?.files}
-            free={free ?? abilities?.free}
             functionCall={functionCall ?? abilities?.functionCall}
-            hot={hot ?? abilities?.hot}
             imageOutput={imageOutput ?? abilities?.imageOutput}
             reasoning={reasoning ?? abilities?.reasoning}
             search={search ?? abilities?.search}

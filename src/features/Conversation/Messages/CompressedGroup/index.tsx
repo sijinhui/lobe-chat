@@ -1,6 +1,6 @@
 'use client';
 
-import  { type CompressionGroupMetadata, type UIChatMessage } from '@lobechat/types';
+import type { CompressionGroupMetadata, UIChatMessage } from '@lobechat/types';
 import {
   ActionIcon,
   Flexbox,
@@ -148,26 +148,26 @@ const CompressedGroupMessage = memo<CompressedGroupMessageProps>(({ id }) => {
           <StreamingMarkdown>{content}</StreamingMarkdown>
         </>
       ) : (
-        <Flexbox horizontal align={'center'} distribution={'space-between'} width={'100%'}>
+        <Flexbox align={'center'} distribution={'space-between'} horizontal width={'100%'}>
           <Tabs
-            compact
             activeKey={isGeneratingSummary ? 'summary' : activeTab}
             className={styles.header}
+            compact
             items={tabItems}
-            variant={'rounded'}
             onChange={handleTabChange}
+            variant={'rounded'}
           />
-          <Flexbox horizontal gap={4}>
+          <Flexbox gap={4} horizontal>
             <ActionIcon
               icon={Undo2}
+              onClick={handleCancelCompression}
               size={'small'}
               title={t('compression.cancel')}
-              onClick={handleCancelCompression}
             />
             <ActionIcon
               icon={expanded ? ChevronUp : ChevronDown}
-              size={'small'}
               onClick={() => toggleCompressedGroupExpanded(id)}
+              size={'small'}
             />
           </Flexbox>
         </Flexbox>
