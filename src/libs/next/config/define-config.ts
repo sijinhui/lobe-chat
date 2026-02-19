@@ -261,8 +261,12 @@ export function defineConfig(config: CustomNextConfig) {
     ...(config.outputFileTracingExcludes && {
       outputFileTracingExcludes: config.outputFileTracingExcludes,
     }),
-    ...(config.outputFileTracingIncludes && {
-      outputFileTracingIncludes: config.outputFileTracingIncludes,
+    // Merge outputFileTracingIncludes from both standaloneConfig and custom config
+    ...((isStandaloneMode || config.outputFileTracingIncludes) && {
+      outputFileTracingIncludes: {
+        ...(isStandaloneMode ? standaloneConfig.outputFileTracingIncludes : {}),
+        ...config.outputFileTracingIncludes,
+      },
     }),
     reactStrictMode: true,
     redirects: async () => [
