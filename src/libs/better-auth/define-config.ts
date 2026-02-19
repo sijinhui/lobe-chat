@@ -75,7 +75,7 @@ if (proxyUrl) {
 
   const selectiveDispatcher = new SelectiveProxyDispatcher(proxyUrl);
   setGlobalDispatcher(selectiveDispatcher);
-  console.log(
+  console.info(
     '[Better-Auth] Configured selective HTTP proxy for domains:',
     PROXY_REQUIRED_DOMAINS.join(', '),
   );
