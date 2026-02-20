@@ -41,6 +41,6 @@ export function getYYYYmmddHHMMss(date: Date) {
   return dayjs(date).format('YYYYMMDD_HHmmss');
 }
 
-export const isNewReleaseDate = (date: string, days = 14) => {
+export const isNewReleaseDate = (date: string, days = 30) => {
   return dayjs().diff(dayjs(date), 'day') < days;
 };
