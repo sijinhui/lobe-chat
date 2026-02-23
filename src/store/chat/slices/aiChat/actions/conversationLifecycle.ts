@@ -4,6 +4,7 @@ import { ENABLE_BUSINESS_FEATURES } from '@lobechat/business-const';
 import { LOADING_FLAT } from '@lobechat/const';
 import {
   type ChatImageItem,
+  type ChatThreadType,
   type ChatVideoItem,
   type ConversationContext,
   type SendMessageParams,
@@ -89,7 +90,10 @@ export class ConversationLifecycleActionImpl {
     // Only create newThread if we have both sourceMessageId and threadType
     const newThread =
       isCreatingNewThread && context.sourceMessageId && context.threadType
-        ? { sourceMessageId: context.sourceMessageId, type: context.threadType }
+        ? {
+            sourceMessageId: context.sourceMessageId,
+            type: context.threadType as ChatThreadType,
+          }
         : undefined;
 
     if (!agentId) return;
@@ -152,7 +156,7 @@ export class ConversationLifecycleActionImpl {
       },
     });
 
-    // 构造服务端模式临时消息的本地媒体预览（优先使用 S3 URL）
+    // Construct local media preview for server-mode temporary messages (S3 URL takes priority)
     const filesInStore = getFileStoreState().chatUploadFileList;
     const tempImages: ChatImageItem[] = filesInStore
       .filter((f) => f.file?.type?.startsWith('image'))
@@ -311,7 +315,7 @@ export class ConversationLifecycleActionImpl {
         }
       }
     } finally {
-      // 创建了新topic 或者 用户 cancel 了消息（或者失败了），此时无 data
+      // A new topic was created, or the user cancelled the message (or it failed), so data is absent here
       if (data?.isCreateNewTopic || !data) {
         this.#get().internal_dispatchMessage(
           { type: 'deleteMessages', ids: [tempId, tempAssistantId] },
