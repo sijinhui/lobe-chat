@@ -173,8 +173,12 @@ export interface OpenLocalFolderParams {
 // Shell command types
 export interface RunCommandParams {
   command: string;
+  /** Working directory for the command. When not specified, `scope` is used as fallback. */
+  cwd?: string;
   description?: string;
   run_in_background?: boolean;
+  /** Working directory scope. Used as `cwd` when `cwd` is not explicitly provided. */
+  scope?: string;
   timeout?: number;
 }
 

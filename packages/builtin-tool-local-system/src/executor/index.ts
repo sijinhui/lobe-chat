@@ -348,7 +348,8 @@ class LocalSystemExecutor extends BaseExecutor<typeof LocalSystemApiEnum> {
 
   runCommand = async (params: RunCommandParams): Promise<BuiltinToolResult> => {
     try {
-      const result: RunCommandResult = await localFileService.runCommand(params);
+      const resolvedParams = resolveArgsWithScope(params, 'cwd');
+      const result: RunCommandResult = await localFileService.runCommand(resolvedParams);
 
       const content = formatCommandResult({
         error: result.error,

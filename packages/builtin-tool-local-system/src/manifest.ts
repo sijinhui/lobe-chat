@@ -305,6 +305,11 @@ export const LocalSystemManifest: BuiltinToolManifest = {
             description: 'Timeout in milliseconds (default: 120000ms, max: 600000ms)',
             type: 'number',
           },
+          scope: {
+            description:
+              'Working directory scope for the command. When `cwd` is not specified, this is used as the working directory. Defaults to the current working directory.',
+            type: 'string',
+          },
         },
         required: ['description', 'command'],
         type: 'object',

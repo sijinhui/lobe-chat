@@ -55,6 +55,7 @@ export default class ShellCommandCtr extends ControllerModule {
   @IpcMethod()
   async handleRunCommand({
     command,
+    cwd,
     description,
     run_in_background,
     timeout = 120_000,
@@ -79,6 +80,7 @@ export default class ShellCommandCtr extends ControllerModule {
         // Background execution
         const shellId = randomUUID();
         const childProcess = spawn(shellConfig.cmd, shellConfig.args, {
+          cwd,
           env: process.env,
           shell: false,
         });
@@ -115,6 +117,7 @@ export default class ShellCommandCtr extends ControllerModule {
         // Synchronous execution with timeout
         return new Promise((resolve) => {
           const childProcess = spawn(shellConfig.cmd, shellConfig.args, {
+            cwd,
             env: process.env,
             shell: false,
           });
