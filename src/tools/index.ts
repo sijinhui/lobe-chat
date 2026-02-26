@@ -47,11 +47,11 @@ export const builtinTools: LobeBuiltinTool[] = [
     manifest: WebBrowsingManifest,
     type: 'builtin',
   },
-  {
-    identifier: CloudSandboxManifest.identifier,
-    manifest: CloudSandboxManifest,
-    type: 'builtin',
-  },
+  // {
+  //   identifier: CloudSandboxManifest.identifier,
+  //   manifest: CloudSandboxManifest,
+  //   type: 'builtin',
+  // },
   {
     hidden: true,
     identifier: KnowledgeBaseManifest.identifier,
