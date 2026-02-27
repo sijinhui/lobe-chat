@@ -552,14 +552,6 @@
       "count": 1
     }
   },
-  "src/store/chat/agents/createAgentExecutors.ts": {
-    "prefer-const": {
-      "count": 1
-    },
-    "sort-keys-fix/sort-keys-fix": {
-      "count": 1
-    }
-  },
   "src/store/chat/slices/aiAgent/actions/groupOrchestration.ts": {
     "no-unused-private-class-members": {
       "count": 1
@@ -599,11 +591,6 @@
     }
   },
   "src/store/chat/slices/aiChat/actions/memory.ts": {
-    "no-unused-private-class-members": {
-      "count": 1
-    }
-  },
-  "src/store/chat/slices/aiChat/actions/streamingExecutor.ts": {
     "no-unused-private-class-members": {
       "count": 1
     }
@@ -805,14 +792,6 @@
   },
   "src/store/home/slices/homeInput/action.ts": {
     "no-console": {
-      "count": 1
-    }
-  },
-  "src/store/image/slices/generationConfig/initialState.ts": {
-    "sort-keys-fix/sort-keys-fix": {
-      "count": 1
-    },
-    "typescript-sort-keys/interface": {
       "count": 1
     }
   },
