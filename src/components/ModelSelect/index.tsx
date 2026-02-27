@@ -4,7 +4,7 @@ import { LobeHub, ModelIcon, ProviderIcon } from '@lobehub/icons';
 import { type FlexboxProps } from '@lobehub/ui';
 import { Avatar, Flexbox, Icon, Tag, Text, Tooltip } from '@lobehub/ui';
 import { createStaticStyles, useResponsive } from 'antd-style';
-import { Infinity, LucideEye, LucideImage, LucidePaperclip, Video, Wrench } from 'lucide-react';
+import { Gift, Infinity, LucideEye, LucideFlame, LucideImage, LucidePaperclip, Video, Wrench } from 'lucide-react';
 import { type ModelAbilities } from 'model-bank';
 import numeral from 'numeral';
 import { type CSSProperties, type FC } from 'react';
@@ -56,7 +56,7 @@ interface ModelInfoTagsProps extends ModelAbilities {
 
 interface FeatureTagsProps extends Pick<
   ModelAbilities,
-  'files' | 'imageOutput' | 'vision' | 'video' | 'functionCall'
+  'files' | 'free' | 'hot' | 'imageOutput' | 'vision' | 'video' | 'functionCall'
 > {
   disableTooltip?: boolean;
   placement: 'top' | 'right';
@@ -97,7 +97,9 @@ const FeatureTags = memo<FeatureTagsProps>(
   ({
     disableTooltip,
     files,
+    free,
     functionCall,
+    hot,
     imageOutput,
     placement,
     tagClassName,
@@ -108,6 +110,24 @@ const FeatureTags = memo<FeatureTagsProps>(
 
     return (
       <>
+        <FeatureTagItem
+          className={tagClassName}
+          color={'gold'}
+          disableTooltip={disableTooltip}
+          enabled={free}
+          icon={Gift}
+          placement={placement}
+          title={t('ModelSelect.featureTag.free')}
+        />
+        <FeatureTagItem
+          className={tagClassName}
+          color={'error'}
+          disableTooltip={disableTooltip}
+          enabled={hot}
+          icon={LucideFlame}
+          placement={placement}
+          title={t('ModelSelect.featureTag.hot')}
+        />
         <FeatureTagItem
           className={tagClassName}
           color={'success'}
@@ -207,7 +227,9 @@ export const ModelInfoTags = memo<ModelInfoTagsProps>(
         <FeatureTags
           disableTooltip={disableTooltip}
           files={model.files}
+          free={model.free}
           functionCall={model.functionCall}
+          hot={model.hot}
           imageOutput={model.imageOutput}
           placement={placement}
           tagClassName={styles.tag}
@@ -239,7 +261,9 @@ export const ModelItemRender = memo<ModelItemRenderProps>(
     abilities,
     contextWindowTokens,
     files,
+    free,
     functionCall,
+    hot,
     imageOutput,
     newBadgeLabel,
     video,
@@ -292,7 +316,9 @@ export const ModelItemRender = memo<ModelItemRenderProps>(
           <ModelInfoTags
             contextWindowTokens={contextWindowTokens}
             files={files ?? abilities?.files}
+            free={free ?? abilities?.free}
             functionCall={functionCall ?? abilities?.functionCall}
+            hot={hot ?? abilities?.hot}
             imageOutput={imageOutput ?? abilities?.imageOutput}
             style={{ zoom: 0.9 }}
             video={video ?? abilities?.video}

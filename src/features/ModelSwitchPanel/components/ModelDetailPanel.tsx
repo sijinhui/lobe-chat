@@ -10,6 +10,8 @@ import {
   AtomIcon,
   CircleFadingArrowUp,
   EyeIcon,
+  FlameIcon,
+  GiftIcon,
   GlobeIcon,
   ImageIcon,
   PaperclipIcon,
@@ -196,6 +198,8 @@ interface AbilityItem {
 }
 
 const ABILITY_CONFIG: AbilityItem[] = [
+  { color: 'gold', icon: GiftIcon, key: 'free' },
+  { color: 'error', icon: FlameIcon, key: 'hot' },
   { color: 'success', icon: EyeIcon, key: 'vision' },
   { color: 'success', icon: PaperclipIcon, key: 'files' },
   { color: 'success', icon: ImageIcon, key: 'imageOutput' },
